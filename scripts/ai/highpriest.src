@@ -27,6 +27,7 @@ const CAST_CURE := 5;
 const CAST_PROTECT := 6;
 const CAST_BLESS := 7;
 const CAST_DISPEL := 8;
+const MAJOR_BLESS := 9;
 
 var priest := Self();
 var me := priest;
@@ -228,7 +229,13 @@ while (1)
 					var player := event.source;
 					TurnToward( event.source );
 					SetObjProperty ( player , "PriestDemand" , CAST_BLESS );
-					Say( "For a small donation left to thine discretion I can grant thee a blessing from the Virtues." );
+					Say( "For a small donation left to thine discretion I can grant thee a minor blessing from the Virtues." );
+
+				elseif (event.text["boost"] or event.text["Boost"])
+					var player := event.source;
+					TurnToward( event.source );
+					SetObjProperty ( player , "PriestDemand" , MAJOR_BLESS );
+					Say( "For a reasonable donation left to thine discretion I can grant thee a major blessing from the Virtues." );
 				endif
 
 			SYSEVENT_ENTEREDAREA:
@@ -389,6 +396,8 @@ function CheckWhyHeGave ( player , donation )
 		CAST_BLESS:		CastSpell( player , donation , "bless" );
 						break;
 		CAST_DISPEL:	CastSpell( player , donation , "dispel" );
+						break;
+		MAJOR_BLESS:	MajorBlessing( player , donation );
 						break;
 	endcase
 
@@ -573,6 +582,63 @@ function CastSpell( player , donation , spell)
 	spellparms[3] := player;
 	start_script( ":spells:"+spell, spellparms );
 	DestroyItem( donation );
+
+endfunction
+
+
+function MajorBlessing( player , donation )
+
+	// Donation amount decides the amount of magery skill that will be used to buff the target.
+	var magery := Cint(donation.amount);
+	if( magery > 20000 )
+		magery := 20000;
+	endif
+
+	if( magery < 100 )
+		magery := 100;
+	endif
+
+	magery := CInt(magery/100);
+	setbaseskill( me , SKILLID_MAGERY , magery);
+
+	Say( "I humbly call upon the Virtues to lay down thine major blessing on this person." );
+
+	var spellparms := { };
+	spellparms[1] := "#MOB";
+	spellparms[2] := me;
+	spellparms[3] := player;
+	
+	// Bless
+	Sleep( 3 );
+	PerformAction( me , 0x0010 );
+	Say("Rel Sanct");
+	start_script( ":spells:bless", spellparms );
+	DestroyItem( donation );
+	
+	// Strength
+	Sleep( 3 );
+	PerformAction( me , 0x0010 );
+	Say("Uus Mani");
+	start_script( ":spells:strength", spellparms );
+
+	// Cunning
+	Sleep( 3 );
+	PerformAction( me , 0x0010 );
+	Say("Uus Wis");
+	start_script( ":spells:cunning", spellparms );
+
+	// Agility
+	Sleep( 3 );
+	PerformAction( me , 0x0010 );
+	Say("Ex Uus");
+	start_script( ":spells:agility", spellparms );
+	
+	// Protection
+	Sleep( 3 );
+	PerformAction( me , 0x0010 );
+	Say("Uus Sanct");
+	start_script( ":spells:protection", spellparms );
+	Sleep( 3 );
 
 endfunction
 
