@@ -1,0 +1,128 @@
+// ********************************************************************************
+// ***
+// ***	magic fish script
+// ***
+// ***	This script is called each time a player uses (double-clicks) a magic fish
+// ***
+// ********************************************************************************
+
+// ********************************************************************************
+//	function modules that will be used
+// ********************************************************************************
+use uo;
+use os;
+
+// ********************************************************************************
+//	included modules that will be used
+// ********************************************************************************
+//include "include/statmod";
+include "include/dotempmods";
+include "include/classes";
+//include "include/drinkpotion";
+
+// ********************************************************************************
+//	Main program
+//	
+//	This is the main magic fish handler.  It is called when the player
+//	double-clicks on a magic fish.
+// ********************************************************************************
+
+var DELAY_BETWEEN_FISH := 20;
+
+function CheckIfCanUseFish(character)
+	if(GetObjProperty(character , "#magicfish") and GetObjProperty(character , "#magicfish") > ReadGameClock())
+        SendSysmessage(character , "You must wait until you can eat another magic fish!");
+        return 0;
+    else
+        SetObjProperty(character , "#magicfish" , ReadGameClock() + DELAY_BETWEEN_FISH);   
+        return 1;
+    endif
+endfunction
+
+function CanUseFish(character)
+	EraseObjProperty(character , "#magicfish");
+endfunction
+
+program use_magicfish( who, fish )
+
+	var buff_delay := DELAY_BETWEEN_FISH;
+
+	if(GetObjProperty(who, CLASSEID_RANGER))
+		buff_delay := 0;
+	endif
+
+	// indicate the bottle is in use.
+	if(!ReserveItem(fish)) return; endif
+
+    // check if can drink.
+    if(!CheckIfCanUseFish(who))
+		return;
+	endif
+
+	// get the cprops we need before destroying the fish
+	var spellnum := GetObjProperty( fish, "spellnum" );
+	var spellsound := GetObjProperty( fish, "spellsound" );
+	var spelleffect := GetObjProperty( fish, "spelleffect" );
+	var miscprop1 := GetObjProperty( fish, "miscprop1" );
+	var miscprop2 := GetObjProperty( fish, "miscprop2" );
+	subtractamount(fish, 1);
+	if (spellnum > 0)
+		// this magic fish has a spell set for it
+		// play the sound and animations that are requested
+		PlaySoundEffect( who, spellsound );
+		PlayObjectCenteredEffect( who, spelleffect, 10,10);
+		// debug messages
+		// SendSysMessage( who, "Fish has spell number " + spellnum);
+		// SendSysMessage( who, "Using spell sound " + spellsound);
+		// SendSysMessage( who, "Using spell effect" + spelleffect);
+        
+		case (spellnum)		// handle the different magical effects
+			4:	// heal
+				HealDamage( who, miscprop1);
+				SendSysMessage(who, "You've healed yourself for "+miscprop1+" damage.");
+			6:	// night sight
+				who.setlightlevel( miscprop1, miscprop2 );
+				SendSysMessage(who, "You are now able to see in the darkness for "+miscprop2/60+" minutes.");
+			9:	// agility
+				if (CanMod(who, "dex"))
+					DoTempMod(who, "dex", miscprop1, miscprop2);
+					SendBoostMessage( who, who, "agility fish", miscprop1, miscprop2, 1 );
+					DELAY_BETWEEN_FISH := buff_delay;
+				endif
+			10:	// cunning
+				if (CanMod(who, "int"))
+					DoTempMod(who, "int", miscprop1, miscprop2);
+					SendBoostMessage( who, who, "cunning fish", miscprop1, miscprop2, 1 );
+					DELAY_BETWEEN_FISH := buff_delay;
+				endif
+			11:	// cure
+				if (who.poisoned)
+					PlayObjectCenteredEffect( who, FX_BLESS_EFFECT, 10,10);
+					CurePoison(who,SFX_SPELL_CURE,"The fish has CURED you!");
+				else
+					SendSysMessage(who, "You are not poisoned!");
+				endif
+			16:	// strength
+				if (CanMod(who, "str"))
+					DoTempMod(who, "str", miscprop1, miscprop2);
+					SendBoostMessage( who, who, "strength fish", miscprop1, miscprop2, 1 );
+					DELAY_BETWEEN_FISH := buff_delay;
+				endif
+			17:	// bless
+				if (CanMod(who, "all"))
+					DoTempMod(who, "all", miscprop1, miscprop2);
+					SendBoostMessage( who, who, "bless fish", miscprop1, miscprop2, 1 );
+					DELAY_BETWEEN_FISH := buff_delay;
+				endif
+		    44:	// invisibility
+				SetObjProperty(who, "StealthCD", ReadGameClock()+10);
+				who.hidden := 1;
+		endcase
+	else
+		// bad spellnum cprop on this fish, it is 0 (not valid)
+		SendSysMessage(who, "Yech, that was a rotten fish!");
+	endif
+    Detach();
+    Sleep(DELAY_BETWEEN_FISH);
+    CanUseFish(who);
+endprogram

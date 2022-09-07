@@ -1,0 +1,121 @@
+use uo;
+use os;
+
+include "include/namingbyenchant";
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// IdentifyItem() - Players selects an item/container for the npc to identify
+//
+// Note: Item has to be in players pack, or equipped by player.
+//	 These are the ONLY checks, don't need others right?
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+program IdentifyItem(parms)
+
+var who, IDENTIFY, me;
+who := parms[1];
+me := parms[2];
+IDENTIFY := parms[3];
+
+// Set temp prop so player can't open multiple id's
+SetObjProperty(who, "#MerchantID", 1);
+
+var item := Target(who);
+
+// player cancelled target
+if (!item)
+	PrintTextAbovePrivate( me, "Farewell", who );
+	EraseObjProperty(who, "#MerchantID");
+	return 0;
+elseif (!item.isa(POLCLASS_ITEM))
+	PrintTextAbovePrivate( me, "I can only identify items", who );
+	EraseObjProperty(who, "#MerchantID");
+	return 0;
+endif
+
+var valid;
+
+// Check to make sure the item is in players pack
+foreach thing in EnumerateItemsInContainer (who.backpack)
+	if (thing == item)
+		valid := 1;
+		break;
+	endif
+endforeach
+
+// Check to see if player is holding item. Very rusty coding atm :)
+if (!valid)
+	foreach thing in ListEquippedItems( who )
+		if (thing == item)
+			valid := 1;
+			break;
+		endif
+	endforeach
+endif
+
+// Is the item in the players pack or equiped on body?
+if (!valid)
+	PrintTextAbovePrivate( me, "You must be carrying the item for me to identify it", who );
+	EraseObjProperty(who, "#MerchantID");
+	return 0;
+endif
+
+// If players wants a bag identified
+if (item.isa(POLCLASS_CONTAINER))
+	var iditems := {};
+	var cost := IDENTIFY;
+
+	foreach thing in EnumerateItemsInContainer(item)
+		if (GetObjProperty(thing, "UnIDedMagicalItem"))
+			iditems.append(thing);
+		endif
+	endforeach
+
+	if (iditems.size() < 1)
+		PrintTextAbovePrivate( me, "I can not see any items that need to be identified in there.", who);
+		EraseObjProperty(who, "#MerchantID");
+		return 0;
+
+	elseif (iditems.size() < 2)
+		PrintTextAbovePrivate( me, "For this 1 item, the price is "+IDENTIFY+" gold", who);
+	else
+		PrintTextAbovePrivate( me, "For these "+iditems.size()+" items, the price is "+(IDENTIFY*iditems.size())+" gold", who);
+		cost := cost * iditems.size();
+	endif
+
+	// Player has enough money identify
+	if (who.spendgold(cost))
+		foreach thing in iditems
+			SetNameByEnchant( thing );
+		endforeach
+		PrintTextAbovePrivate( me, "All items in thy container are now identified", who);	
+	else
+		PrintTextAbovePrivate( me, "You do not have enough gold to pay for that", who);	
+	endif
+
+// Item already been ided
+elseif (GetObjProperty(item, "IDed"))
+	PrintTextAbovePrivate( me, "That item's secrets have already been revealed", who);
+
+// Item isn't magic, normal item
+elseif (!GetObjProperty(item, "UnIDedMagicalItem") && !GetObjProperty(item, "IsGMItem"))
+	PrintTextAbovePrivate( me, "It looks like an ordinary item to me.", who);
+else
+
+// Identify a single item
+
+	PrintTextAbovePrivate( me, "I can identify this item for the price of "+IDENTIFY+" gold", who);
+
+		// Player has enough money identify
+		if (who.spendgold(IDENTIFY))
+			SetNameByEnchant( item );
+			PrintTextAbovePrivate( me, "That appears to be a "+item.desc, who);	
+		else
+			PrintTextAbovePrivate( me, "You do not have enough gold to pay for that", who);	
+		endif	
+endif
+
+EraseObjProperty(who, "#MerchantID");
+
+endprogram

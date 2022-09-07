@@ -1,0 +1,59 @@
+use uo;
+use os;
+
+include "include/client";
+include ":gumps:include/gumps";
+include ":gumps:include/gumps_ex";
+include "include/spelldata";
+
+program showcaps(who)
+var gump := GFCreateGump(15, 15, 600, 460);
+GFResizePic(gump, 15, 15, 9270, 600, 460);
+GFResizePic(gump, 25, 25, 9350, 580, 440);
+GFTextLine(gump, 250, 30, 53, "Skill Caps:");
+GFTextLine(gump, 250, 410, 53, "Stat Caps:");
+
+	var matrix := GetObjProperty(who, "pScrollMatrix");
+	var x := 40, y := 30;
+	var skill, cap, i, count := 0;
+	for(i:=0; i<49; i:=i+1)
+		skill := GetAttributeIdBySkillId( i );
+		if(!matrix)
+			cap := 130;
+		else 
+			if(i == 0)
+				cap := 130+matrix[49];
+			else
+				cap := 130+matrix[i];
+			endif
+		endif
+
+		if(i > 16 && count == 0)
+			x := 240;
+			y := 30;
+			count := 1;
+		endif
+		if(i > 33 && count == 1)
+			x := 440;
+			y := 30;
+			count := 2;
+		endif
+		y := y+20;
+		if(skill == "Enticement")
+			skill := "Discordance";
+		endif
+		GFTextLine(gump, x, y, 0,  skill+" = "+cap);
+	endfor
+
+	var statMatrix := GetObjProperty(who, "statMatrix");
+	if(!statMatrix)
+		statMatrix := {0,0,0};
+	endif
+	GFTextLine(gump, 40, 430, 0,  "Strength"+" = "+(130+statMatrix[1]));
+	GFTextLine(gump, 240, 430, 0,  "Dexterity"+" = "+(130+statMatrix[2]));
+	GFTextLine(gump, 440, 430, 0,  "Intelligence"+" = "+(130+statMatrix[3]));
+	
+
+	GFSendGump(who, gump);
+return;
+endprogram

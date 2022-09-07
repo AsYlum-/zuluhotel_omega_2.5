@@ -1,0 +1,48 @@
+
+Use uo;
+include ":staff:include/staff";
+include "util/bank";
+
+program open_bank( who )
+
+	SendSysMessage(who, "Target an item to dupe into your backpack.");
+
+	var what := TargetCoordinates(who).item;
+
+	if (!what)
+		SendSysMessage(who, "Cancelled.");
+		return 0;
+	elseif (!what.isa(POLCLASS_ITEM))
+		SendSysMessage(who, "You can only dupe items.");	
+		return 0;
+	endif
+
+	var newitem := CreateItemCopyAtLocation(0, 0, 0, what);
+	newitem.movable := 1;
+	MoveItemToContainer(newitem, who.backpack);
+
+	// for shrunk npcs, we dont allow duping containers yet :P
+
+	if (what.objtype == 8)
+		var sub_item;
+		foreach item in EnumerateItemsInContainer(what)
+			sub_item := CreateItemCopyAtLocation(0, 0, 0, item);
+			MoveItemToContainer(sub_item, newitem);
+		endforeach
+	endif
+
+	if (newitem.container == who.backpack)
+		SendSysMessage(who, "A duplicate item has been placed in your backpack.");
+	else
+		DestroyItem(newitem);
+		SendSysMessage(who, "Error duplicating the item!");
+	endif
+
+	if(who.cmdlevel < 5)
+		SetObjProperty(newitem, "LFucker", who.acctname+"/"+who.serial);
+	endif
+		
+	LogCommand(who, GetProcess(GetPid()).name, what.desc+"/"+what.serial, newitem.desc+"/"+newitem.serial);
+
+endprogram
+

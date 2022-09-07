@@ -1,0 +1,18 @@
+use os;
+use uo;
+
+include "include/attributes";
+
+program akill( who, dist )
+	
+	dist := CInt(dist);
+        SendSysMessage( who, "Killing all npcs in range of "+dist+" tiles." );
+
+	foreach mob in ListMobilesNearLocation( who.x, who.y, who.z, dist )
+		if (mob != who)
+			RevokePrivilege( mob, "invul" );
+			ApplyRawDamage( mob, GetMaxHP(mob) + 3 );
+		endif
+	endforeach
+		
+endprogram

@@ -1,0 +1,111 @@
+use uo;
+
+include ":staff:include/staff";
+
+program textcmd_equip( speaker )
+    SendSysMessage( speaker, "What shall be equipped?" );
+
+    var what := Target( speaker );
+    if (!what)
+        return;
+    endif
+
+    SendSysMessage( speaker, "On whom shall " + what.desc + " be equipped?" );
+    var who := Target( speaker );
+    if (!who)
+        return;
+    endif
+
+	var res;
+	
+	if (what.isa(POLCLASS_NPC))
+		res := MountNPC(speaker, who, what);
+	else
+		res := EquipItem( who, what );
+    endif
+	
+	if (res)
+        SendSysMessage( speaker, "Done!" );
+	    LogCommand(who, GetProcess(GetPid()).name, res.name+"/"+res.serial, what.desc+"/"+what.serial);
+    else
+        SendSysMessage( speaker, "Unable to equip item: " + res.errortext );
+    endif
+endprogram
+
+function MountNPC(who, npc, mount)
+
+	var mounttype := 0;
+
+	case (mount.graphic)
+		0xcc: //dark brown/horse
+			mounttype := 0x3ea2;
+		0xc8: //lightbrown/horse2
+			mounttype := 0x3e9f;
+		0xe2: //light grey/horse3
+			mounttype := 0x3ea0;
+		0xe4: //greybrown/horse4
+			mounttype := 0x3ea1;
+		0xdc: //Llama:
+			mounttype := 0x3ea6;
+		0xd2: //desert
+			mounttype := 0x3ea3;
+		0xda: //frenzied
+			mounttype := 0x3ea4;
+		0xdb: //forest
+			mounttype := 0x3ea5;
+
+		0x23d: //vortex
+			mounttype := 0x3ea7;
+		0xd5:  //polar
+			mounttype := 0x03f0f;
+		0x3c: //drake1
+			mounttype := 0x03f0e;
+        177:  mounttype := 0x3ea7;  // Nightmare
+        117:  mounttype := 0x3ea8;  // Silver Steed
+        114:  mounttype := 0x3ea9;  // Nightmare
+        115:  mounttype := 0x3eaa;  // Ethereal Horse
+        170:  mounttype := 0x3eab;  // Ethereal Llama
+        170:  mounttype := 0x3eac;  // Ethereal Ostard
+        0xC3:  mounttype := 0x3e97;  // Ethereal Giant Beetle
+        0xC2:  mounttype := 0x3e98;  // Ethereal Swamp Dragon
+        0xC1:  mounttype := 0x3e9a;  // Ethereal Ridgeback
+        0xBE:  mounttype := 0x3e9e;  // Firesteed
+        0xBF:  mounttype := 0x3e9c;  // Ethereal Kirin
+        0xC0:  mounttype := 0x3e9d;  // Ethereal Unicorn
+        0xC8:  mounttype := 0x3e9f;  // Light Brown horse
+        120:  mounttype := 0x3eaf;  // War Horse (Blood Red)
+        121:  mounttype := 0x3eb0;  // War Horse (Light Green)
+        119:  mounttype := 0x3eb1;  // War Horse (Light Blue)
+        144:  mounttype := 0x3eb3;  // Sea Horse (Medium Blue)
+        116:  mounttype := 0x3eb5;  // Nightmare
+        178:  mounttype := 0x3eb6;  // Nightmare 4
+        132:  mounttype := 0x3ead;  // Kirin
+        118:  mounttype := 0x3eb2;  // War Horse (Purple)
+        122:  mounttype := 0x3eb4;  // Unicorn
+        116:  mounttype := 0x3eb5;  // Nightmare
+        179:  mounttype := 0x3eb7;  // Dark Steed
+        187:  mounttype := 0x3eb8;  // Ridgeback
+        188:  mounttype := 0x3eba;  // Ridgeback, Savage
+        793:  mounttype := 0x3ebb;  // Skeletal Mount
+        791:  mounttype := 0x3ebc;  // Beetle
+        794:  mounttype := 0x3ebd;  // SwampDragon
+        799:  mounttype := 0x3ebe;  // Armored Swamp Dragon
+	endcase
+
+
+    var mount2 := CreateItemAtLocation(5288 , 1176 , 0, 0xF021,1);
+    mount2.color := mount.color;
+    setobjproperty(mount2,"petname",mount.name);
+    setobjproperty(mount2,"pethp",GetHP(mount));
+    setobjproperty(mount2,"petmana",GetMana(mount));
+    setobjproperty(mount2,"npctemplate",mount.npctemplate);
+
+            MoveObjectToLocation(mount, 5288 , 1176 , 0, "britannia", MOVEOBJECT_FORCELOCATION);
+                RevokePrivilege( mount, "invul" );
+                setobjproperty(mount,"guardkill",1);
+                ApplyRawdamage( mount, GetMaxHP(mount) + 3 );
+
+    mount2.graphic := mounttype;
+    return EquipItem(npc,mount2);
+
+endfunction

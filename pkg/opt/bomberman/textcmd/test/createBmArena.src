@@ -1,0 +1,73 @@
+use uo;
+
+include "include/random";
+
+program createArena(who)
+	var i, pad;
+	for(i := 0;i<20; i:=i+1)
+		CreateItemAtLocation( 5508+i, 1674, 0, 0x9A94 );
+		CreateItemAtLocation( 5527, 1674-i, 0, 0x9A94 );
+
+		if(i%2 == 0)
+			CreateItemAtLocation( 5509, 1674-i, 0, 0x9A94 );
+			CreateItemAtLocation( 5511, 1674-i, 0, 0x9A94 );
+			CreateItemAtLocation( 5513, 1674-i, 0, 0x9A94 );
+			CreateItemAtLocation( 5515, 1674-i, 0, 0x9A94 );
+			CreateItemAtLocation( 5517, 1674-i, 0, 0x9A94 );
+			CreateItemAtLocation( 5519, 1674-i, 0, 0x9A94 );
+			CreateItemAtLocation( 5521, 1674-i, 0, 0x9A94 );
+			CreateItemAtLocation( 5523, 1674-i, 0, 0x9A94 );
+			CreateItemAtLocation( 5525, 1674-i, 0, 0x9A94 );
+		endif
+	endfor
+	//Blue
+	pad := CreateItemAtLocation( 5508, 1673, 0, 0x9A95 );
+	pad.color := 1170;
+	//Yellow
+	pad := CreateItemAtLocation( 5508, 1655, 0, 0x9A95 );
+	pad.color := 1300;
+	//Red
+	pad := CreateItemAtLocation( 5526, 1673, 0, 0x9A95 );
+	pad.color := 1172;
+	//Green
+	pad := CreateItemAtLocation( 5526, 1655, 0, 0x9A95 );
+	pad.color := 0x48a;
+
+	Sleep(1);
+	var aX := 5508, aY := 1674, blocks, chance, stone, stop, startpad;
+	while(aX < 5527)
+		if(aY < 1655)
+			aY := 1674;
+			aX := aX+1;
+			SleepMS(100);
+		endif
+		blocks := ListItemsAtLocation( aX, aY, 0 );
+		startpad := ListItemsNearLocation( aX, aY, 0, 1 );
+		stop := 0;
+		foreach pad in startpad
+			if(GetObjProperty(pad, "bmStartPad"))
+				stop := 1;
+			endif
+		endforeach
+		if(!stop)
+			if(len(blocks) > 0)
+				foreach item in blocks
+					if(!GetObjProperty(item, "bmItem"))
+						chance := Random(100)+1;
+						if(chance > 25);
+							stone := CreateItemAtLocation( aX, aY, 0, 0x9A93 );
+						endif
+					endif
+				endforeach
+			else
+				chance := Random(100)+1;
+				if(chance > 25);
+					stone := CreateItemAtLocation( aX, aY, 0, 0x9A93 );
+				endif
+			endif
+		endif
+		aY := aY-1;
+	endwhile
+
+	SendSysMessage(who, "Done!");
+endprogram

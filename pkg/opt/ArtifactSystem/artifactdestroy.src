@@ -1,0 +1,22 @@
+use uo;
+use os;
+
+include ":ArtifactSystem:artifact";
+
+program maindestroy( item ) 
+
+	if (item.unequipscript) // The item has an unequip script
+		if (item.container.isa(POLCLASS_MOBILE)) // The item in equipped
+			MoveObjectToLocation(item, 5286, 1170, 0, "britannia", MOVEOBJECT_NORMAL);
+		endif
+	endif
+
+	// send artifacts back to their box
+	if (GetObjProperty(item,"Artifact"))
+		toArtifactBox(item);
+		return 0;
+	else
+		return 1;
+	endif
+
+endprogram

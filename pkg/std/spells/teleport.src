@@ -1,0 +1,147 @@
+use uo;
+
+include "include/spelldata";
+include "include/client";
+include "include/attributes";
+include "../pkg/std/housing/utility";
+var water := { 0xA8, 0xA9, 0x64, 0xAA, 0xAB };
+
+program cast_teleport( parms, spell_id )
+
+	var circle := 3;
+	var caster;
+	var where;
+	var BX;
+	var BY;
+	var BZ;
+	var fromhit;
+	
+	if (parms[1] == "#MOB")
+		caster := parms[2];
+		where := parms[3];
+
+		if (parms[4])
+			circle := parms[4];
+		endif
+
+		if (parms[5])
+			fromhit := parms[5];
+		endif
+	else
+		caster := parms;
+		// For scrolls, StartSpellScript isn't working >:(
+		if (TypeOf(parms) == "Array")
+			caster := parms[1];
+			spell_id := parms[2];
+		endif
+
+		if (TryToCast( caster, spell_id ) != SUCCESS);
+			EraseObjProperty(caster, "#Casting");
+			return 0;
+		endif
+
+		where := CanTargetArea(caster, circle);
+		if (!where)
+			return;
+		endif
+	endif
+	
+	Bx:=caster.x;
+	By:=caster.y;
+	Bz:=caster.z;
+	var standing := where.z;
+
+	// Dreams' Teleport reduction range.
+/* 	if(!caster.IsA(POLCLASS_NPC))
+		var xConv := ((Bx+By)/Sqrt(2))/2;
+		var yConv := ((By-Bx)/Sqrt(2))/2;
+		var xTConv := ((where.x+where.y)/Sqrt(2))/2;
+		var yTConv := ((where.y-where.x)/Sqrt(2))/2;
+		var xLimit := Abs(xConv - xTConv);
+		var yLimit := Abs(yConv - yTConv);
+		if(xLimit > 4.94976 || yLimit > 6.36397)
+			SendSysmessage( caster, "You cannot teleport this far." );
+			return;
+		endif
+	endif */
+
+	/* // Reduced teleport range.
+	if(Bx > 15 || By > 15)
+		SendSysmessage( caster, "You cannot teleport this far." );
+		return;
+	endif */
+
+	var diff := Bz - standing;
+	if(diff > 19 && !caster.IsA(POLCLASS_NPC))
+		SendSysmessage( caster, "You cannot teleport from this height." );
+		return;
+	endif
+
+	if(GetObjProperty( caster, "bmPlayer" ))
+		return;
+	endif
+
+	var multi := GetStandingHeight( caster.x, caster.y, caster.z ).multi;
+	if( multi )
+		return;
+	endif
+
+	foreach item in ListItemsNearLocation( cint(where.x), cint(where.y), cint(where.z), 4 );
+		if( (item.objtype == 61457 or item.objtype == 61458) and
+		  (GetMapInfo(where.x,where.y).landtile in water) )
+			SendSysmessage( caster, "You cannot teleport there." );
+			return;
+		endif
+	endforeach
+
+	var Near_Items;
+	var ok := 1;
+	Near_Items := ListItemsNearLocation(where.x, where.y, where.z,10, where.realm);
+	foreach thing in Near_Items
+		if (thing.objtype == 0xf156 || thing.objtype == 0xa3c7)
+			ok := 0;
+		endif
+	endforeach
+
+	multi := GetStandingHeight( where.x, where.y, where.z ).multi;
+	if( multi )
+		return;
+	endif
+	
+	var canstand := 0;
+	var Moveland := GetStandingLayers(cint(where.x), cint(where.y), MAPDATA_FLAG_MOVELAND, caster.realm );
+	
+	if (DEBUG_MODE)
+		SendSysmessage( caster, "Where Z: "+where.z, color:=  38);
+		SendSysmessage( caster, "Moveland: "+Moveland, color:=  53);
+	endif
+	foreach layer in Moveland
+		var standlayer := layer.height + layer.z;
+		if (DEBUG_MODE)
+			SendSysmessage( caster, "layer height:"+layer.height, 48);
+			SendSysmessage( caster, "layer height:"+layer.z, 48);
+			SendSysmessage( caster, "standlayer: "+standlayer, color:= 49);
+		endif
+		if (where.z <= standlayer)
+			canstand := 1;
+		endif
+	endforeach
+	if (!canstand)
+		SendSysmessage( caster, "You can't stand there.", color:= 33 );
+		if (!DEBUG_MODE)
+			return;
+		endif
+	endif
+	
+	var sx := caster.x, sy := caster.y, sz := caster.z, sr := caster.realm;
+	if (ok == 1)
+		MoveObjectToLocation( caster, cint(where.x), cint(where.y), cint(where.z), caster.realm );
+		PlayStationaryEffect( sx, sy, sz, FX_SPELL_TELEPORT, SPEED_SPELL_TELEPORT, LOOP_SPELL_TELEPORT, 0 , sr );
+		PlayStationaryEffect( caster.x, caster.y, caster.z, FX_SPELL_TELEPORT, SPEED_SPELL_TELEPORT, LOOP_SPELL_TELEPORT, 0 , caster.realm );
+		PlaySoundEffect( caster, SFX_SPELL_TELEPORT );
+	endif
+	If (Caster.multi)
+		MoveObjectToLocation( caster, bx, by, bz, 1, caster.realm );
+	endif	
+
+endprogram

@@ -1,0 +1,126 @@
+use uo;
+use os;
+use basic;
+
+include "include/attributes";
+include "include/npcbackpacks";
+include "include/spelldata";
+include "include/classes";
+include "include/client";
+
+program summon_creature( parms )
+
+	var caster		:= parms[1];
+	var npctemplate	:= parms[2];
+	var cast_loc		:= parms[3];
+	var sfx		:= parms[4];
+	var delay		:= parms[5];
+
+	var magery		:= GetEffectiveSkill( caster , SKILLID_MAGERY );
+	
+	var magic_pets := 0;
+	var mobs := ListMobilesNearLocation( caster.x, caster.y, caster.z, 15 );
+	var masterserial := caster.serial;
+	foreach mob in mobs
+		if( (mob.script == "tamed") and ( GetObjProperty( mob, "master" ) == masterserial ) )
+			if( GetObjProperty( mob , "summoned" ) or GetObjProperty( mob , "animated" ) or GetObjProperty( mob , "charmed" ) )
+				magic_pets := magic_pets + 1;
+			endif
+		endif
+	endforeach
+
+	if(magic_pets > 4)
+		SendSysMessage(caster, "Can't summon more creatures.");
+		return;
+	endif	
+
+	var multi := GetStandingHeight( cast_loc.x, cast_loc.y, cast_loc.z ).multi;
+	if( multi )
+		SendSysMessage(caster, "Can't summon creatures inside multis.");
+		return;
+	endif		
+
+	if( GetObjProperty( caster , CLASSEID_MAGE ) )
+		magery := Cint( magery * ClasseBonus( caster , CLASSEID_MAGE ) );
+	elseif( GetObjProperty( caster , CLASSEID_CLERIC ) )
+		magery := Cint( magery * ClasseBonus( caster , CLASSEID_CLERIC ) );
+	elseif( GetObjProperty( caster , CLASSEID_WARRIOR ) )
+		magery := Cint( magery / ClasseBonus( caster , CLASSEID_WARRIOR ) );
+	endif
+
+	if( delay )
+		//SleepMs( delay );
+	endif
+
+	var duration		:= ModifyWithMagicEfficiency( caster , magery * 2 );
+	
+	PlaySoundEffect( caster , sfx );
+	
+	Detach();
+	
+	var thecritter := CreateNpcFromTemplate( npctemplate, 5283, 1184, 0, 0, "britannia");
+	thecritter.hidden := 1;
+	var power := Cint( ModifyWithMagicEfficiency( caster , Cint(magery / 1.5)) );
+	if( power > 100 )
+		power := 100;
+	elseif( power < 1 )
+		power := 1;
+	endif
+
+	SetObjProperty( thecritter , "master" , caster.serial );
+	SetObjProperty( thecritter , "script" , thecritter.script );
+	SetObjProperty( thecritter , "noloot" , 1 );
+	SetObjProperty( thecritter , "summoned" , 1 );
+	thecritter.setmaster( caster );
+	thecritter.script := "tamed";
+	RestartScript( thecritter );
+	
+	Set_Critical( 1 );
+	
+	var str	:= GetBaseStrength(thecritter)-GetStrengthMod(thecritter);
+	var int	:= GetBaseIntelligence(thecritter)-GetIntelligenceMod(thecritter);
+	var dex	:= GetBaseDexterity(thecritter)-GetDexterityMod(thecritter);
+	
+	SetBaseStrength(thecritter,  Cint(str * power / 100));
+	SetBaseIntelligence(thecritter,  Cint(int * power / 100));
+	SetBaseDexterity(thecritter,  Cint(dex * power / 100));
+	
+	SetStrengthMod(thecritter,Cint(GetObjProperty( thecritter , "BaseStrmod" ) * power / 100 ));
+	SetIntelligenceMod(thecritter,Cint(GetObjProperty( thecritter , "BaseIntmod" ) * power / 100 ));
+	SetDexterityMod(thecritter,Cint(GetObjProperty( thecritter , "BaseDexmod" ) * power / 100 ));
+	
+	SetHP(thecritter, GetMaxHP(thecritter));
+	SetMana(thecritter, GetMaxMana(thecritter));
+	SetStamina(thecritter, GetMaxStamina(thecritter));
+
+	for i := 0 to SKILLID__HIGHEST
+		if( i != SKILLID_MAGICRESISTANCE )
+			var initskill := GetEffectiveSkill( thecritter , i );
+			if( initskill )
+				SetBaseSkill( thecritter , i , CInt((initskill * power)/100) );
+			endif
+		else
+			SetBaseSkill( thecritter , i , magery );
+		endif
+	endfor
+
+	Set_Critical( 0 );
+	
+	MoveObjectToLocation( thecritter, cint(cast_loc.x), cint(cast_loc.y), cint(cast_loc.z) , caster.realm, MOVEOBJECT_FORCELOCATION );
+	RestartScript( thecritter );
+	thecritter.hidden := 0;
+	
+	Sleep( duration );
+	
+	PlaySoundEffect( thecritter , 0x01fa );
+	PlayStationaryEffect( cint(thecritter.x) , cint(thecritter.y) , cint(thecritter.z) , 0x3728 , 0xa , 0xa );
+	var backpack := FindExistingPack( thecritter.serial );
+	if( backpack )
+		foreach item in EnumerateItemsInContainer( backpack );
+  			MoveObjectToLocation( item , thecritter.x , thecritter.y , thecritter.z, "britannia", MOVEOBJECT_FORCELOCATION );
+		endforeach
+	endif
+	MoveObjectToLocation( thecritter , 0 , 0 , 0 , "britannia",MOVEOBJECT_FORCELOCATION );
+	ApplyRawDamage(thecritter, GetMaxHP(thecritter) + 3);
+
+endprogram

@@ -1,0 +1,19 @@
+use uo;
+
+include "include/random";
+include "include/attributes";
+include "include/dotempmods";
+
+Program walkOn(mobile)
+	if(GetObjProperty(mobile, "iChampSpawn"))
+		if(!GetObjProperty(mobile, "AlreadyPorted"))
+			SetObjProperty(mobile, "AlreadyPorted", 1);
+			var rtime := Random(5)+5;
+			Sleep(rtime);
+			MoveObjectToLocation(mobile, 5557, 824, 50, "britannia", MOVEOBJECT_FORCELOCATION);
+			SetHP(mobile, GetMaxHP(mobile));
+			CurePoison(mobile);
+			EraseObjProperty(mobile, "AlreadyPorted");
+		endif
+	endif
+endprogram

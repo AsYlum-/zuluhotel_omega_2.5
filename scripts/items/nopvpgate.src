@@ -1,0 +1,42 @@
+use os;
+use uo;
+
+include "include/classes";
+
+program NoPvPGate( mobile , gate )
+    
+    var level := GetClasseLevel(mobile);
+
+    if( mobile.npctemplate and mobile.script != "tamed" )
+		return;
+	endif
+
+    if(mobile.cmdlevel < 1)
+        if(GetObjProperty( mobile, CLASSEID_POWERPLAYER))
+            if(level > 1)
+                SendSysMessage(mobile, "This dungeon is only for lvl 1 Powerplayers and below.");
+                var move := MoveObjectToLocation( mobile , 3682 , 2557 , 0 , "britannia" , MOVEOBJECT_FORCELOCATION );
+                return;
+            endif
+        elseif(level > 4)
+            SendSysMessage(mobile, "This dungeon is only for spec class lvl 4 and below.");
+            var move := MoveObjectToLocation( mobile , 3682 , 2557 , 0 , "britannia" , MOVEOBJECT_FORCELOCATION );
+            return;
+        endif
+    endif
+
+	var x := GetObjProperty( gate, "GateDestX" );
+	var y := GetObjProperty( gate, "GateDestY" );
+	var z := GetObjProperty( gate, "GateDestZ" );
+
+	if( !x or !y )
+		return;
+	endif
+
+	var move := MoveObjectToLocation( mobile , CInt(x) , CInt(y) , CInt(z) , mobile.realm , MOVEOBJECT_FORCELOCATION );
+	if(!move)
+		Print("Move error msg: "+move);		
+	endif
+
+endprogram
+

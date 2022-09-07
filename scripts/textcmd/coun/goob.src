@@ -1,0 +1,12 @@
+use os;
+use uo;
+use vitals;
+
+include "include/attributes";
+include ":staff:include/staff";
+
+program unstuck( who )
+
+MoveObjectToLocation( who, 3679, 2517, 0, "britannia",MOVEOBJECT_FORCELOCATION );	
+
+endprogram
