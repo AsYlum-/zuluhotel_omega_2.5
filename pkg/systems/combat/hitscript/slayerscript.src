@@ -45,7 +45,7 @@ program slayerscript(attacker, defender, weapon, armor, basedamage, rawdamage)
 			15:	slaytype := "Dragonkin";
 		endcase
 	endif
-	SendSysMessage(attacker, "Damage before: "+basedamage, FONT_NORMAL, 2595 );
+
 	var multiplier;
 	var istype := 0;
 	foreach	creature in SplitWords(slaytype)
@@ -59,7 +59,7 @@ program slayerscript(attacker, defender, weapon, armor, basedamage, rawdamage)
 			break;
 		endif
 	endforeach
-	SendSysMessage(attacker, "Damage after: "+basedamage, FONT_NORMAL, 2595 );
+	
 	rawdamage := RecalcDmg( attacker , defender , weapon , armor ,  CInt(basedamage*multiplier), 1);
 	DealDamage( attacker , defender , weapon , armor , basedamage ,rawdamage);
 
