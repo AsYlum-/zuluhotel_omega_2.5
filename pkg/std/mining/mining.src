@@ -479,7 +479,26 @@ function DoSomething( character , tool )
 				msg := "You find a diamond!";			
 			endif
 			break;
-		106:	
+			
+		106: if( Random(5) < 1 && !IsInGuardedArea(character) && !IsInSafeArea(character) )
+				objtype := 0xc503;
+				if(GetObjProperty(tool, "MiningBonus"))
+					amount := 4;
+					msg := "You find four pieces of exlusive NEW ZULU ORES!";
+				else
+					amount := 2;
+					msg := "You find two pieces of exlusive NEW ZULU ORES!";
+				endif
+			elseif( Random(40) < 1 && (IsInGuardedArea(character) || IsInSafeArea(character)) )
+				objtype := 0xc503;
+				if(GetObjProperty(tool, "MiningBonus"))
+					amount := 2;
+					msg := "You find two pieces of exlusive NEW ZULU ORES!";
+				else
+					msg := "You find a piece of exlusive NEW ZULU ORE!";
+				endif
+			endif
+			break;	
 		
 		107:	if( Random(15) < 1 && !IsInGuardedArea(character) && !IsInSafeArea(character) )
 					case(RandomInt(3))
