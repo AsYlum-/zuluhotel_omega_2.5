@@ -27,9 +27,11 @@ program tavernaz(user,item)
 		 return; 
 	 endif
 
-	 if (IsInSafeArea(user) || IsInNOPKArea(user) || IsForbiddenAreaToMark(user)) 
-		sendsysmessage(user,"You can't plant that here."); 
-		return; 
+	if(user.cmdlevel < 2)
+		if (IsInSafeArea(user) || IsInNOPKArea(user) || IsForbiddenAreaToMark(user)) 
+			sendsysmessage(user,"You can't plant that here."); 
+			return; 
+		endif
 	endif
 
 	var dungteles := ListItemsNearLocation(user.x, user.y, user.z, 5, user.realm);
