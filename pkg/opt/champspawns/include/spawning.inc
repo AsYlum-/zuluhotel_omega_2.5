@@ -1,6 +1,6 @@
 include "titles";
-include "include/attributes";
-include "include/random";
+include "scripts/include/attributes";
+include "scripts/include/random";
 
 
 function getSpawnTemplateName(altar)  
@@ -80,6 +80,8 @@ function SpawnChampion(altar)
 	  item.desc := name;  
 	  if(GetObjProperty(creature, "Champion") == 2)
 		item.color := 1948;
+    elseif(GetObjProperty(creature, "Champion") == 3)
+		item.color := 1183;
 	  endif
   endif
 
