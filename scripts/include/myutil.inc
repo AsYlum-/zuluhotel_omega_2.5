@@ -1,4 +1,4 @@
-use cfgfile;
+use uo;
 
 //returns all the items in container of objtype
 function EnumerateItemsInContainerOfObjtype(container, objtype)

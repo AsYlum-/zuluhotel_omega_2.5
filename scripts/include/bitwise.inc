@@ -7,8 +7,9 @@ function Log(base, answer)
 	var logcount := 0.000;
 	var diff := 1.000;
 	var success := 0;
+	var count;
 
-	While (success = 0)
+	While (success == 0)
 
 		x := x * base;
 
@@ -74,7 +75,7 @@ function YRoot(x, y)
 	
 	var i := 0.000;
 	var n := 0.000;
-	var root := 2.000;
+	var rootx := 2.000;
 	var a := CInt(Sqrt(x));
 
 	if (a < 4)
@@ -84,25 +85,25 @@ function YRoot(x, y)
 	var success := 0;
 	
 	
-	While (success = 0)		
+	While (success == 0)		
 
-		n := Pow(root, y);
+		n := Pow(rootx, y);
 		i := x - n;
-		i := i / (a * root);
+		i := i / (a * rootx);
 		i := Trunc(i, 3);
-		root := root + i;
-		if (i = 0)
+		rootx := rootx + i;
+		if (i == 0)
 			success := 1;
-			if ( Pow(Root, y) > x )
-				root := root - 0.001;
+			if ( Pow(rootx, y) > x )
+				rootx := rootx - 0.001;
 			endif
-			if ( Pow((root + 0.001), y) = x)
-				root := root + 0.001;
+			if ( Pow((rootx + 0.001), y) == x)
+				rootx := rootx + 0.001;
 			endif
 		endif
 	endwhile
 
-	return root;
+	return rootx;
 
 endfunction
 
@@ -154,14 +155,14 @@ function ZTest(ArrayX, mu, sigma)
 
 	z := i/n;
 
-	return := z;
+	return z;
 
 endfunction
 
 
 function TTest(ArrayX, mu)
 
-	var i, n, s;
+	var i, n;
 	var t:= 0.000;
 	var ArrayMean := Mean(ArrayX);
 	var ArrayLen := Len(ArrayX);
@@ -172,7 +173,7 @@ function TTest(ArrayX, mu)
 
 	t := i/n;
 
-	return := t;
+	return t;
 
 endfunction
 
@@ -234,7 +235,7 @@ function BitAnd(x, y)
 	while (loop <= 8)
 	
 		n := loop - 1;
-		if ( (ArrayX[loop] = 1) AND (ArrayY[loop] = 1) )
+		if ( (ArrayX[loop] == 1) AND (ArrayY[loop] == 1) )
 			z := z + Pow(2, n);
 		endif
 		loop := loop + 1;
@@ -252,12 +253,12 @@ function BitOr(x, y)
 	var ArrayY := BitOut(y);
 	var z := 0;
 	var loop := 1;
-	locan n;
+	var n;
 
 	while (loop <= 8)
 
 		n := loop - 1;
-		if ( (ArrayX[loop] = 1) OR (ArrayY[loop] = 1) )
+		if ( (ArrayX[loop] == 1) OR (ArrayY[loop] == 1) )
 			z := z + Pow(2, n);
 		endif
 		loop := loop + 1;
@@ -303,7 +304,7 @@ function BitEqv(x, y)
 	while (loop <= 8)
 
 		n := loop - 1;
-		if (ArrayX[loop] - ArrayY[loop] = 0)
+		if (ArrayX[loop] - ArrayY[loop] == 0)
 			z := z + Pow(2, n);
 		endif
 		loop := loop + 1;
@@ -348,7 +349,7 @@ function BitNot(x)
 	while (loop <= 8)
 
 		n := loop - 1;
-		if (ArrayX[loop] = 0)
+		if (ArrayX[loop] == 0)
 			ArrayX[loop] := 1;
 			z := z + Pow(2, n);
 		else
@@ -391,7 +392,7 @@ function FlagReset(flag, bit);
 
 	While (x <= 8)
 
-		if (FlagArray[x] = 1)
+		if (FlagArray[x] == 1)
 			n := x - 1;
 			y := y + Pow(2, n);
 		endif

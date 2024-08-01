@@ -16,8 +16,8 @@
 use uo; 
 use os;
 
-include "../pkg/opt/loot/antiloot";
-include "../pkg/std/housing/utility";
+include ":loot:antiloot";
+include ":housing:utility";
 
 program Container_CanRemoveScript(who, container,item, movetype)
 

@@ -16,6 +16,12 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
+use uo;
+use cfgfile;
+
+include "::util/creature";
+include "conflicts";
+
 Const SHORT_RANGE    := 3;
 Const DEFAULT_RANGE  := 5;
 Const PARANOID_RANGE := 7;
@@ -36,32 +42,32 @@ function lft_lookForTroubleAll()
          bu_setBuddy( dude );
       endif
 
-      var annoyed := Hunger + aggression/4;
+      var annoyed := ( CInt(GetObjProperty( dude, "hunger")) + Cint( GetObjProperty( dude, "aggression" )) ) / 4;
 
-      if (     nature = "meek"     )
-         if ( cr_justLikeMe( dude ) = 0 )
+      if (     nature == "meek"     )
+         if ( cr_justLikeMe( dude ) == 0 )
             RunAwayFrom( dude );
             return crowd;
          endif
-      elseif ( nature = "prey"     )
-         if ( GetObjProperty( dude, "BadGuy" ) = me.serial )
+      elseif ( nature == "prey"     )
+         if ( GetObjProperty( dude, "BadGuy" ) == me.serial )
             co_target( dude );
             return crowd;
          endif
-      elseif ( nature = "predator" )
+      elseif ( nature == "predator" )
          if ( annoyed > Cint( GetObjProperty( dude, "aggression" ) ) // hunting
-         or ( GetObjProperty( dude, "BadGuy" ) = me.serial ) )       // hunted
+         or ( GetObjProperty( dude, "BadGuy" ) == me.serial ) )       // hunted
             co_target( dude );
             return crowd;
          endif
-      elseif ( nature = "killer"   )
+      elseif ( nature == "killer"   )
          if ( annoyed * ( 1 + co_human(dude) ) > Cint( GetObjProperty( dude, "aggression" ) )
-         or ( GetObjProperty( dude, "BadGuy" ) = me.serial ) )
+         or ( GetObjProperty( dude, "BadGuy" ) == me.serial ) )
             co_target( dude );
             return crowd;
          endif
-      elseif ( nature = "undead"   )
-         if ( ! (GetObjProperty( dude, "alignment" ) = "evil") )
+      elseif ( nature == "undead"   )
+         if ( ! (GetObjProperty( dude, "alignment" ) == "evil") )
             co_target( dude );
             return crowd;
          endif
@@ -84,9 +90,9 @@ function lft_lookForTrouble()
    var crowd  := len( nearby );
 
    foreach dude in nearby
-      if ( Hunger + Cint( GetObjProperty( me,   "aggression" ) )/4
+      if ( CInt(GetObjProperty( dude, "hunger")) + Cint( GetObjProperty( me,   "aggression" ) )/4
                   > Cint( GetObjProperty( dude, "aggression" ) ) // hunting
-         or ( GetObjProperty( dude, "BadGuy" ) = me.serial ) )   // hunted
+         or ( GetObjProperty( dude, "BadGuy" ) == me.serial ) )   // hunted
          co_target( dude );
          return crowd;
       endif
@@ -108,9 +114,9 @@ function lft_lookForTroubleAndFriends()
 
    foreach dude in nearby
       if ( ! cr_justLikeMe( dude ) )
-         if ( Hunger + Cint( GetObjProperty( me,   "aggression" ) )/4
+         if ( CInt(GetObjProperty( dude, "hunger")) + Cint( GetObjProperty( me,   "aggression" ) )/4
                      > Cint( GetObjProperty( dude, "aggression" ) ) // hunting
-              or ( GetObjProperty( dude, "BadGuy" ) = me.serial ) ) // hunted
+              or ( GetObjProperty( dude, "BadGuy" ) == me.serial ) ) // hunted
             co_target( dude );
             return crowd;
          endif
@@ -176,11 +182,11 @@ function lft_killerLookForTrouble()
  
    var nearby  := ListMobilesInLineOfSight( me, HUNTER_RANGE );
    var crowd   := len( nearby );
-   var annoyed := Hunger + aggression;
+   var annoyed := ( CInt(GetObjProperty( dude, "hunger")) + Cint( GetObjProperty( dude, "aggression" )) );
 
    foreach dude in nearby
       if ( annoyed * ( 1 + co_human( dude ) ) > Cint( GetObjProperty( dude, "aggression" ) )
-      or ( GetObjProperty( dude, "BadGuy" ) = me.serial ) )
+      or ( GetObjProperty( dude, "BadGuy" ) == me.serial ) )
          co_target( dude );
          return crowd;
       endif
@@ -198,7 +204,7 @@ function lft_killerLookForTroubleAndFriends()
  
    var nearby  := ListMobilesInLineOfSight( me, HUNTER_RANGE );
    var crowd   := len( nearby );
-   var annoyed := Hunger + aggression;
+   var annoyed := ( CInt(GetObjProperty( dude, "hunger")) + Cint( GetObjProperty( dude, "aggression" )) );
 
    foreach dude in nearby
       if ( annoyed * ( 1 + co_human( dude ) ) > Cint( GetObjProperty( dude, "aggression" ) )
@@ -225,10 +231,11 @@ function lft_undeadLookForTrouble()
 
    var nearby := ListMobilesInLineOfSight( me, DEFAULT_RANGE );
    var crowd  := len( nearby );
+   var i;
 
    foreach dude in nearby
       var dude := nearby[i];
-      if (!GetObjProperty( dude, "alignment" ) = "evil")
+      if (!GetObjProperty( dude, "alignment" ) == "evil")
          co_target( dude );
          return crowd;
       endif
@@ -248,10 +255,10 @@ function lft_undeadLookForTroubleAndFriends()
    var crowd  := len( nearby );
 
    foreach dude in nearby
-      if ( ! GetObjProperty( dude, "alignment" ) = "evil")
+      if ( ! GetObjProperty( dude, "alignment" ) == "evil")
          co_target( dude );
          return crowd;
-      elseif ( bu_setLeader( dude ) = 0 )
+      elseif ( bu_setLeader( dude ) == 0 )
          bu_setBuddy( dude );
          return crowd;
       endif

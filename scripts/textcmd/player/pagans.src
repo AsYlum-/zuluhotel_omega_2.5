@@ -82,9 +82,6 @@ function ShowReagsDialog(me)
 	"tilepic 240 222 3983" //volcanicash
 );
 
-
-
-
 	var data := {
 		"Pagan Reagent Counter",
 		"Set warning level",
@@ -203,24 +200,25 @@ program gumptest( who )
 endprogram
 
 function TypesOfPagans()
-	return {PAGAN_WYRMH  
- 		PAGAN_BLOODS  
-		PAGAN_DEADW  
- 		PAGAN_SERPENTS  
-		PAGAN_BONE  
- 		PAGAN_DRAGONB  
-		PAGAN_EXECCAP  
-		PAGAN_BATWING  
-		PAGAN_FETRILED  
-		PAGAN_OBSIDIAN  
- 		PAGAN_BRIMSTONE  
-		PAGAN_DAEMONB  
-		PAGAN_VIALOFBLOOD  
-		PAGAN_PUMICE  
-		PAGAN_EYESOFNEWT  
- 		PAGAN_PIGIRON  
-		PAGAN_BLACKMOOR 
-		PAGAN_VOLCANICA };
+	return {PAGAN_WYRMH, 
+			PAGAN_BLOODS, 
+			PAGAN_DEADW, 
+			PAGAN_SERPENTS, 
+			PAGAN_BONE, 
+			PAGAN_DRAGONB, 
+			PAGAN_EXECCAP, 
+			PAGAN_BATWING, 
+			PAGAN_FETRILED, 
+			PAGAN_OBSIDIAN, 
+			PAGAN_BRIMSTONE, 
+			PAGAN_DAEMONB, 
+			PAGAN_VIALOFBLOOD, 
+			PAGAN_PUMICE, 
+			PAGAN_EYESOFNEWT, 
+			PAGAN_PIGIRON, 
+			PAGAN_BLACKMOOR, 
+			PAGAN_VOLCANICA 
+			};
 endfunction
 
 

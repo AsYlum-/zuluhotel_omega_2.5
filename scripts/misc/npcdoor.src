@@ -5,7 +5,7 @@ use uo;
 include "include/client";
 include "include/objtype";
 include "include/doors";
-include "../../pkg/std/boat/plankutil";
+include ":boat:plankutil";
 /*
 Const KEYSTART := 0x100E;
 Const KEYEND := 0x1013;

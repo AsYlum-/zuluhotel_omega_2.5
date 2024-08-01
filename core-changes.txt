@@ -1,4 +1,476 @@
-﻿-- POL100 --
+-- POL100.2.0 --
+07-29-2024 Kevin:
+    Added: Compiler support for function expressions via syntax `@(param1, param2, ..., paramN) { ... }`.
+           For example, to get all hidden online players:
+
+            var all_hidden := EnumerateOnlinePlayers()
+              .filter( @( player ) {
+                return player.hidden;
+              });
+
+           See the Racalac Escript Guide for additional details.
+07-28-2024 Kevin:
+    Added: Array script method `filter(FunctionObject testFn)`.
+    Added: The compiler now supports any expression as the callee for a function call,
+           eg: `var func := @FunctionObject; func( 1, 2, 3 )` or `func( 1 )( 2 )( 3 )`.
+           For now, only function references (ie. a variable that holds or a function
+           that returns a `@FunctionObject`) can be called in this manner.
+07-21-2024 Kukkino:
+    Fixed: Changing realm will now send full status to player to prevent showing scaled hp/maxhp.
+07-16-2024 Kevin:
+    Added: When using the debugger, an attached script's `Print()` calls will now show in the Debug Console.
+           The log message includes the source location of the `Print()` call.
+07-14-2024 Turley:
+  Removed: pol.cfg SingleThreadDecay setting
+  Changed: syshook CanDecay: returning 2 skips further core checks.
+           Currently meaning that the item will decay even if inside of a multi and decayonmulti is false.
+           Returning true/false or 1/0 still have the same meaning.
+07-13-2024 Kevin:
+    Fixed: An attacking character will now attack immediately when their opponent unhides.
+07-11-2024 Kevin:
+    Fixed: A hidden, attacking character will now attack immediately when unhidden.
+07-10-2024 Turley:
+    Fixed: Boat movement to the edge of a realm no more crashes
+    Fixed: Moving a Boat via MoveObjectToLocation checks realms boundary and returns an error if it doesnt fit.
+06-14-2024 Kukkino:
+    Fixed: Performance of containers held weight computations in deeply nested scenarios
+05-16-2024 Kevin:
+    Fixed: When removing a partial stack from a container, the `item` parameter in the container's
+           OnRemoveScript will now be the partial stack itself (instead of the pre-split stack).
+    Added: Parameter `split_from` to container OnRemoveScript
+    Added: Parameter `amount` to container CanRemoveScript
+05-15-2024 Kevin:
+    Fixed: Client is now properly updated when adding a stack to a container which contains a matching
+           stack (a regression introduced in previous core change)
+05-13-2024 Kevin:
+    Added: container.held_weight_multiplier, item descriptor HeldWeightMultiplier to dynamically
+           modify a container's held weight. For example, on a backpack (having weight 3 stones) that
+           contains items totalling a weight of 100 stone, setting this property to 0.5 would have the
+           backpack weigh 53 (3 + 100 * 0.5) stone. Similarly, setting this property to 2 would have
+           the backpack weigh 203 stone.
+    Fixed: Tooltip updates to client are now correctly triggered for some previously missing scenarios
+           (eg. dragging an item from a container).
+04-24-2024 Reloecc:
+    Added: `NpcMinimumMovementDelay` parameter to `servspecopt.cfg`. It controls maximum movement speed of NPCs.
+04-14-2024 Kevin:
+  Changed: Boat sails will now by default not collide with other objects in the
+           world. For example, large orc galleon ships "dock" properly at the coastline
+           with the ship's sails floating above the ground, and sails from multiple
+           boats can occupy the same space in the world.
+    Added: ServSpecOpt "BoatSailsCollide" 1/0 default 0.
+           This setting adjusts the behavior of boat sails' collision:
+04-12-2024 Kevin:
+  Changed: For thread-safety, the debug password in pol.cfg may no longer be changed
+           when the server is running.
+03-24-2024 Kevin:
+    Added: `lastrealm` parameter to WalkOnScript.
+    Added: Boat WalkOnScript now triggers in the same manner as other Multis and Items.
+03-22-2024 Kevin:
+  Changed: Equipment shown on a human corpses will now only show what was equipped
+           at the time of the character's death. Previously, any equippable item
+           on the corpse would show as equipped.
+    Fixed: Hair items equipped on a corpse will no longer disappear when opening
+           the corpse.
+    Fixed: Containers with MaxItems 0 (default if unspecified) will correctly support
+           the maximum allowed items (3200.)
+03-18-2024 Kevin:
+    Fixed: Crash when going to certain map edge locations in Tokuno.
+     Note: This change requires recreating realms via uoconvert.
+03-16-2024 Kevin:
+    Added: item.weight_multiplier_mod to dynamically modify an item's weight.
+           For example, on an item that weighs 100 stone, setting this property
+           to 0.5 would have the item weigh 50 stone. Similarly, setting this
+           property to 2 would have the item weigh 200 stone.
+03-14-2024 Kevin:
+    Added: ecompile option -W (watch mode) / ecompile.cfg option WatchModeByDefault
+           Ecompile now includes a daemon watch mode! When using this mode,
+           ecompile will stay running and watch for file system changes,
+           recompiling scripts if they (or their dependent includes or modules)
+           are changed. This works in conjunction with other options, such as -A
+           for watching all scripts in the distro, or -r for watching all
+           scripts in a specific folder.
+     Note: When using watch mode, threaded-compilation is disabled.
+03-10-2024 Turley:
+    Added: mysql_connect now also accepts port param for non standard ports
+    Added: mysql_escape_string escapes given string
+03-03-2024 Turley:
+    Fixed: unknown realm in startloc.cfg now stops starting the core
+02-26-2024 Turley:
+    Added: ecompile option -F and -Fi
+           EScript formatter for .src and .inc (, .em) files, can be combined with -r and -A
+           -F prints the formatted source without touching thr original files
+           -Fi (inplace) formatting, rewrites the source file(s)
+           ecompile.cfg.example in the distribution contains all the options currently available (or online configuration files docs)
+           comments containing "format-off" disables the formatting until a comment containing "format-on" is found (or eof is reached)
+           this is a very early stage of the formatter, so dont expect perfect results
+02-08-2024 Kukkino:
+    Added: POL now accepts proxy protocol v2 if configured to in Listener in `uoclient.cfg` listener.
+    Added: Gameservers in `servers.cfg` can now be filtered using `ProxyMatch` similar to `IPMatch` except for used proxy.
+    Fixed: Gameservers `AcctMatch` and `IPMatch` can now be used at both at once (both conditions need to match).
+02-06-2024 Kevin:
+    Fixed: Compiler error with escaping `}` inside interpolated strings.
+02-04-2024 Kevin:
+    Fixed: Compiler crash on handling error member initializers with no expression initializer, eg. `error{ errortext }`.
+01-27-2024 Kevin:
+    Added: POL now exposes a Debug Adapter Protocol (DAP) server to provide debugging support. Any IDE or tooling that implements DAP, such as the vscode-escript extension (https://github.com/polserver/vscode-escript), can utilize this new debugging server. See pol.cfg setting DAPDebugPort.
+01-23-2024 Turley:
+    Fixed: faster_cast_recovery/faster_cast_recovery_mod item member returned wrong value
+    Fixed: attribute cap tenth value storing
+    Fixed: reportables of mobiles should now load correctly
+01-18-2024 Kevin:
+    Added: Escript keyword `uninit` to represent the uninitialized value.
+    Added: Escript keywords `true` and `false`, equivalent to `Boolean(1)` and `Boolean(0)` respectively.
+     Note: These keywords can be used anywhere a "simple value" is used, eg. expressions, constants, user function default parameters, etc. Additionally, these changes increases the Escript version, therefore a recompilation of all scripts is required.
+-- POL100.1.0 --
+01-18-2024 Kevin:
+     Note: POL 100.1.0 is now officially released.
+01-18-2024 Kukkino:
+  Changed: A player that single-clicks a hidden mobile will no longer receive a "You see" message for that mobile.
+01-12-2024 Turley:
+    Added: chr.buffs member. Returns the current active buffs added via addBuff as dictionary.
+           Key is the iconid and value a struct struct{name_cliloc, desc_cliloc, end_time, name_args, desc_args}
+  Changed: addBuff(int icon_id, int duration, int cliloc_name, int cliloc_descr, string arguments_desc, [string arguments_name]) new optional argument arguments_name.
+           Needs a client higher then 5.x and modifies the cliloc_name like argument_desc does for cliloc_descr.
+01-10-2024 Kevin:
+    Added: Boat item descriptor `AlternateMultiID` and boat method `boat.set_alternate_multiid(position)` to facilitate changing a boat's graphic, for example switching a boat from a "normal" to a "damaged" graphic.
+01-07-2024 Kevin:
+    Added: Boat control script can be specified via the `ControlScript` item descriptor. If none specified, defaults to existing `scripts/misc/boat.ecl`.
+    Fixed: Shard no longer crashes if boat control script does not exist.
+01-06-2024 Kevin:
+    Added: Boat script is now properly considered as a control script for the boat.
+    Added: Boat piloting via mouse movements. Set pilot of a boat via `boat.set_pilot(who)`, clear via `boat.set_pilot(0)`, and retrieved via `boat.pilot`. See boat method `set_pilot` and member `pilot` for more details.
+    Added: Boat piloting events are sent to the boat's control script. See `SYSEVENT_BOAT_MOVEMENT` for more details.
+12-31-2023 Vitor:
+    Added: MaxAnimID to pol.cfg to extend animation limit for characters. (default: 2048)
+12-29-2023 Turley:
+    Fixed: os::OpenConnection when sending multiple messages there was a (very low) chance that the messages where send in the wrong order.
+12-22-2023 Turley:
+    Fixed: Multis get now send/removed based on their footprint. Especially big multis had the problem (bigger then 32x32)
+    Fixed: login near 0,0 did not send items/mobiles nearby
+12-20-2023 Turley:
+    Fixed: storing of doubles, before the precision was fixed to 6 now its possible to store in e.g. CProps 12345678.12345678
+12-16-2023 Kukkino:
+  Changed: PerformAction( character, action, framecount := 5, repeatcount := 1, backward := ACTION_DIR_FORWARD, repeatflag := ACTION_NOREPEAT, delay := 1 ):
+           Now validates 'action' parameter against UACTION
+12-10-2023 Turley:
+    Fixed: https support on windows for HttpRequest (broken since august)
+    Fixed: unpack of big double values on windows when it used e notation. (broken since...)
+12-06-2023 Brndd:
+    Fixed: crash due to character.clearBuffs()
+12-03-2023 Brndd:
+    Added: GetStandingLayers() now has a "includeitems" parameter which allows including or excluding items from the search (default: enabled).
+    Fixed: GetStandingLayers() now returns the height of results correctly.
+    Added: GetStandingCoordinates( x, y, radius := 0, minz := -128, maxz := 127, realm := _DEFAULT_REALM, movemode := "L", doors_block := 0 ):
+           This is a new EScript function that returns an Array of coordinates that are valid locations for a creature to stand on in a given radius around the given coordinates. One example use-case is finding valid spawning locations for NPCs within an area.
+11-19-2023 Turley:
+    Fixed: possible deadlock in packethooks
+11-16-2023 Nando:
+    Added:  UoConvert smartness:
+            - MaxTileID is now detected from tiledata.mul (uoconvert) and tiles.cfg (POL).
+            - Default width/height for each map id
+            - map0 and map1 width can be estimated automatically based on a height of 4096
+            - better error handling
+  Changed:  usedif=1 is now the default in uoconvert
+  Removed:  UseNewHSAFormat in uoconvert.cfg. This will be detected automatically from
+            tiledata.mul size.
+11-12-2023 Kevin:
+    Fixed: crash when control scripts end for a destroyed item
+11-08-2023 Turley:
+    Fixed: crash due to NPCs after calling ReloadConfiguration
+11-01-2023 Kevin:
+    Added: RestartScript() now can restart item control scripts. Similar to NPC scripts, the existing Item control script will terminate and a new one started.
+10-28-2023 Ins:
+    Added: ServSpecOpt "UndoGetItemEnableRangeCheck" 1/0 default 0.
+           If enabled - on fail to equip item back on character (if it has been taken from character layer)
+           and on fail to put item back to backpack will check if item has been taken from position/container that is in default_accessible_range.
+           If origin position/container is not in default_accessible_range will skip try to put item to origin position/container (unless item is no_drop)
+           and as last resort will drop item at character position (feet). UndoGetItemDropHere executed before UndoGetItemEnableRangeCheck if both are set.
+    Added: ServSpecOpt "UndoGetItemDropHere" 1/0 default 0.
+           If enabled - on fail to equip item back on character (if it has been taken from character layer)
+           and on fail to put item back to backpack drops item at character position (feet), except no_drop items. Attempt to return item in
+           origin container will be skipped.
+    Fixed: Leftover items in corpse on client side.
+  Changed: Added ServerSpecOpt reload to ReloadConfiguration.
+10-23-2023 Turley:
+  Changed: added movemode parameter to uo:FindPath, defaults to "L". Before the move mode was fixed to land, now its possible to use the FindPath functionality also for eg sea monsters
+10-18-2023 Turley:
+    Added: print/syslog console_color parameter. When used with one of the basicio.em CONSOLE_COLOR constants, or a custom xterm formatting string the output to the console is formatted accordingly. Resets the formatting at the end. Xterm formatting is supported on Linux and Windows11. For syslog only the output to the console is modified not the logfile entry.
+    Added: pol.cfg EnableColoredOutput 1/0 to disable formatted output. Default is 1.
+10-15-2023 Kevin:
+    Fixed: Changed return values and parameters used by storage module functions to match documentation.
+09-03-2023 Ins:
+    Added: repsys.cfg General section "PartyHarmFullCountsAsCriminal 1/0" default 1.
+           If 0 OnHarm does not set mobile to criminal when they are in the same party.
+08-30-2023 Kevin:
+    Fixed: Client character no longer stutters while moving the character and changing the 'poison' property.
+08-29-2023 Kevin:
+    Fixed: Corrected implementation of previous OpenConnection race condition fix.
+08-28-2023 Kevin:
+    Fixed: Fixed race condition causing random crashes with OpenConnection.
+06-11-2023 Ins:
+    Added: New Character member .parrychance_mod +-int in thousandth. Additive modificator of the parry_chance from the defender when it has shield equipped.
+05-24-2023 Kevin:
+    Fixed: Fixed crash when using mysql_fetch_row with a query that does not return any result (eg. UPDATE).
+05-23-2023 Turley / Kevin:
+    Fixed: Corrected behavior of dropping items with NoDrop: An attempt from a character to move a no-drop item between regular containers (ie, both containers are not "no-drop exception") will now correctly place the item back into the original container (instead of the player's backpack).
+05-15-2023 Kevin:
+    Fixed: Fixed an issue with GetConfigString behavior on large numeric property values.
+05-13-2023 Kevin:
+  Changed: Modified functionality of combat.cfg setting WarmodeInhibitsRegen (backwards-compatible). Instead of a boolean 0/1, it is now an enumeration 0-4: none = 0 (default), both = 1, players only = 2, NPCs only = 3.
+04-04-2023 Turley:
+    Fixed: Crash when EventQueue is full due to SpeechEvents
+04-23-2023 Kevin:
+    Added: PackJSON() now accepts an option for `prettify`. If true, the output string will be indented with new lines.
+03-19-2023 Kevin:
+    Added: OpenConnection() now accepts an option for ignore_line_breaks. If set to 1, the connection script will receive events for all incoming socket data and not be restricted to data ending in line breaks, with CRLFs included in the event's value. The connection's transmit method will also not append a CRLF to the message.
+02-28-2023 Kevin:
+    Fixed: MultiRef.items now correctly includes items on the exterior stairs of custom houses.
+02-27-2023 Kevin:
+    Fixed: DestroyItem(item) will now throw an error if item is a multi.
+02-06-2023 Kevin:
+    Added: HTTPRequest() now accepts a flags parameter. If HTTPREQUEST_EXTENDED_RESPONSE is passed as flags, returns a Dictionary with members: 'status', the numeric HTTP status code; 'statusText', the reason phrase; 'headers', a Dictionary of key-values for each header; 'body', the response text body.
+    Added: http::WriteStatus(code, reason := "") to change the status of an HTTP response from the web server. If no reason is provided, one will be calculated from the code (if possible). This can only used once before WriteHeader(), WriteHtml(), and WriteHtmlRaw().
+    Added: http::WriteHeader(name, value) to write a header to an HTTP response from the web server. This function can be used to change the response's Content-Type from the default "text/html". This can only be used before WriteHtml() and WriteHtmlRaw().
+02-05-2023 Kevin:
+    Fixed: Creating an item via item descriptor whose SaveOnExit property has been set to 0 will now properly not save the item during a world save.
+01-11-2023 Turley:
+    Fixed: Placing items into a container failed since nightly of 01-05-2023
+01-02-2023 Kevin:
+    Added: Target() option TGTOPT_ALLOW_NONLOCAL to allow targeting items owned by other characters (eg. in a snooped backpack).
+    Added: Member item.character_owner, returns the Character that owns the item, ie. the character whose backpack or equipped items contains the item.
+    Fixed: SnoopScript is properly persisted across saves when changed via item member item.snoopscript.
+01-02-2023 Kevin:
+    Fixed: Custom Boat method scripts now properly execute.
+12-19-2022 Kevin:
+    Added: SnoopScript to itemdesc.cfg Item descriptors which runs when a character double-clicks an item that is owned by a different character, eg. another character's backpack or an item within that backpack. This can be used to implement the Snooping skill.
+12-17-2022 Turley:
+    Fixed: potential crash in client login phase
+12-13-2022 Kevin:
+    Added: CreateItemInBackpack, CreateItemInContainer, and CreateItemInInventory now have an x and y optional parameter to specify location in container gump of where to create the item.
+10-24-2022 Crowen(che666):
+    Fixed: uo.em Broadcast and unicode.em BroadcastUC renamed requiredcmdLevel parameter to required_cmdlevel to be consistent.
+10-15-2022 Turley:
+    Fixed: crash when calling another method inside of a methodscript
+09-27-2022 Brndd:
+    Added: CreateNPCFromTemplate() now has a "forcelocation" parameter, which allows creating NPCs even in invalid locations.
+09-21-2022 Kevin:
+    Added: POLCore() member "poldir", returning the directory of the POL executable.
+08-25-2022 Yukiko:
+    Added: uoconvert now surfaces the partial hue flag in tiles.cfg for tiles that have that flag set in tiledata,
+	eg. PartialHue 1
+08-21-2022 Turley:
+    Fixed: PopupMenu request did not work when client canceled a request and sends a new one.
+08-14-2022 Turley:
+  Changed: SendPopUpMenu supports now the new pkt format added with 6.x client, it will be automatically used if needed.
+           The new format does not support color, but removes the limitation of valid cliloc numbers.
+    Fixed: insurance reset performed after death didnt increase the revision.
+07-01-2022 Kevin:
+    Added: Boolean property `item.cursed` and corresponding itemdesc.cfg `Cursed` property. There is no special core handling of cursed items, eg. gold coin objtype 0x0EED that is cursed can still be used for vendor transactions.
+06-21-2022 Turley:
+  Changed: OpenXMLFile(file) returns Error if file does not exists, or any parsing error occurs.
+           Before it returned XMLRef in an error state, so 'if (!xml)' was and is a way to check for success.
+06-16-2022 Kevin:
+    Fixed: Corrected objref documentation on Character.acct, Character.acctname, and Client.acctname.
+    Added: client.acct member to return Account object
+    Fixed: Accessing properties on a Client that do not exist no longer results in a shard crash.
+04-29-2022 Kevin:
+    Fixed: `SendOverallSeason` now checks that connected clients have a character.
+04-12-2022 Kevin:
+    Added: Boolean property `client.disable_inactivity_timeout`.
+           If true, the client will not be disconnected due to inactivity.
+11-08-2021 Brndd:
+    Fixed: Outgoing packets with text field now correctly encode the text as CP-1252.
+11-02-2021 Brndd:
+  Changed: SetString packet hook method will now write CP-1252 (extended ASCII) encoded text. This is what is used for the majority of packet fields that are not UTF-16.
+    Added: Added a new SetUtf8String packet hook method which will write UTF-8 encoded text.
+09-11-2021 Kevin:
+    Fixed: party.AddMember(character) will no longer error if the character is a candidate of the party.
+  Changed: party.AddMember(character) will now error if passed an NPC.
+08-30-2021 Nando:
+    Fixed: Possible infinite recursion of the attack hook if a character was moved by the attack hook
+08-14-2021 Kevin:
+    Fixed: The remaining drop errors (too far away; location blocked) can now be disabled via the ShowWarningItem option.
+08-11-2021 Kevin:
+    Fixed: User Functions that conflict with the same name as Module Functions will now result in a compilation error.
+08-03-2021 Turley:
+    Fixed: loading of npcdesc AttackCProp and ShieldCProp
+    Fixed: loading of itemdesc NoDrop and NoDropException
+  Changed: either AttackSpeed or AttackDelay npcdesc entry need to exist for npc weapon creation.
+           Before only AttackSpeed lead to an creation.
+07-22-2021 Turley:
+    Fixed: Fixed crash when too many items exists an a boat.
+07-21-2021 Kevin:
+    Fixed: Fixed bug where a target couldn't be cancelled in some clients.
+06-21-2021 Turley:
+    Fixed: HSA boat movement packets (0xF7 and 0xF6) overflow logic. It sends now the correct truncated object count and checks visibility of the objects it sends.
+04-10-2021 AsYlum:
+    Fixed: Duplicated internal value for "speedhack" and "losany" privileges. When enabling "speedhack" privilege it also worked as "losany"
+           so LoS checks always returned true.
+03-24-2021 Turley:
+    Added: os:OpenConnection argument keep_connection
+           defaults to 0, if set to 1 the connection is kept active on read timeout.
+           By default (old behaviour) the connection is closed when for 5 seconds no pkt was received (old behaviour).
+03-14-2021 Kevin:
+    Added: Conditional operator: condition ? exprIfTrue : exprIfFalse
+           This new syntax allows you to efficiently return the result of one of the two expressions, depending on whether the conditon
+           expression evaluates to true or false.
+03-11-2021 Kevin:
+    Added: Interpolated string expression: $"..."
+           This new expression syntax allows you to join multiple components into a string. Within the ..., you may specify zero or more:
+             - normal strings
+             - escaped characters, eg. \n
+             - {expression [: format]}, eg. {who.name} or {who.graphic : #x}
+             - {{ for a { character, and }} for a } character
+
+           A complete example:
+            $"Hello, {who.name}! You are player #{who in EnumerateOnlineCharacters()} online. Your graphic is {who.graphic : #x}."
+
+            ... can replace an expression like ...
+
+            "Hello " + who.name + "! You are player #" + (who in EnumerateOnlineCharacters()) + " online. Your graphic is " + Hex(who.graphic)
+
+            ... or ...
+
+            "Hello {1}! You are player #{2} online. Your graphic is {3:#x}".format(who.name, who in EnumerateOnlineCharacters(), who.graphic)
+
+           Since this change introduces new instructions, you **MUST** recompile all your scripts!
+03-07-2021 Nando:
+    Added: RefreshDecayAfterBoatMoves in servspecopt.cfg. Defaults to true to maintain the old behavior. If this setting is true,
+           the items on deck will be refreshed after each movement or turn. You might want to disable this to implement item decay
+           on boats. Note that POL doesn't yet handle item decay on boats.
+    Fixed: HSA boat movement packets (0xF7 and 0xF6) will no longer overflow when too many items are on deck. Note that the packet
+           will be truncated and might be misinterpreted by the client or leave ghost items behind.
+03-05-2021 Kevin:
+  Removed: The ability to generate the Escript wordlist via the -W argument to ecompile.exe has been removed. The Escript grammar can be
+           described by the ANTLR .g4 files in the repository.
+03-04-2021 Kevin:
+  Removed: The old compiler has been removed from ecompile in favor of the ANTLR-driven 2020 compiler. This removes the ecompile.cfg
+           setting UseCompiler2020 as well as the ecompile.exe switches -g and -G. Any value of UseCompiler2020 in ecompile.cfg will be
+           ignored without warning.
+-- POL100.0.0 --
+02-28-2021 Nando:
+     Note: POL 100.0.0 is now officially released. This release marks the beginning of more frequent, rolling releases.
+           The next release will remove support for the old compiler. This is the *last chance* to test
+           if your scripts change when compiled with the new compiler. (See entry on 09-15-2020)
+02-27-2021 Nando:
+    Added: Parameter "evmask" to EnableEvents(ev, range := -1, evmask := EVMASK_ALL).
+           The allowed values are EVMASK_ONLY_PC, EVMASK_ONLY_NPC, or EVMASK_ALL.
+           When set, an NPC or Item will only receive entered/leftarea events caused by a PC, NPC or all mobiles (the default behavior).
+           This parameter is useful, for example, to decrease the load when there are too many NPCs in the same area.
+    Added: Default mimetypes for .png, .js and .ico in the internal webserver
+    Added: Allow URLs/filenames with a hyphen (-) in the internal webserver
+    Fixed: Crash in SendPacket(), packet.SendPacket() and DisconnectClient() when the client was not yet logged in. Mostly affects packet hooks.
+02-27-2021 Turley, Kevin:
+    Added: os::GetEnvironmentVariable(name:="")
+           Returns String value of given environment variable name. If name is empty, returns Dictionary of all allowed environment variables.
+           The pol.cfg setting AllowedEnvironmentVariablesAccess controls script access to this function. See documentation for more details.
+02-22-2021 Kevin:
+    Fixed: Various compilation issues when using "\\" in scripts.
+    Fixed: Passing a string for the skill to CheckSkill() now correctly uses the mobile's skill.
+12-17-2020 Turley:
+    Added: AppendConfigFileElem now checks if the file could be opened, returns an error if this fails.
+12-9-2020 Turley:
+    Added: os::LoadExportedScript(scriptname, args:={})
+           Load and start program part of given script.
+           The optional args array will be unpacked and passed as single arguments to the program.
+           Script will be started non-critical or critical depending on the caller's state.
+           Blocks until the program part ends.
+           Returns array{ExportScript, return value} return value is the return value of the program or 1 if nothing was returned.
+    Added: ExportScript object
+           the script will remain loaded as long as the object exists.
+           member: .exported_functions array of exported function names
+           method .call(functionname, args:={})
+           Calls and blocks current script a exported function and returns the return value or 1 if no return value was given.
+           Like LoadExportedScript critical state depends on the caller's script.
+           Args see LoadExportedScript.
+    Added: packageref.dir member returns directory path
+           packageref.desc member returns description "pkg.name (pkg.dir)"
+  Changed: added optional parameter for syslog "log_verbose" if set to 0 only the text will be logged and printed, not the scriptname.
+10-25-2020 Turley:
+  Changed: updated StrFormatTime to allow all format specifiers see http://www.cppreference.com/stddate/strftime.html for full list.
+           Removed restriction of 100 characters.
+10-20-2020 Syzygy:
+  Changed: It is now a syntax error to have a string literal that spans multiple lines.
+           If you have code like this:
+                 var a := "first line
+                     second line";
+           change it to something like this (adjust padding as needed):
+                 var a := "first line\n"
+                    + "    second line";
+10-17-2020 Syzygy:
+  Changed: Now using semantic versions for core versions.
+           polcore().version now returns a string like 100.0.0 rather than an integer like 100
+
+09-15-2020 Syzygy:
+  Changed: Replaced the eScript compiler.  (Added the new compiler, which is used by default)
+           The intent is that the new compiler will compile every script that used to compile,
+           and will compile to identical instructions in the .ecl files.
+           There are a few cases where the old compiler (or "OG compiler") and the new compiler differ:
+             - Functions that are included but not referenced now have to have valid syntax.
+             - It is now an error for a "case" statement to specify the same value more than once when selecting which block to execute.
+             - Some operator precedence levels have changed:
+               - postfix operators: now have highest precedence.
+               - bit shift, bitwise or, bitwise and: now have the same precedence as multiplication
+               - bitwise or, bitwise xor: now have the same precedence as addition
+               - "in": now has higher precedence than the comparison (< <= >= >) operators
+               - elvis: now has precedence just below addition, and above "in", and above comparison
+               - As an example, this means "x & 0xFF == y & 0xFF" no longer needs parentheses to mean "(x & 0xff) == (y & 0xFF)"
+               - All operator precedence levels are here: https://github.com/polserver/polserver/blob/master/lib/EscriptGrammar/EscriptParser.g4#L252
+             - The ordering of module function declarations (from .em files) and user function definitions:
+               - the OG compiler orders these in order of use
+               - the new compiler orders them alphabetically
+             - On 64-bit windows, the old compiler generates the wrong constant (-1) for hex values with the high bit set.
+               - Example: const EVENT_PEACEMADE := 0x90000000;
+           In order to ensure that the behavior of your scripts does not change, please perform the following steps:
+             - Run "ecompile -f -a -s -l -G" to run both compilers in "comparison mode" against all of your scripts.
+             - Fix any syntax errors.
+             - Remove duplicate "case" statement dispatch selector values.
+             - Add parentheses as needed to account for operator precedence.
+             - Repeat until both compilers produce the same output.
+           Here are some examples of changes that I had to make:
+             - https://github.com/polserver/ModernDistro/pull/28/files
+             - https://github.com/polserver/ModernDistro/pull/36/files
+             - https://github.com/polserver/ClassicDistro/pull/6/files
+
+           The OG compiler is still available.  I'll remove it in a later version.  If needed, you can use it by doing either of the following:
+             - pass "-g-" to ecompile
+             - set "UseCompiler2020 0" in ecompile.cfg
+
+           New ecompile.cfg options:
+             EmParseTreeCacheSize (default 25): The number of .em files to cache.  This value is intended to be high enough to cache every .em file.
+             IncParseTreeCacheSize (default 50): The number of .inc files to cache.  You might see a tiny speed boost by increasing this.
+             UseCompiler2020 (default 1): Whether or not to use the new compiler.
+
+08-27-2020 Nando:
+  Changed: If "ShowGumpWarnings" in pol.cfg is disabled, it will also disable warnings about
+           overflow in the gump responses (B1 packet). Those messages may indicates the use of macro
+           tools or custom clients.
+08-18-2020 Nando:
+    Added: Parameter "max_cmdlevel" to polsys::ListTextCommands(). Indicates the maximum cmdlevel to include in the list.
+08-13-2020 Nando:
+  Changed: item.hitscript and item.onhitscript now always return the full path to the script (":pkgname:scriptname").
+           Before, if the item was defined on the same package as the script, only "scriptname" was returned.
+           POTENTIAL BREAKING CHANGE!
+
+08-09-2020 Turley:
+    Added: new argument "outdir" for uoconvert tiles/landtiles/multis this allows to define a different directory then the current workdirectory for the produced cfgs
+08-04-2020 AsYlum:
+    Added: polcore().last_character_serial returns last character serial assigned by core
+           polcore().last_item_serial returns last item serial assigned by core
+08-03-2020 Kevin:
+    Added: Optional parameter exit_code to uo::Shutdown() to change the pol process' exit code.
+08-03-2020 Syzygy:
+    Added: ecompile.cfg "VerbosityLevel" option (setting this is equivalent to ecompile -vN)
+08-01-2020 Turley:
+    Added: attribute.em CheckSkill() accepts now also the attribute name instead of the skill id.
+07-31-2020 Nando:
+    Fixed: Quality of any item can now be directly assigned from an ItemDescriptor. Before this only worked for Equipment (Armor & Weapons).
+    Fixed: Stackable items with different values of 'quality' will no longer stack.
+07-28-2020 Kevin:
+    Fixed: Multiple scripts should not be allowed to call uo::SendTextEntryGump on the same character.
+07-16-2020 DevGIB:
+    Added: SwingSpeedIncrease(swing_speed_increase) and SwingSpeedIncreaseMod(swing_speed_increase_mod) to Mobiles and Items allowing people to have a dynamic modifier to the calculated swing speed.
+           Swing Speed Increase is used as a % modifier to the calculated speed of a weapon, e.g. Weapon speed of 30 * swing speed increase of 100% would make the swing speed 60.
 06-14-2020 Syzygy:
     Fixed: A compiler optimization bug that could corrupt emitted instructions
            if branches of an if statement were optimized out.
@@ -41,8 +513,8 @@
     Added: New Server Specific Option (servspecopt.cfg) EnableWorldMapPackets. If enabled, the server will respond to client
            requests for guild and party member locations. This option is disabled by default.
 02-05-2020 Kevin:
-    Added: New SCRIPTOPT_SURVIVE_ATTACHED_DISCONNECT will keep attached scripts (eg. skill scripts, item use scripts) alive if the 
-           character's client disconnects. Note that by default all references to the character will become invalidated; for example, 
+    Added: New SCRIPTOPT_SURVIVE_ATTACHED_DISCONNECT will keep attached scripts (eg. skill scripts, item use scripts) alive if the
+           character's client disconnects. Note that by default all references to the character will become invalidated; for example,
            GetObjProperty(chr, "prop") will return an error. Enable SCRIPTOPT_CAN_ACCESS_OFFLINE_MOBILES to bypass this.
     Fixed: Scripts that have Set_Script_Option(SCRIPTOPT_CAN_ACCESS_OFFLINE_MOBILES) can correctly access offline mobiles.
 01-20-2020 Kevin:
@@ -57,7 +529,7 @@
            system, and MAY be set to use custom a client data files directory.
 01-04-2020 Turley:
     Fixed: Tabulator and newline chars where disallowed in CChr and the sanitize step of strings. (introduced with unicode support)
-01-03-2020 DevGIB: 
+01-03-2020 DevGIB:
   Changed: POTENTIAL BREAKING CHANGE! Updated AddAmount() function to return the item reference on success instead of 1.
            You'll need to check your scripts for AddAmount and make sure its not evaluated against 1 for success.
 12-29-2019 Kevin:
@@ -96,12 +568,12 @@
            while (++i<5)
              ...
   Note:    The operators are only implemented for numbers but this includes also eg. arrays or members when it represents a number. So ++a[1], ++who.fire_resist_mod are also valid.
-           Performance wise is i:=i+1 the slowest then i+=1 then i++ then ++i. (i++ is slower since it returns the old value). 
+           Performance wise is i:=i+1 the slowest then i+=1 then i++ then ++i. (i++ is slower since it returns the old value).
 10-03-2019 Turley:
   Fixed:   min/max damage visualization in the statbar are now cropped between 0 and 65k like damage calculation.
 09-30-2019 Nando:
   Changed: Changed default of GetProcess(pid) from 0 to -1 due to compatibility issues with scripts using CInt()'s result directly.
-           PIDs are now enforced to never represent negative numbers. Please update your os.em and recompile your scripts. 
+           PIDs are now enforced to never represent negative numbers. Please update your os.em and recompile your scripts.
 09-26-2019 DevGIB:
   Added:   Script objects now have package member which returns a PackageRef. e.g. script.package.name = "GuildStone".
 09-21-2019 Turley:

@@ -28,7 +28,7 @@ var Grab_SfX:={0x249,0x50};
 program grab_fruit(user,item)
 
 	var PlacedBy := user.name;
-
+	var cfg;
 	if( !ReserveItem( item ) )
 		return;
 	endif
@@ -142,23 +142,23 @@ program grab_fruit(user,item)
 
     if (distance(user,tree)>2) sendsysmessage(user,"That is too far away!"); return; endif
 
-    var resource_type := cfg[tree.objtype].product;
+    resource_type := cfg[tree.objtype].product;
     if (!resource_type) sendsysmessage(user,"It's too young to produce anything."); return; endif
 
-    curamount:=getobjproperty(tree,"amt");
-    var maxamount:=cfg[tree.objtype].maxamount;
+    var curamount:=getobjproperty(tree,"amt");
+    maxamount := cfg[tree.objtype].maxamount;
 
     if (curamount>=maxamount)
       maxamount:=getobjproperty(tree,"#regrow");
       	if (maxamount.errortext) 
-	  		fixtree(tree,cfg[tree.objtype].regrown,cfg[tree.objtype].maxamount,PlacedBy); 
+	  		fixtree(tree, cfg[tree.objtype].regrown, cfg[tree.objtype].maxamount, PlacedBy); 
 		endif
-      sendsysmessage(user,cfg[tree.objtype].productname+"s is still growing.");
+      sendsysmessage(user, cfg[tree.objtype].productname+"s is still growing.");
       DestroyTree(user, tree);
       return;
     endif
 
-    var i,num_chops,SFX_Rand,num,fruit,theamount,distt,difficulty,x:=cint(user.x),y:=cint(user.y);
+    var i,num_chops,SFX_Rand,num,fruit,theamount,x:=cint(user.x),y:=cint(user.y);
 
     sendsysmessage(user,"You start to harvest...");
 
@@ -169,7 +169,7 @@ program grab_fruit(user,item)
       performaction(user,ANIM_SALUTE);
       sleep(2);
 
-      difficulty:=Random(100)+1;
+      var difficulty:=Random(100)+1;
 
       curamount:=getobjproperty(tree,"amt");
       setobjproperty(tree,"amt",curamount);
@@ -188,7 +188,7 @@ program grab_fruit(user,item)
 	else
           playsoundeffect(user,Finish_SfX);
 	  sendsysmessage(user,"You harvested all you can.");
-	  fixtree(tree,cfg[tree.objtype].regrown,cfg[tree.objtype].maxamount);
+	  fixtree(tree,cfg[tree.objtype].regrown,cfg[tree.objtype].maxamount, PlacedBy);
 	  return 0;
 	endif
 
@@ -197,5 +197,5 @@ program grab_fruit(user,item)
     until ((cint(user.x)!=x) or (cint(user.y)!=y));
 
     sendsysmessage(user,"You stop harvesting...");
-*/
+
 endprogram

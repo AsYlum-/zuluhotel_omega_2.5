@@ -28,7 +28,7 @@ include "include/anchors";
 include "include/speech";
 include "include/res";
 include "ai/setup/modsetup";
-include "../pkg/std/housing/utility";
+include ":housing:utility";
 
 Const SOUND_EFFECT_RES := 0x215;
 Const ACTION_EFFECT_CAST2 := 0x11;
@@ -161,7 +161,7 @@ function CloseDistance( opponent )
   var sleepdelay := 300 - (CInt(me.dexterity) * 1.5);
   if (sleepdelay < 0) sleepdelay := 0; endif
 
-    case Distance( me, opponent )
+    case (Distance( me, opponent ))
         1:              // the most likely, so first 
         0:
             return 1;

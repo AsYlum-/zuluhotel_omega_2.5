@@ -3,7 +3,7 @@ use uo;
 include "include/spelldata";
 include "include/client";
 include "include/attributes";
-include "../pkg/std/housing/utility";
+include ":housing:utility";
 var water := { 0xA8, 0xA9, 0x64, 0xAA, 0xAB };
 
 program cast_teleport( parms, spell_id )

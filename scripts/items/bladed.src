@@ -13,7 +13,7 @@ include "include/classes";
 include "include/itemutil";
 include "include/autoloop";
 include "include/utility";
-include "../../pkg/opt/karmafame/karmafame";
+include ":karmafame:karmafame";
 include "include/attributes";
 include "include/difficulty";
 

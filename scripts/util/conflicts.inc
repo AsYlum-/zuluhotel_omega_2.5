@@ -13,12 +13,15 @@
 ////////////////////////////////////////////////////////////
 use os;
 use cfgfile;
+use npc;
 
 include "include/attributes";
+
 var BadGuy         := 0;
 var Hunger         := 0;
 
 var conf           := ReadConfigFile( "corpses" );
+
 Const UOBJECT_CORPSE  := 0x2006;  // for the carnivore in all of us
 Const UOBJECT_BLOOD   := 0x122d;
 Const UOBJECT_MEAT    := 0x09f1;
@@ -35,8 +38,8 @@ Const IN_RANGE        := 5;
 //////////////////////////////////////////////////////////////////////////////
 function co_human(theobj)
 
-   if ( theobj.objtype = UOBJECT_HUMAN
-     or theobj.objtype = UOBJECT_HUMAN+1 )
+   if ( theobj.objtype == UOBJECT_HUMAN
+     or theobj.objtype == UOBJECT_HUMAN+1 )
       return 1;
    else
       return 0;
@@ -100,7 +103,7 @@ function co_eatTheDead()
 
    foreach body in ListItemsNearLocation( me.x, me.y, me.z, IN_RANGE )
 
-      if ( ( body.objtype = UOBJECT_CORPSE ) 
+      if ( ( body.objtype == UOBJECT_CORPSE ) 
        and ( GetObjProperty( body, "cut" ) != "1") )
 
          while ( Distance( me, body ) >= 1 )
@@ -122,7 +125,7 @@ function co_eatTheDead()
            // parms[2] := CreateItemAtLocation( body.x, body.y, body.z, UOBJECT_BLOOD, 1);// theblood
            // start_script("decay",parms);
 
-         if ( ( item1 = UOBJECT_MEAT ) or  ( item2 = UOBJECT_MEAT ) )
+         if ( ( item1 == UOBJECT_MEAT ) or  ( item2 == UOBJECT_MEAT ) )
             say( "* munch munch *" );
             Hunger := Hunger - ( amount1 * 500 );
             return amount1 * 500;

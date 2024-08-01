@@ -1,6 +1,6 @@
 include "titles";
-include "scripts/include/attributes";
-include "scripts/include/random";
+include "include/attributes";
+include "include/random";
 
 
 function getSpawnTemplateName(altar)  
