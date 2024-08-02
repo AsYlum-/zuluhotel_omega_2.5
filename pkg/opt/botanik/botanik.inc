@@ -1,5 +1,7 @@
 use uo;
-
+use cfgfile;
+use os;
+include ":gumps:yesno";
 
 function counttree(leaves)
 

@@ -1,5 +1,16 @@
-function play(character,succeed_sound,fail_sound, theskill)
+use uo;
+use os;
+use basic;
+use cfgfile;
+
+include "include/client";
+include "include/skillpoints";
+
+
+function play(character, succeed_sound, fail_sound, theskill)
+
 	var thepoints := get_default_points(SKILLID_MUSICIANSHIP);
+
 	if (CheckSkill(character, SKILLID_MUSICIANSHIP, theskill, thepoints))
 		PlaySoundEffect( character, succeed_sound );
 		return 1;
@@ -14,13 +25,13 @@ function music(character, instrument, diff)
 	var inst_id := instrument.graphic;
 	var ret := 0;
  
-	if (inst_id = UOBJ_HARP)
+	if (inst_id == UOBJ_HARP)
 		ret := play(character,SFX_HARP_SUCC,SFX_HARP_FAIL, diff);
-	elseif (inst_id = UOBJ_LUTE)
+	elseif (inst_id == UOBJ_LUTE)
 		ret := play(character,SFX_LUTE_SUCC,SFX_LUTE_FAIL, diff);
-	elseif (inst_id = UOBJ_DRUM)
+	elseif (inst_id == UOBJ_DRUM)
 		ret := play(character,SFX_DRUM_SUCC,SFX_DRUM_FAIL, diff);
-	elseif (inst_id = UOBJ_TAMB)
+	elseif (inst_id == UOBJ_TAMB)
 		ret := play(character,SFX_TAMB_SUCC,SFX_TAMB_FAIL, diff);
 	else
 		PrintTextAbovePrivate( character, "That's not something you can play", character );

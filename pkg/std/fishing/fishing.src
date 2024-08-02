@@ -8,8 +8,8 @@ use os;
 
 include "include/random";
 include "include/client";
-//include "include/objtype";
-//include "include/skillpoints";
+include "include/objtype";
+include "include/skillpoints";
 include "include/starteqp";
 include "include/checkcity";
 include "include/autoloop";

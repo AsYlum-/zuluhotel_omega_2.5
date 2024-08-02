@@ -129,10 +129,10 @@ function HouseFunctionLock( house, event, num )
 	var parent_locked :=0;
 
 	foreach item in ( house.items )
-		if ( getobjproperty ( item, "lockeddown" ) and (itemt.x = item.x) and ( itemt.y = item.y))
+		if ( getobjproperty ( item, "lockeddown" ) and (itemt.x == item.x) and ( itemt.y == item.y))
 			parent_locked := 1;
 		endif
-		if (( itemt.serial = item.serial ) or ( parent_locked ))
+		if (( itemt.serial == item.serial ) or ( parent_locked ))
 			inside := 1;
 		endif
 	endforeach
@@ -144,7 +144,7 @@ function HouseFunctionLock( house, event, num )
 	endif
 
 	if( inside )
-		if( num = 1 )
+		if( num == 1 )
 			if(( GetObjProperty( house , "numlockdowns" ) > 0 ) and (itemt.movable))
 
 				if( IsCarpet( itemt ) )
@@ -179,13 +179,13 @@ endfunction
 function HouseFunctionSecure( house, event, num )
 
 	var itemt;
-	if( num = 3 ) // num = 3 (delete)
+	if( num == 3 ) // num = 3 (delete)
 		itemt := Target( event.source );
 		if( !itemt )
 			SendSysmessage( event.source, "Canceled." );
 			return;
 		endif
-		if(GetObjProperty( itemt , "houseserial" ) = house.serial)
+		if(GetObjProperty( itemt , "houseserial" ) == house.serial)
 			DestroyItem(itemt);
 			SetObjProperty( house, "numsecure" , CInt(GetObjProperty( house, "numsecure") + 1) );
 			SendSysmessage( event.source , "Secure Off." );
@@ -202,7 +202,7 @@ function HouseFunctionSecure( house, event, num )
 		endif
 		if( GetObjProperty( house , "numsecure" ) )
 			var itemid;
-			if( num = 1 )
+			if( num == 1 )
 				itemid := 0xE41;
 			else
 				itemid := 0xE40;
@@ -210,7 +210,7 @@ function HouseFunctionSecure( house, event, num )
 			var box := CreateItemAtLocation( itemt.x, itemt.y, itemt.z, itemid, 1 );
 			var inside := 0;
 			foreach item in (house.items)
-				if( box.serial = item.serial )
+				if( box.serial == item.serial )
 					inside := 1;
 				endif
 			endforeach
@@ -291,9 +291,9 @@ function Demolish(house, sign)
 		if (founditem<>1) destroyitem(systemfindobjectbyserial(addonitem,2)); endif
 	endif
 
-	if (house.objtype=0x608D)
+	if (house.objtype == 0x608D)
 		foreach items in ListItemsNearLocation( sign.x, sign.y, 0, 8 )
-			if((items.objtype=0x177d) or (items.objtype=0xb41) or (items.objtype=0xb42))
+			if((items.objtype == 0x177d) or (items.objtype == 0xb41) or (items.objtype == 0xb42))
 				destroyitem(items);
 			endif
 		endforeach

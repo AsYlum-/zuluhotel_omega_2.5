@@ -13,6 +13,8 @@ include "include/eventid";
 include "include/classes";
 include "include/attributes";
 include "include/difficulty";
+include "include/random";
+include "include/snoop";
 
 var stealme_cfg:= ReadConfigFile( "stealme" );
 var items_cfg:= ReadConfigFile( "stealitems" );

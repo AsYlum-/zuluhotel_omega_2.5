@@ -5,7 +5,7 @@ include "include/spelldata";
 include "include/recalling";
 include "include/objtype";
 include "include/client";
-include "../pkg/std/housing/utility";
+include ":housing:utility";
 include "include/attributes";
 
 program cast_earth_portal( caster )

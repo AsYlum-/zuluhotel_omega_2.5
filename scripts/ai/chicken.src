@@ -44,13 +44,13 @@ function CloseDistance( opponent )
 	endif
 
 
-    case Distance( me, opponent )
+    case (Distance( me, opponent ))
         1:              // the most likely, so first 
         0:
             return 1;
         default:
             RunToward( opponent );
-            Sleepms(sleepdelay);
+            Sleepms( sleepdelay );
             return 0;
     endcase
 

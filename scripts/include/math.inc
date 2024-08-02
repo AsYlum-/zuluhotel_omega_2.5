@@ -6,6 +6,7 @@
 // EMail: prostheticdelirium@worldnet.att.net
 // ICQ: 10520050
 
+use math;
 
 function Inc(a)
 
@@ -36,6 +37,7 @@ function Log(base, answer)
 	var logcount := 0.000;
 	var diff := 1.000;
 	var success := 0;
+	var count;
 
 	While (success==0)
 
@@ -294,7 +296,7 @@ function ZTest(ArrayX, mu, sigma)
 
 	z := i/n;
 
-	return := z;
+	return z;
 
 endfunction
 
@@ -314,7 +316,7 @@ function TTest(ArrayX, mu)
 // n==the number of samples in the data
 
 
-	var i, n, s;
+	var i, n;
 	var t:= 0.000;
 	var ArrayMean := Mean(ArrayX);
 	var ArrayLen := Len(ArrayX);
@@ -325,7 +327,7 @@ function TTest(ArrayX, mu)
 
 	t := i/n;
 
-	return := t;
+	return t;
 
 endfunction
 
@@ -427,7 +429,7 @@ function BitOr(x, y)
 	var ArrayY := BitOut(y);
 	var z := 0;
 	var loop := 1;
-	locan n;
+	var n;
 
 	while (loop <= 8)
 
