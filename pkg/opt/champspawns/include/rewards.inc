@@ -1,4 +1,5 @@
-include ":Events:include/bag";
+include "include/client";
+include ":Events:bag";
 
 function RainDownMoney(corpse)
   var tile, blocked;
@@ -32,10 +33,11 @@ function RainDownMoney(corpse)
   endfor
 endfunction
 
-function GiveRewardsToPlayers(corpse)
+//function GiveRewardsToPlayers(corpse)
+  /*
   var altar := GetAltarByCorpse(corpse); 
   var players := GetObjProperty(altar, "players");
-  /*
+  
   foreach mobile in EnumerateOnlineCharacters()
     if(EligibleForLoot(mobile, players))
       PlayRewardFX(mobile);
@@ -67,7 +69,7 @@ function GiveRewardsToPlayers(corpse)
       endif
     endif
   endforeach*/
-endfunction
+//endfunction
 
 function EligibleForLoot(who, players)
   if(players[who.serial])

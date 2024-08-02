@@ -16,7 +16,7 @@ endprogram
 
 // command .go  started June 19, 2000
 // Zulu (zulu@zuluhotel.com)
-// last updated June 25, 2000
+// last updated Aug 2, 2024
 
 use os;
 use uo;
