@@ -4,6 +4,7 @@ use uo;
 include "include/spelldata";
 include "include/client";
 include "include/attributes";
+include "include/random";
 
 const SPELL_EFFECT_TYPE_MOVING 	:= MOVING_SPELL_MIND_BLAST;
 const SPELL_EFFECT_ID		:= FX_SPELL_MIND_BLAST;

@@ -7,6 +7,14 @@
 //this function checks to make sure the player isn't holding anything, or wearing heavy armor
 //ripped directly from the armor check on spell casting
 
+use uo;
+use os;
+use datafile;
+use cfgfile;
+
+include "include/attributes";
+
+
 function cansteal(character)
 
 if(GetEquipmentByLayer( character, LAYER_HAND1))
@@ -39,7 +47,7 @@ if (!mark.intelligence)
 sendsysmessage(character, "Perhaps you should find a more lively mark!");
 return;
 endif
-if (mark.serial = character.serial)
+if (mark.serial == character.serial)
 SendSysmessage(character, "You notice yourself acting foolish!");
 return;
 endif
@@ -50,7 +58,7 @@ endfunction
 function seeskill(character)
 var skill;
 
-skill := GetSkill( character, 28 );
+skill := GetEffectiveSkill( character, 28 );
 if ((skill >= 0) and (skill <= 10))	
 return 10;
 elseif ((skill >= 11) and (skill <= 20))	
@@ -78,20 +86,21 @@ endfunction
 
 //This checks if a item is a container or not, probably won't be used in final script
 
+/*
 function iscontainer(itemt, thingie)
 if (((itemt >= 0x1f2d) and (itemt <= 0x1f72)) or ((itemt >= 0x0e43) and (itemt <= 0x0e3c)) or ((itemt >= 0x0e75) and (itemt <= 0x0e77)) or ((itemt >= 0x0e43) and (itemt <= 0x0e3c)) or ((itemt >= 0x0e80) and (itemt <= 0x0e79)))
 data.insert( 1, thingie.serial );
 return 1;
 endif
 endfunction
-
+*/
 //This checks the marks intelligence against the players skill to determin difficulty
 
 function snoopindifficulty(character, mark)
 var marksi;
 var skill;
 
-skill := GetSkill( character, 28 );
+skill := GetEffectiveSkill( character, 28 );
 marksi := mark.intelligence - (character.dexterity * 0.3);
 if (mark.intelligence > 100)
 marksi := cint(100 - (character.dexterity * 0.3));

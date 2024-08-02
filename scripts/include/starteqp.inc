@@ -1819,7 +1819,7 @@ var n;
 	elseif (magiclevel == 10)
 		
 		// 0% chance of ruin
-		if (power < 99999999999999999)
+		if (power < 999999999)
 			n := 1;
 
 		// 0% chance of might
@@ -1846,7 +1846,7 @@ var n;
 	else
 		
 		// 0% chance of ruin
-		if (power < 99999999999999999)
+		if (power < 999999999)
 			n := 1;
 
 		// 0% chance of might
@@ -2131,7 +2131,7 @@ var n;
 	elseif (magiclevel == 10)
 		
 		// 0% chance of durable
-		if (power < 99999999999999999)
+		if (power < 999999999)
 			n := 5;
 
 		// 0% chance of substantial
@@ -2158,7 +2158,7 @@ var n;
 	else
 		
 		// 0% chance of durable
-		if (power < 99999999999999999)
+		if (power < 999999999)
 			n := 5;
 
 		// 0% chance of substantial
@@ -2420,7 +2420,7 @@ var n;
 	elseif (magiclevel == 10)
 		
 		// 0% chance of defence
-		if (power < 99999999999999999)
+		if (power < 999999999)
 			n := 5;
 
 		// 0% chance of guarding
@@ -2447,7 +2447,7 @@ var n;
 	else
 		
 		// 0% chance of defence
-		if (power < 99999999999999999)
+		if (power < 999999999)
 			n := 5;
 
 		// 0% chance of guarding
@@ -2713,11 +2713,11 @@ var n;
 	elseif (magiclevel == 10)
 		
 		// 0% chance of iron
-		if (power < 99999999999999999)
+		if (power < 999999999)
 			n := 5;
 
 		// 0% chance of steel
-		elseif (power < 99999999999999999)
+		elseif (power < 999999999)
 			n := 10;
 
 		// 0% chance of met steel
@@ -2740,7 +2740,7 @@ var n;
 	else
 		
 		// 0% chance of iron
-		if (power < 99999999999999999)
+		if (power < 999999999)
 			n := 5;
 
 		// 0% chance of steel
@@ -3279,7 +3279,7 @@ function ApplySpellHitscript( item )
 	elseif (magiclevel == 10)
 		
 		//0% 1st circle
-		if (rand < 99999999999999999)
+		if (rand < 999999999)
 		
 			ascircle := 1;
 	
@@ -3312,7 +3312,7 @@ function ApplySpellHitscript( item )
 	elseif (magiclevel > 10)
 		
 		//0% 1st circle
-		if (rand < 99999999999999999)
+		if (rand < 999999999)
 		
 			ascircle := 1;
 	
@@ -3694,7 +3694,7 @@ function ApplyWeapSkillMod( item )
 	elseif (magiclevel == 10)
 		
 		// 0% chance of defence
-		if (power < 99999999999999999)
+		if (power < 999999999)
 			n := 5;
 
 		// 0% chance of guarding
@@ -3721,7 +3721,7 @@ function ApplyWeapSkillMod( item )
 	else
 		
 		// 0% chance of defence
-		if (power < 99999999999999999)
+		if (power < 999999999)
 			n := 5;
 
 		// 0% chance of guarding
@@ -4010,7 +4010,7 @@ var n;
 	elseif (magiclevel == 10)
 		
 		// 0% chance of defence
-		if (power < 99999999999999999)
+		if (power < 999999999)
 			n := 5;
 
 		// 0% chance of guarding
@@ -4037,7 +4037,7 @@ var n;
 	else
 		
 		// 0% chance of defence
-		if (power < 99999999999999999)
+		if (power < 999999999)
 			n := 5;
 
 		// 0% chance of guarding
@@ -4342,7 +4342,7 @@ function ApplyMiscSkillMod( item )
 	elseif (magiclevel == 10)
 		
 		// 0% chance of defence
-		if (power < 99999999999999999)
+		if (power < 999999999)
 			n := 5;
 
 		// 0% chance of guarding
@@ -4369,7 +4369,7 @@ function ApplyMiscSkillMod( item )
 	else
 		
 		// 0% chance of defence
-		if (power < 99999999999999999)
+		if (power < 999999999)
 			n := 5;
 
 		// 0% chance of guarding
@@ -4856,7 +4856,7 @@ function ApplySpellOnHitscript( item )
 	elseif (magiclevel == 10)
 		
 		//0% 1st circle
-		if (rand < 99999999999999999)
+		if (rand < 999999999)
 		
 			ascircle := 1;
 	
@@ -4889,7 +4889,7 @@ function ApplySpellOnHitscript( item )
 	elseif (magiclevel > 10)
 		
 		//0% 1st circle
-		if (rand < 99999999999999999)
+		if (rand < 999999999)
 		
 			ascircle := 1;
 	
@@ -5282,7 +5282,7 @@ function ApplyStatMod ( item )
 	elseif (magiclevel > 9) 
 
 		// 0% chance of level 1
-		if (power < 99999999999999999)
+		if (power < 999999999)
 			n := 1;
 
 		// 0% chance of level 2
@@ -5602,7 +5602,7 @@ function DetermineImmunityLevel(item, isimmun := 0, modifier := 0)
 	elseif (magiclevel > 9) 
 
 		// 0% chance of level 1
-		if (power < 99999999999999999)
+		if (power < 999999999)
 			n := 1;
 
 		// 0% chance of level 2

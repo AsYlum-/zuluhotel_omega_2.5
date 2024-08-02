@@ -209,7 +209,7 @@ sleepms(250);
     else
         // attacking hand-to-hand (hope we unequipped the bow!)
 
-    case Distance( me, opponent )
+    case (Distance( me, opponent ))
         1:              // the most likely, so first
         0:
             return 0;
@@ -245,10 +245,14 @@ if (Random(3) == 1)
 else
         sendsysmessage(thetarg, "the rock misses you!");
 endif
-/*sleepms(500);
+
+/*
+sleepms(500);
+
 var therock := createitematlocation(thetarg.x, thetarg.y, thetarg.z, stone,1);
 therock.decayat := ReadGameClock() + 20;
 Sleep( 2 );
-DestroyItem( therock );*/
+DestroyItem( therock );
+*/
 
 endfunction

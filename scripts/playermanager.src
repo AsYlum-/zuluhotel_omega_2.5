@@ -6,7 +6,7 @@ use basic;
 include "include/time";
 include "include/classes";
 include "include/client";
-include "../pkg/opt/karmafame/karmafame";
+include ":karmafame:karmafame";
 include "include/dotempmods";
 include "util/bank";
 include "include/constants/locations";
@@ -96,8 +96,8 @@ endprogram
 function StartScripts(who)
 
 	var process := {};
-	process.append(start_script(":cooking:hunger",who).pid);
-	process.append(start_script(":areas:areaban", who ).pid);
+	process.append(start_script(":cooking:hunger", who).pid);
+	process.append(start_script(":areas:areaban", who).pid);
 	SetObjProperty( who, "#RunningScripts", process );
 
 endfunction
@@ -105,7 +105,7 @@ endfunction
 
 function setchat(who)
 
-	while (getglobalproperty("plylock")=1)
+	while (getglobalproperty("plylock") == 1)
 	sleep(10);
 	endwhile
 
@@ -114,9 +114,11 @@ function setchat(who)
 
 	var plychat:=getglobalproperty("plychat"),csize:=plychat.size();
 
-	if (plychat[1]="NONE") csize:=0; endif
+	if (plychat[1] == "NONE")
+		csize:=0;
+	endif
 
-	plychat[csize+1]:=who.serial;
+	plychat[csize+1] := who.serial;
 
 	setglobalproperty("plychat",plychat);
 	setglobalproperty("plylock",0);
@@ -132,7 +134,7 @@ function SetNewbieStatus(player)
 	var newbieflag := GetObjProperty(player, "newbie");
 
 	//Make sure we don't tag twice
-	var result:=find(player.name," [New]",1);
+	var result := find(player.name, " [New]", 1);
 	if (result)
 		if (!newbieflag)
 			//SetObjProperty(player,"newbie", 1);

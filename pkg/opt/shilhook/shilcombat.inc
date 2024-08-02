@@ -21,7 +21,7 @@ function IdentifyAttacker( who )
 				endif
 				
 				if( attacker )
-					AffectCombatSkillForKill( attacker, weapon.skillid );
+					AffectCombatSkillForKill( attacker, defender, weapon.skillid );
 				endif
 			endif
 
@@ -34,7 +34,7 @@ endfunction
 function AffectCombatSkillForKill ( attacker, defender, weapon )
 
 	var skillused := GetObjProperty ( who, weapon.skillid);
-	var delta_expgain := expgain
+	var delta_expgain := expgain;
 	var delta_fencing := 0;
 	var delta_macing := 0;
 

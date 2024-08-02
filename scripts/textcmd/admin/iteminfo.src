@@ -207,7 +207,6 @@ program textcmd_info( character )
         12:
         13:
         14:
-        13:
         15: EditItem( item , character , result[0] );
         16: if (character.cmdlevel > 2)
             var tmpname := item.desc, tmpcolor := item.color;

@@ -86,7 +86,7 @@ const TILEDATA_FLAG_DOOR        := 0x20000000; //Door
 const TILEDATA_FLAG_STAIRBACK   := 0x40000000; //StairBack
 const TILEDATA_FLAG_STAIRRIGHT  := 0x80000000; //StairRight
 
-// GetStandingLayers( x, y, flags, realm := _DEFAULT_REALM ); mapdata flags
+// GetStandingLayers( x, y, flags, realm := _DEFAULT_REALM, includeitems := 1 ); mapdata flags
 const MAPDATA_FLAG_NONE         := 0x0000;     // Nothing
 const MAPDATA_FLAG_MOVELAND     := 0x0001;     // Move Land
 const MAPDATA_FLAG_MOVESEA      := 0x0002;     // Move Sea
@@ -165,11 +165,12 @@ const SYSFIND_SEARCH_OFFLINE_MOBILES := 1;
 //	Target Options - add these together and pass as second
 //	param to Target()
 
-const TGTOPT_CHECK_LOS   := 0x0001;
-const TGTOPT_NOCHECK_LOS := 0x0000;	// to be explicit
-const TGTOPT_HARMFUL     := 0x0002;
-const TGTOPT_NEUTRAL     := 0x0000;	// to be explicit
-const TGTOPT_HELPFUL     := 0x0004;
+const TGTOPT_CHECK_LOS      := 0x0001;
+const TGTOPT_NOCHECK_LOS    := 0x0000;	// to be explicit
+const TGTOPT_HARMFUL        := 0x0002;
+const TGTOPT_NEUTRAL        := 0x0000;	// to be explicit
+const TGTOPT_HELPFUL        := 0x0004;
+const TGTOPT_ALLOW_NONLOCAL := 0x0008;
 
 // POLCLASS_* constants - use with obj.isa(POLCLASS_*)
 const POLCLASS_UOBJECT      := 1;
@@ -215,6 +216,11 @@ const ACTION_DIR_BACKWARD := 1;
 const ACTION_NOREPEAT     := 0;
 const ACTION_REPEAT       := 1;
 
+// Masks for EnableEvents()
+const EVMASK_ALL      := 0;
+const EVMASK_ONLY_PC  := 1;
+const EVMASK_ONLY_NPC := 2;
+
 //CanWalk
 const CANWALK_DIR := -1;
 
@@ -229,8 +235,8 @@ const CLOSE_PROFILE   := 8;
 const CLOSE_CONTAINER := 12;
 
 //SendCharProfile
-const CHARPROFILE_NO_UNEDITABLE_TEXT := array;
-const CHARPROFILE_NO_EDITABLE_TEXT := array;
+const CHARPROFILE_NO_UNEDITABLE_TEXT := "";
+const CHARPROFILE_NO_EDITABLE_TEXT := "";
 
 //Accessible
 const ACCESSIBLE_DEFAULT := -1; // uses the default from ssopt
@@ -248,7 +254,7 @@ AddMenuItem( menu, objtype, text, color:=0 );
 ApplyConstraint( objlist, configfile, propertyname, minvalue );
 AssignRectToWeatherRegion( region, xwest, ynorth, xeast, ysouth );
 Attach( character );
-Broadcast( text, font := _DEFAULT_TEXT_FONT, color := _DEFAULT_TEXT_COLOR, requiredcmdlevel := _DEFAULT_TEXT_REQUIREDCMD );
+Broadcast( text, font := _DEFAULT_TEXT_FONT, color := _DEFAULT_TEXT_COLOR, required_cmdlevel := _DEFAULT_TEXT_REQUIREDCMD );
 CancelTarget( of_whom );
 CanWalk(movemode, x1, y1, z1, x2_or_dir, y2 := CANWALK_DIR, realm := _DEFAULT_REALM);
 CheckLineOfSight( object1, object2 );
@@ -264,12 +270,12 @@ CoordinateDistanceEuclidean(x1, y1, x2, y2);
 CreateAccount( acctname, password, enabled );
 CreateItemAtLocation( x, y, z, objtype, amount := 1, realm := _DEFAULT_REALM );
 CreateItemCopyAtLocation(x, y, z, item, realm := _DEFAULT_REALM);
-CreateItemInBackpack( of_character, objtype, amount := 1 );
-CreateItemInContainer( container, objtype, amount := 1 );
-CreateItemInInventory( container, objtype, amount := 1 );
+CreateItemInBackpack( of_character, objtype, amount := 1, x := -1, y := -1 );
+CreateItemInContainer( container, objtype, amount := 1, x := -1, y := -1 );
+CreateItemInInventory( container, objtype, amount := 1, x := -1, y := -1 );
 CreateMenu( title );
 CreateMultiAtLocation( x, y, z, objtype, flags := 0, realm := _DEFAULT_REALM );
-CreateNpcFromTemplate( template, x, y, z, override_properties := 0, realm := _DEFAULT_REALM);
+CreateNpcFromTemplate( template, x, y, z, override_properties := 0, realm := _DEFAULT_REALM, forcelocation := 0);
 DestroyItem( item );
 DestroyMulti( multi );
 Detach();
@@ -277,7 +283,7 @@ DisableEvents( eventtype );     // eventtype combination of constants from SYSEV
 DisconnectClient( character );
 Distance( obj1, obj2 );
 DistanceEuclidean( obj1, obj2 );
-EnableEvents( eventtype, range := -1);  // eventtype combination of constants from SYSEVENT.INC
+EnableEvents( eventtype, range := -1, evmask := EVMASK_ALL );  // eventtype combination of constants from SYSEVENT.INC
 EnumerateItemsInContainer( container, flags := 0 );
 EnumerateOnlineCharacters();
 EquipFromTemplate( character, template ); // reads from equip.cfg
@@ -286,7 +292,7 @@ EraseGlobalProperty( propname );
 EraseObjProperty( object, propname );
 FindAccount( acctname );
 FindObjtypeInContainer( container, objtype, flags := FINDOBJTYPE_RECURSIVE );
-FindPath( x1, y1, z1, x2, y2, z2, realm := _DEFAULT_REALM, flags := FP_IGNORE_MOBILES, searchskirt := 5 );
+FindPath( x1, y1, z1, x2, y2, z2, realm := _DEFAULT_REALM, flags := FP_IGNORE_MOBILES, searchskirt := 5, movemode := "L" );
 FindSubstance( container, objtype, amount, makeinuse := 0, flags := 0 );
 GetAmount( item );
 GetCommandHelp( character, command );
@@ -309,7 +315,8 @@ GetRegionNameAtLocation( x, y, realm := _DEFAULT_REALM );
 GetRegionString( resource, x, y, propertyname, realm := _DEFAULT_REALM );
 GetSpellDifficulty( spellid );
 GetStandingHeight( x, y, startz, realm := _DEFAULT_REALM );
-GetStandingLayers( x, y, flags := MAPDATA_FLAG_ALL, realm := _DEFAULT_REALM );
+GetStandingLayers( x, y, flags := MAPDATA_FLAG_ALL, realm := _DEFAULT_REALM, includeitems := 1 );
+GetStandingCoordinates( x, y, radius := 0, minz := -128, maxz := 127, realm := _DEFAULT_REALM, movemode := "L", doors_block := 0);
 GetWorldHeight( x, y, realm := _DEFAULT_REALM );
 GrantPrivilege( character, privilege );
 HarvestResource( resource, x, y, b, n, realm := _DEFAULT_REALM ); // returns b*a where 0 <= a <= n
@@ -361,7 +368,7 @@ RegisterForSpeechEvents( at_object, range, flags := 0 );
 ReleaseItem( item );
 RequestInput( character, item, prompt ); // item is a placeholder, just pass any item
 ReserveItem( item );
-RestartScript( npc );
+RestartScript( npc_or_item );
 Resurrect( mobile, flags := 0 ); // flags: RESURRECT_*
 RevokePrivilege( character, privilege );
 SaveWorldState();
@@ -380,7 +387,7 @@ SendOpenSpecialContainer( character, container );
 SendOverallSeason( season_id, playsound := 1 );
 SendPacket( to_whom, packet_hex_string );
 SendPopUpMenu( to_whom, above, menu );
-SendQuestArrow( to_whom, x := -1, y := -1, target := "" ); // no params (-1x,-1y) turns the arrow off, target is required for HSA clients
+SendQuestArrow( to_whom, x := -1, y := -1, arrowid := 0 ); // no params (-1x,-1y) turns the arrow off, target is required for HSA clients
 SendSellWindow( character, vendor, i1, i2, i3, flags := 0 );
 SendSkillWindow( towhom, forwhom );
 SendStatus( character );
@@ -395,7 +402,7 @@ SetRegionLightLevel( regionname, lightlevel );
 SetRegionWeatherLevel( region, type, severity, aux := 0, lightoverride := -1);
 SetScriptController( who );
 SingleClick( who, what );
-Shutdown();
+Shutdown( exit_code := 0 );
 SpeakPowerWords( who, spellid, font := _DEFAULT_TEXT_FONT, color := _DEFAULT_TEXT_COLOR );
 StartSpellEffect( who, spellid );
 SubtractAmount( item, amount );

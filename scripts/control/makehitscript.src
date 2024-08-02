@@ -2,6 +2,6 @@ use uo;
 
 program makehitscript(item)
 
-item.hitscript := ":combat:mainhitscript";
+item.hitscript := ":combat:mainhit";
 endprogram
 

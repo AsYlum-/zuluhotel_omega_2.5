@@ -1,109 +1,9 @@
-function povernut(ch, us)
-    var xd, yd;
+use uo;
+use cfgfile;
+use os;
 
-    xd := ch.x - us.x;
-    yd := ch.y - us.y;
-	var signt;
-
-
-if ((xd==0) or (yd==0))
-	if (xd=0)
-		if(yd>=0)
-			ch.facing:=0;
-		else
-			ch.facing:=4;
-		endif
-	else
-		if(xd>=0)
-			ch.facing:=6;
-		else
-			ch.facing:=2;
-		endif
-	endif
-else
-    if (xd<0)
-	if (yd<0)
-		signt := 1;
-	else
-		signt := 2;
-	endif
-    else
-	if (yd<0)
-		signt := 3;
-	else
-		signt := 4;
-	endif
-    endif
-	case (signt)
-        1: if ( Tan(-xd, -yd)>=0.4142)
-		if (Tan(-xd, -yd)<=2.4142)
-			ch.facing:=3;
-		else
-			ch.facing:=2;
-		endif
-	   else
-			ch.facing:=4;
-	   endif
-        2: if ( Tan(-xd, yd)>=0.4142)
-		if (Tan(-xd, yd)<=2.4142)
-			ch.facing:=1;
-		else
-			ch.facing:=2;
-		endif
-	   else
-			ch.facing:=0;
-	   endif
-        3: if ( Tan(xd, -yd)>=0.4142)
-		if (Tan(xd, -yd)<=2.4142)
-			ch.facing:=5;
-		else
-			ch.facing:=6;
-		endif
-	   else
-			ch.facing:=4;
-	   endif
-        4: if ( Tan(xd, yd)>=0.4142)
-		if (Tan(xd, yd)<=2.4142)
-			ch.facing:=7;
-		else
-			ch.facing:=6;
-		endif
-	   else
-			ch.facing:=0;
-	   endif
-
- 	endcase
-
-endif
-endfunction
-
-function CreateSosBottle(char)
-
-var cfg := ReadConfigFile("sosarea");
-var maxI := GetConfigMaxIntKey(cfg);
-var sosnum := Random(maxI)+1;
-if ( sosnum > 10 )
-	sosnum := 10;
-endif
-var elem := cfg[Random(sosnum)];
-var X := cint(elem.x)+Random(cint(elem.range)*2) - cint(elem.range);
-var Y := cint(elem.y)+Random(cint(elem.range)*2) - cint(elem.range);
-var color := cint(elem.color);
-
-// var Z := GetWorldHeight(X,Y);
-
-// syslog(X+" "+Y+" "+Z);
-
-var bottle :=CreateItemInContainer(char.backpack, 0xa360);
-
-SetObjProperty(bottle, "tileX", X);
-SetObjProperty(bottle, "tileY", Y);
-SetObjProperty(bottle, "colormes", color);
-// SetObjProperty(bottle, "tileZ", (Z+1));
-
-UnloadConfigFile( "sosarea");
-
-endfunction
+include "include/random";
+include "include/itemutil";
 
 function RandomFish(character)
 
@@ -181,3 +81,113 @@ function check_for_water (theobj)
 		return 0;
 	endif
 endfunction
+
+//Depreciated Code
+/*
+function povernut(ch, us)
+    var xd, yd;
+
+    xd := ch.x - us.x;
+    yd := ch.y - us.y;
+	var signt;
+
+
+if ((xd == 0) or (yd == 0))
+	if (xd == 0)
+		if(yd >= 0)
+			ch.facing:=0;
+		else
+			ch.facing:=4;
+		endif
+	else
+		if(xd >= 0)
+			ch.facing:=6;
+		else
+			ch.facing:=2;
+		endif
+	endif
+else
+    if (xd < 0)
+	if (yd < 0)
+		signt := 1;
+	else
+		signt := 2;
+	endif
+    else
+	if (yd < 0)
+		signt := 3;
+	else
+		signt := 4;
+	endif
+    endif
+	case (signt)
+        1: if ( Tan(-xd, -yd)>=0.4142)
+		if (Tan(-xd, -yd)<=2.4142)
+			ch.facing:=3;
+		else
+			ch.facing:=2;
+		endif
+	   else
+			ch.facing:=4;
+	   endif
+        2: if ( Tan(-xd, yd)>=0.4142)
+		if (Tan(-xd, yd)<=2.4142)
+			ch.facing:=1;
+		else
+			ch.facing:=2;
+		endif
+	   else
+			ch.facing:=0;
+	   endif
+        3: if ( Tan(xd, -yd)>=0.4142)
+		if (Tan(xd, -yd)<=2.4142)
+			ch.facing:=5;
+		else
+			ch.facing:=6;
+		endif
+	   else
+			ch.facing:=4;
+	   endif
+        4: if ( Tan(xd, yd)>=0.4142)
+		if (Tan(xd, yd)<=2.4142)
+			ch.facing:=7;
+		else
+			ch.facing:=6;
+		endif
+	   else
+			ch.facing:=0;
+	   endif
+
+ 	endcase
+
+endif
+endfunction
+
+function CreateSosBottle(char)
+
+var cfg := ReadConfigFile("sosarea");
+var maxI := GetConfigMaxIntKey(cfg);
+var sosnum := Random(maxI)+1;
+if ( sosnum > 10 )
+	sosnum := 10;
+endif
+var elem := cfg[Random(sosnum)];
+var X := cint(elem.x)+Random(cint(elem.range)*2) - cint(elem.range);
+var Y := cint(elem.y)+Random(cint(elem.range)*2) - cint(elem.range);
+var color := cint(elem.color);
+
+// var Z := GetWorldHeight(X,Y);
+
+// syslog(X+" "+Y+" "+Z);
+
+var bottle :=CreateItemInContainer(char.backpack, 0xa360);
+
+SetObjProperty(bottle, "tileX", X);
+SetObjProperty(bottle, "tileY", Y);
+SetObjProperty(bottle, "colormes", color);
+// SetObjProperty(bottle, "tileZ", (Z+1));
+
+UnloadConfigFile( "sosarea");
+
+endfunction
+*/

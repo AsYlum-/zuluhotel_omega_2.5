@@ -63,7 +63,7 @@ function clone(npc, me)
 		EquipItem(npc, newbackpack);
 	endif
 
-	if (npc.color = cint(0x4631))
+	if (npc.color == cint(0x4631))
 		npc.color := 1002;
 	endif
 

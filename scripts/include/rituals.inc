@@ -9,6 +9,7 @@ include "include/classes";
 include "include/itemutil";
 include "include/random";
 include ":gumps:yesno";
+include ":combat:hitscriptinc";
 
 //Used objects
 const RITUAL_ROBE        := 0xBA29;
@@ -100,9 +101,9 @@ function TryToDrawCircle( who )
 
 			ev := os::wait_for_event( 5 );
 
-			if( ev and ev.source = who )
+			if( ev and ev.source == who )
 				set_critical(1);
-				if( ev.type = SYSEVENT_SPEECH )
+				if( ev.type == SYSEVENT_SPEECH )
 					if( ev.text[speech] )
 						loop := 0;
 					else
@@ -411,7 +412,7 @@ function ProcessRitual( who , item , byref magic_circle , the_ritual , keep_circ
 			ev := os::wait_for_event( 5 );
 			if( ev )
 				if( ev.source in wizards )
-					if( ev.type = SYSEVENT_SPEECH )
+					if( ev.type == SYSEVENT_SPEECH )
 						if( ev.text[speech] and !GetObjProperty( ev.source , "SaidFormula" + current ))
 							if( x_mod )
 								if( ev.source.x != x + x_mod )
@@ -486,7 +487,7 @@ function ProcessRitual( who , item , byref magic_circle , the_ritual , keep_circ
 				endif
 			endforeach
 
-			if( total = len( wizards ) )
+			if( total == len( wizards ) )
 
 				foreach wizard in wizards
 					EraseObjProperty( wizard , "SaidFormula" + current );
@@ -533,7 +534,7 @@ function ProcessRitual( who , item , byref magic_circle , the_ritual , keep_circ
 					var item_x_mods := SplitWords( GetConfigString( elem , "IXmod" + current ) );
 					var item_y_mods := SplitWords( GetConfigString( elem , "IYmod" + current ) );
 
-					if( len(the_items) = len(item_x_mods) and len(the_items) = len(item_y_mods) )
+					if( len(the_items) == len(item_x_mods) and len(the_items) == len(item_y_mods) )
 						var count;
 						for( count := 1 ; count <= len(the_items) ; count := count + 1 )
 							var to_be_created := Cint( the_items[count] );
@@ -607,7 +608,7 @@ function ProcessRitual( who , item , byref magic_circle , the_ritual , keep_circ
 
 	//Try to undo the Circle
 	if( len(magic_circle) > 4 )
-		if( keep_circ = UNDO_CIRCLE )
+		if( keep_circ == UNDO_CIRCLE )
 			if( !TryToUndoTheCircle( who , magic_circle , item ) )
 				EraseObjProperty( who , "#Casting" );
 				return 0;
@@ -657,7 +658,7 @@ function CheckRitualSkillCheck( wizards , item , magic_circle , spell )
 	var difficulty := GetSpellDifficulty( spell );
 	var min_diff	 := 100 + Cint((circ - 29) * 15);
 
-	if( spell = SPELLID_RITUAL_OF_CONSECRATION or spell = SPELLID_RITUAL_OF_CHANNEL_MANA )
+	if( spell == SPELLID_RITUAL_OF_CONSECRATION or spell == SPELLID_RITUAL_OF_CHANNEL_MANA )
 		who.mana := who.mana * 2;
 	endif
 
@@ -784,8 +785,8 @@ function TryToUndoTheCircle( who , magic_circle , item := 0 )
 
 			ev := os::wait_for_event( 5 );
 
-			if( ev and ev.source = who )
-				if( ev.type = SYSEVENT_SPEECH )
+			if( ev and ev.source == who )
+				if( ev.type == SYSEVENT_SPEECH )
 					if(ev.text[speech] )
 						loop := 0;
 					else
@@ -914,7 +915,7 @@ function LookForTheCircle( who )
 
 	//Check if the caster want to use his personnal circle
 	foreach thing in ListItemsAtLocation( who.x , who.y , who.z );
-		if( thing.objtype = NORTH_RUNE and GetObjProperty( thing , "PermMagicCircle" ) )
+		if( thing.objtype == NORTH_RUNE and GetObjProperty( thing , "PermMagicCircle" ) )
 			is_permanent := thing;
 			break;
 		endif
@@ -1002,25 +1003,25 @@ function TargetItemToEnchant( who, magic_circle, options, msg )
 		elseif( GetObjProperty( item, "UnEnchantable" ) )
 			SendSysMessage( who, "You can't enchant this item." );
 
-		elseif( item.hitscript = "::combat:voidscipt" )
+		elseif( item.hitscript == ":combat:voidscipt" )
 			SendSysMessage( who, "You can't enchant this item." );
 
-		elseif( item.hitscript = "::combat:banishscript" )
+		elseif( item.hitscript == ":combat:banishscript" )
 			SendSysMessage( who, "You can't enchant this item." );
 
-		elseif( item.hitscript = "::combat:blackrockscript" )
+		elseif( item.hitscript == ":combat:blackrockscript" )
 			SendSysMessage( who, "You can't enchant this item." );
 
-		elseif( item.hitscript = "::combat:lifedrainscript" )
+		elseif( item.hitscript == ":combat:lifedrainscript" )
 			SendSysMessage( who, "You can't enchant this item." );
 
-		elseif( item.hitscript = "::combat:manadrainscript" )
+		elseif( item.hitscript == ":combat:manadrainscript" )
 			SendSysMessage( who, "You can't enchant this item." );
 
-		elseif( item.hitscript = "::combat:piercingscript" )
+		elseif( item.hitscript == ":combat:piercingscript" )
 			SendSysMessage( who, "You can't enchant this item." );
 
-		elseif( item.hitscript = "::combat:spellstrikescript" )
+		elseif( item.hitscript == ":combat:spellstrikescript" )
 			SendSysMessage( who, "You can't enchant this item." );
 
 		elseif( GetObjProperty( item, "IsGMItem" ) )
@@ -1029,7 +1030,7 @@ function TargetItemToEnchant( who, magic_circle, options, msg )
 		elseif( item.newbie )
 			SendSysMessage( who, "You can't enchant newbied items." );
 
-		elseif( item.equipscript = "::skilladvancerequip" and item.unequipscript = "::skilladvancerunequip" )
+		elseif( item.equipscript == "::skilladvancerequip" and item.unequipscript == "::skilladvancerunequip" )
 
 			case( options )
 
@@ -1040,7 +1041,7 @@ function TargetItemToEnchant( who, magic_circle, options, msg )
 
 				0x001:
 					var curse := GetObjProperty( item , "Cursed" );
-					if( curse = 2 or curse = 3 )
+					if( curse == 2 or curse == 3 )
 						SendSysmessage( who , "You can't target cursed items." );
 					else
 						return item;
@@ -1060,7 +1061,7 @@ function TargetItemToEnchant( who, magic_circle, options, msg )
 				0x003:
 					if( item.skillid )
 						var curse := GetObjProperty( item , "Cursed" );
-						if( curse = 2 or curse = 3 )
+						if( curse == 2 or curse == 3 )
 							SendSysmessage( who , "You can't target cursed items." );
 						else
 							return item;
@@ -1083,7 +1084,7 @@ function TargetItemToEnchant( who, magic_circle, options, msg )
 				0x005:
 					if( item.ar )
 						var curse := GetObjProperty( item , "Cursed" );
-						if( curse = 2 or curse = 3 )
+						if( curse == 2 or curse == 3 )
 							SendSysmessage( who , "You can't target cursed items." );
 						else
 							return item;
@@ -1106,7 +1107,7 @@ function TargetItemToEnchant( who, magic_circle, options, msg )
 				0x007:
 					if( item.hp )
 						var curse := GetObjProperty( item , "Cursed" );
-						if( curse = 2 or curse = 3 )
+						if( curse == 2 or curse == 3 )
 							SendSysmessage( who , "You can't target cursed items." );
 						else
 							return item;
