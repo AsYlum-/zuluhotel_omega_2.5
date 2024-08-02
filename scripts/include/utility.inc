@@ -98,7 +98,7 @@ function GetDirection (character, x, y)
 	endif
 
 	var total_desc := "";
-	if (ns_desc = "" and ew_desc = "")
+	if (ns_desc == "" and ew_desc == "")
 		total_desc := "nearby";
 	else 
 		total_desc :=ns_desc + ew_desc;

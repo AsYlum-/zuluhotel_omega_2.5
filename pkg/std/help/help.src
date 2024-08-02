@@ -5,7 +5,7 @@ use os;
 use boat;
 
 include ":gumps:yesno";
-include "../pkg/std/housing/utility";
+include ":housing:utility";
 include "include/dotempmods";
 
 const X := 210;

@@ -1,3 +1,8 @@
+use uo;
+use os;
+use util;
+use cfgfile;
+
 function imalooter(npctemplate)
 
 	var cfg := ReadConfigFile("::npcdesc");
@@ -23,7 +28,7 @@ endfunction
 //good npcs use this function to determine what they should attack
 function IsHostile(mob)
 
-	if ( (!mob.npctemplate) or ( mob.script = "tamed" ) || GetObjProperty(mob, "NPCAttack"))
+	if ( (!mob.npctemplate) or ( mob.script == "tamed" ) || GetObjProperty(mob, "NPCAttack"))
 		return 0; 
 	endif
 
@@ -35,16 +40,16 @@ endfunction
 //aggro npcs use this function to determine what they should attack
 function IsGood(mob)
 
-	if ( (!mob.npctemplate) or ( mob.script = "tamed" ) || || GetObjProperty(mob, "NPCAttack"))
+	if ( (!mob.npctemplate) or ( mob.script == "tamed" ) || GetObjProperty(mob, "NPCAttack"))
 		return 1;
 	endif
 
-	if ( mob.script = "humuc" or mob.script = "merchant" or mob.script = "playervendor" )
+	if ( mob.script == "humuc" or mob.script == "merchant" or mob.script == "playervendor" )
 		return 0;
 	endif
 
 	var cfg := ReadConfigFile("::npcdesc");
-	if ( cfg[mob.npctemplate].alignment = "good" ) return 1; else return 0; endif
+	if ( cfg[mob.npctemplate].alignment == "good" ) return 1; else return 0; endif
 
 
 endfunction

@@ -1,6 +1,7 @@
 use uo;
 use os;
 use util;
+use cfgfile;
 
 include "include/classes";
 include ":combat:hitscriptinc";
@@ -72,7 +73,7 @@ function OmegaAttack(attacker, defender)
 	//find random piece of armor to hit -- need this for onhit script and damage
 	var def_armor:=GetHitArmor(defender);	
 	
-	start_script(":combat:hitscript/"+hitscript, {attacker, defender, attacker.weapon, def_armor, wbasedamage, 0});
+	start_script(hitscript, {attacker, defender, attacker.weapon, def_armor, wbasedamage, 0});
 	
 endfunction
 

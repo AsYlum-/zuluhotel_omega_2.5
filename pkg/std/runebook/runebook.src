@@ -79,19 +79,19 @@ program open_runebook( who, runebook )
 	var index;
 	var rune_count;
 	var page_count;
-	var defloc	 := 0;
-	var charges	 := Cint( GetObjProperty( runebook, "charges" ) );
+	var defloc := 0;
+	var charges := Cint( GetObjProperty( runebook, "charges" ) );
 	var maxcharges := Cint( GetObjProperty( runebook, "maxcharges" ) );
 	if( !maxcharges )
 		maxcharges := 5;
 	endif
 
-	var runes_def	 := GetObjProperty( runebook, "RuneDefs" );
+	var runes_def := GetObjProperty( runebook, "RuneDefs" );
 	if( !runes_def )
 		runes_def := array;
 	endif
 
-	var max_page	 := Cint( (runes_def.size()+1) / 2 );
+	var max_page := Cint( (runes_def.size()+1) / 2 );
 
 	var layout := { "page 0",
 			  "nodispose",
@@ -692,7 +692,7 @@ function TruncName( name )
 
 	foreach word in splited
 		if( (len(word) + len(the_name)) < 15 )
-			if( the_name = "" )
+			if( the_name == "" )
 				the_name := word;
 			else
 				the_name := the_name + " " + word;
@@ -702,7 +702,7 @@ function TruncName( name )
 		endif
 	endforeach
 
-	if( the_name = "" )
+	if( the_name == "" )
 		the_name := name[1,16];
 	endif
 

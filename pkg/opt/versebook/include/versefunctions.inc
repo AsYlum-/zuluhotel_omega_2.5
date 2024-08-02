@@ -3,6 +3,9 @@ use cfgfile;
 
 include "include/client";
 include "include/attributes";
+include "include/areas";
+include "verseconstants";
+include "include/spelldata";
 
 var cfgfile := ReadConfigFile(":versebook:verses");
 

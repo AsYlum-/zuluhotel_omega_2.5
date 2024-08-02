@@ -140,42 +140,42 @@ endfunction
 ////////////////////////////////////////////////////////////////
 function InsertInSortedArray( byref the_array, byref element )
 
-	var max := the_array.Size();
-	if( !max )
+	var maxarray := the_array.Size();
+	if( !maxarray )
 		return the_array.Append(element);
 	endif
 
 	var ctr;
-	var min := 1;
+	var minarray := 1;
 	if( the_array[1].IsA(POLCLASS_UOBJECT) )
-		while( min <= max )
-			ctr := Cint((min+max)/2);
-			if( the_array[ctr].serial = element.serial )
+		while( minarray <= maxarray )
+			ctr := Cint((minarray + maxarray)/2);
+			if( the_array[ctr].serial == element.serial )
 				var ret := error;
 				ret.+errortext := "Element " + element + " already exists in array";
 				return ret;
 			elseif( the_array[ctr].serial < element.serial )
-				min := ctr + 1;
+				minarray := ctr + 1;
 			else
-				max := ctr - 1;
+				maxarray := ctr - 1;
 			endif
 		endwhile
 	else
-		while( min <= max )
-			ctr := Cint((min+max)/2);
-			if( the_array[ctr] = element )
+		while( minarray <= maxarray )
+			ctr := Cint((minarray + maxarray)/2);
+			if( the_array[ctr] == element )
 				var ret := error;
 				ret.+errortext := "Element " + element + " already exists in array";
 				return ret;
 			elseif( the_array[ctr] < element )
-				min := ctr + 1;
+				minarray := ctr + 1;
 			else
-				max := ctr - 1;
+				maxarray := ctr - 1;
 			endif
 		endwhile
 	endif
 
-	return the_array.Insert( min, element );
+	return the_array.Insert( minarray, element );
 
 endfunction
 

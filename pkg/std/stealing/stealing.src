@@ -8,12 +8,14 @@
 use uo;
 use os;
 use cfgfile;
+use math;
 
 include "include/client";
 include "include/skillpoints";
 include "include/utility";
 include "include/eventid";
 include "include/attributes";
+include "include/random";
 
 
 program stealing(who)

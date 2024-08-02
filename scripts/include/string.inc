@@ -23,7 +23,7 @@
 ///////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
 
-
+use os;
 const CONST_EMPTY := { };
 const CONST_NULL := "";
 
@@ -108,7 +108,7 @@ function CreateArrayIndex(MainArray)
 
 	for (q := 1; q <= ArrayLen; q := q + 1)
 		for (i := 1; i <= ArrayLen; i := i + 1)
-			if (OldArray[q] = MainArray[i])
+			if (OldArray[q] == MainArray[i])
 				IndexArray[q] := i;
 				i := ArrayLen + 1;
 			endif
@@ -231,7 +231,7 @@ function PadArray(x, arraylength)
 
 	if (padding < 0)
 		return 0;
-	elseif (padding = 0)
+	elseif (padding == 0)
 		return x;
 	endif
 
@@ -257,7 +257,7 @@ function ReturnIndex(myarray, elementvalue)
 
 	var i;
 	for (i := 1; i <= len(myarray); i := i + 1)
-		if (myarray[i] = elementvalue)
+		if (myarray[i] == elementvalue)
 			return i;
 		endif
 	endfor
