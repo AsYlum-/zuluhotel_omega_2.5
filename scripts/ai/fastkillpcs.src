@@ -19,7 +19,6 @@ include "ai/setup/killpcssetup";
 include "ai/main/loot";
 include "ai/main/sleepmode";
 include "include/attributes";
-include "include/attributes";
 
 const HALT_THRESHOLD := 8; // how close before he attacks?
 
