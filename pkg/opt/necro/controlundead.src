@@ -102,12 +102,12 @@ program cast_controlundead( parms )
 	
 	var oldscript := cast_on.script;
 	SendSysmessage( caster , "Control Undead is successful!" );
+	WarnManagerOfNpcDeath(cast_on);
 	SetObjProperty( cast_on , "master" , caster.serial );
 	EraseObjProperty( cast_on, "SpawnPoint" );
 	EraseObjProperty( cast_on, "Anchor" );
 	SetObjProperty( cast_on, "charmed", 1 );
 	PrintTextAbove( cast_on, "You take control of " + cast_on.name );
-	WarnManagerOfNpcDeath(cast_on);
 	cast_on.script := "tamed";
 	RestartScript( cast_on );
 	

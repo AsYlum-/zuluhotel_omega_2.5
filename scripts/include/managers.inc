@@ -17,7 +17,7 @@ function ManagerAnswer( process, answer )
 
 endfunction
 
-
+/*
 function SendAuctionEvent( event_type, uobject := 0, mobile := 0, bid := 0, description := error )
 
 	var pid := GetGlobalProperty(PROPID_GLOBAL_AUCTION_MANAGER);
@@ -71,7 +71,7 @@ function SendAuctionEvent( event_type, uobject := 0, mobile := 0, bid := 0, desc
 	return ret;
 
 endfunction
-
+*/
 
 function SendBookCaseEvent( event_type, bookcase := 0 )
 

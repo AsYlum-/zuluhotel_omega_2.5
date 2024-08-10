@@ -7,6 +7,7 @@ include "include/difficulty";
 include "include/classes";
 include "include/autoloop";
 include ":gumps:yesno";
+include "include/math";
 
 const TEXT_COLOR		:= 319;
 const MAT_DIVIDER		:= 3;
@@ -173,12 +174,16 @@ function MakeUpgrade(character, start_material, smithyretort)
 			//Check for Exceptional
 			if ((RandomInt(100) < excep_chance) && (CheckSkill(character, skilltype, excep_diff,0) ))
 				var multiplier := 5 + Cint( GetEffectiveSkill( character , SKILLID_ARMSLORE ) / 10 );
+
 				if( GetObjProperty( character , CLASSEID_CRAFTER ) )
 					multiplier := Cint( multiplier * ClasseBonus( character , CLASSEID_CRAFTER ) );
 				endif
-				multiplier := 1.0 + multiplier/100.0;
-				newitem.Quality *= multiplier;
+								
+				multiplier := (100.0 + multiplier);
+				newitem.Quality := Trunc((newitem.Quality * multiplier) / 100.0, 2);
+
 				newitem.Name := "Exceptional " + newitem.Name;
+
 				if(GetObjProperty(character, "ToggleBuildMark"))
 					if( YesNo( character , "Add Builder Mark?" ))
 						SetObjProperty( newitem , "CraftedBy" , character.name );

@@ -164,6 +164,7 @@ program cast_spellbind( parms )
 
 	SendSysmessage( caster , "Spellbinding is successful!" );
 	PrintTextAbove( cast_on, "You take control of " + cast_on.name + "'s mind." );
+	WarnManagerOfNpcDeath(cast_on);
 	SetObjProperty( cast_on ,"master" , caster.serial );
 	SetObjProperty( cast_on ,"charmed", cast_on.script );
 	EraseObjProperty( cast_on, "SpawnPoint" );

@@ -1,10 +1,13 @@
 use uo;
+
 include ":staff:include/staff";
+
 program tame( who )
 
     SendSysmessage( who , "Tame what?" );
     var npc := Target( who );
 
+    WarnManagerOfNpcDeath(npc);
     SetObjProperty( npc , "master" , who.serial );
     SetObjProperty( npc , "script" , npc.script );
 	EraseObjProperty( npc, "SpawnPoint" );
