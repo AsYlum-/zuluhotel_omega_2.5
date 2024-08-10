@@ -36,9 +36,11 @@
 use os;
 use uo;
 use cfgfile;
+use vitals;
 
 include "include/clock";
 include "include/random";
+include "include/constants";
 include ":lootlottery:include/lootlottery";
 
 ///////////////////////////////////////////////////////////
@@ -80,7 +82,7 @@ function RemoveSpawnPoint(serial)
 
 	var num;
 	for (num := 1; num <= spawnpoint.size(); num := num + 1)
-		if (spawnpoint[num] = serial)
+		if (spawnpoint[num] == serial)
 			spawnpoint.erase(num);
 			break;
 		endif
@@ -106,7 +108,7 @@ function SpawnPointDeath(corpse);
 	var npcserial := GetObjProperty(corpse, "AiSerial");
 
 	var ev := struct;
-	ev.+type := EVID_SPAWN_DEATH;
+	ev.+type := EVID_SPAWNPOINT_DEATH;
 	ev.+npcserial := npcserial;
 	ev.+pointserial := pointserial;
 
@@ -128,7 +130,7 @@ function RemoveSerialFromPoint(byref point, npcserial)
 	var serials := GetObjProperty(point, "Serials");
 	var num;
 	for (num := 1; num <= serials.size(); num := num + 1)
-		if (serials[num] = npcserial)
+		if (serials[num] == npcserial)
 			serials.erase(num);
 			break;
 		endif
@@ -168,7 +170,7 @@ function Spawn(byref point)
 		serials := array;
 	endif
 
-	var max := CInt(GetObjProperty(point, "Max"));
+	var maxtime := CInt(GetObjProperty(point, "Max"));
 
 	// Check for expiry based on time.
 	var expiretime := CInt(GetObjProperty(point, "Expire")) * 60; // In mins.
@@ -185,7 +187,7 @@ function Spawn(byref point)
 	endif
 
 	// Anything to spawn?
-	if( template = "nil" or !template )
+	if( template == "nil" or !template )
 		Set_Critical( 0 );
 		return 0;
 	endif
@@ -196,7 +198,7 @@ function Spawn(byref point)
 	endif
 
 	// How many to spawn?
-	var numtospawn := max - serials.size();
+	var numtospawn := maxtime - serials.size();
 	if (numtospawn <= 0)
 		Set_Critical( 0 );
 		return 0;

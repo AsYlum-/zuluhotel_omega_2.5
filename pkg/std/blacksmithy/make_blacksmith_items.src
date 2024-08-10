@@ -44,7 +44,7 @@ include ":crafting:craftingfunctions";
 const DIVIDER		:= 3;
 const APPEAR_AT		:= -10;
 const POINTS_MULTIPLIER	:= 8;
-const GOLD_COLOR	:= 0x0033;
+//const GOLD_COLOR	:= 0x0033;
 const FAME_BONUS	:= 10;
 
 var itemcfg   := ReadConfigFile(":combat:itemdesc");
@@ -248,7 +248,8 @@ function MakeBlacksmithItems( character, ingots )
 			product.hp := product.maxhp;
 			if(GetObjProperty(product, "IsExceptional"))
 				if(product.hitscript)
-					product.speed_mod := Cint(ClasseBonus(character, CLASSEID_CRAFTER)*12); //18 at 6, 15 at 5 etc
+					//was *12.. changed to *8
+					product.speed_mod := Cint(ClasseBonus(character, CLASSEID_CRAFTER)*8); //18 at 6, 15 at 5 etc
 				elseif(product.ar)
 					// maybe something for armor too?
 				endif

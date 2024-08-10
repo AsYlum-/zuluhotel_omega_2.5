@@ -1,3 +1,5 @@
+use uo;
+
 function GetDefaultPrivs(who)
 
 var privs := {};
