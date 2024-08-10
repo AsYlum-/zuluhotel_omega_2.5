@@ -248,7 +248,8 @@ function MakeBlacksmithItems( character, ingots )
 			product.hp := product.maxhp;
 			if(GetObjProperty(product, "IsExceptional"))
 				if(product.hitscript)
-					product.speed_mod := Cint(ClasseBonus(character, CLASSEID_CRAFTER)*12); //18 at 6, 15 at 5 etc
+					//was *12.. changed to *8
+					product.speed_mod := Cint(ClasseBonus(character, CLASSEID_CRAFTER)*8); //18 at 6, 15 at 5 etc
 				elseif(product.ar)
 					// maybe something for armor too?
 				endif
