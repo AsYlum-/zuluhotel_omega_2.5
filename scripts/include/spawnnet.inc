@@ -2,6 +2,9 @@
 
 use uo;
 use os;
+use vitals;
+
+include "include/attributes";
 
 const CLEAR_RANGE :=100;
 
@@ -113,7 +116,7 @@ case(type)
 			endif
 			RevokePrivilege( npc, "invul" );
 			setobjproperty(npc, "guardkill", 1);
-			Damage( npc, (GetMaxHP(npc)+3) );
+			ApplyRawDamage( npc, (GetMaxHP(npc)+3) );
 		endif
 	   endforeach
 
@@ -188,7 +191,7 @@ endfunction
 
 function is_item_spawn(rune)
 
-var props :=cstr(hex(runes.flags[rune]));
+var props := cstr(hex(runes.flags[rune]));
 var type := props[3,1];
 type := cint(type);
 if(type >1)
