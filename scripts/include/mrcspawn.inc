@@ -1,3 +1,5 @@
+use uo;
+use os;
 use cfgfile;
 
 var mrcspawn_cfg := ReadConfigFile( "mrcspawn" );
