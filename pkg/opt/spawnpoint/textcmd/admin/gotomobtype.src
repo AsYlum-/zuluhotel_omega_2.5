@@ -99,10 +99,10 @@ function MakeAndProcessGump( character, found, realm )
 	GFTextLine(gump, 180, 35, 67, "Found NPCs in " +realmname);
 
 	// Change Info Buttons
-	GFTextLine(gump, 110, 70, 57, "Change Mob Type");
-	GFAddButton(gump, 60, 70, 4005, 4006, 1, 2); 
-	GFTextLine(gump, 110, 105, 57, "Change Realm");
-	GFAddButton(gump, 60, 105, 4005, 4006, 1, 4); 
+	GFTextLine(gump, 110, 70, 57, "Dummy Button 1");
+	GFAddButton(gump, 60, 70, 4005, 4006, GF_DUMMY_BTN, 0); 
+	GFTextLine(gump, 110, 105, 57, "Dummy Button 2");
+	GFAddButton(gump, 60, 105, 4005, 4006, GF_DUMMY_BTN, 0); 
 
 	// Column Titles
 	GFTextLine(gump, 96, 150, 900, "Mob Name");
