@@ -2,7 +2,7 @@ use os;
 use uo;
 
 include "include/recalling";
-include "../pkg/std/housing/utility";
+include ":housing:utility";
 
 program walk_on_moongate( mobile , gate )
 	if( mobile.npctemplate and mobile.script != "tamed" )

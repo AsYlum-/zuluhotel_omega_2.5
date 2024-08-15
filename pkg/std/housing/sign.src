@@ -523,7 +523,7 @@ function AddFriend( house, who )
 		return;
 	endif
 
-	if(targetchr.acctname = GetObjProperty( house , "owneracct" ))
+	if(targetchr.acctname == GetObjProperty( house , "owneracct" ))
 		SendSysmessage( who, "Canceled." );
 		return;
 	endif
@@ -558,7 +558,7 @@ function ListFriend( house, who )
 		endif
 	endfor
 
-	if (nothing = 0) SendSysmessage( who, "The list is empty." ); endif
+	if (nothing == 0) SendSysmessage( who, "The list is empty." ); endif
 
 endfunction
 
@@ -690,7 +690,7 @@ function AddCoowner( house, who )
 		return;
 	endif
 
-	if(targetchr.acctname = GetObjProperty( house , "owneracct" ))
+	if(targetchr.acctname == GetObjProperty( house , "owneracct" ))
 		SendSysmessage( who, "Canceled." );
 		return;
 	endif
@@ -724,7 +724,7 @@ function ListCoowner( house, who )
 		endif
 	endfor
 
-	if (nothing=0) SendSysmessage( who, "The list is empty." ); endif
+	if (nothing == 0) SendSysmessage( who, "The list is empty." ); endif
 
 endfunction
 

@@ -2,7 +2,7 @@ use uo;
 use cfgfile;
 use os;
 
-include "../pkg/std/cooking/food";
+include "food";
 include "include/dotempmods";
 include "include/drinkpotion";
 include "include/attributes";

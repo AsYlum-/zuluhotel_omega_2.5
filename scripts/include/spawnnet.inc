@@ -2,6 +2,9 @@
 
 use uo;
 use os;
+use vitals;
+
+include "include/attributes";
 
 const CLEAR_RANGE :=100;
 
@@ -87,7 +90,7 @@ if(!spawnnet)
 	return 0;
 endif
 
-if (flag = 1)
+if (flag == 1)
 	AddDeleted(SpawnNet);
 endif
 
@@ -107,13 +110,13 @@ var aux;
 case(type)
 	1: foreach npc in ListMobilesNearLocation( item.x, item.y, item.z, dist );
 		Aux:=cint( GetObjProperty( npc, "spawnnet" ));
-		if (Aux = SpawnNet)
-			if (flag = 1)
+		if (Aux == SpawnNet)
+			if (flag == 1)
 				EraseObjProperty( npc, "spawnnet");
 			endif
 			RevokePrivilege( npc, "invul" );
 			setobjproperty(npc, "guardkill", 1);
-			Damage( npc, (GetMaxHP(npc)+3) );
+			ApplyRawDamage( npc, (GetMaxHP(npc)+3) );
 		endif
 	   endforeach
 
@@ -130,7 +133,7 @@ case(type)
 
 		list := EnumerateItemsInContainer(aux);
 		var tmp := cint(GetObjProperty(aux, "spawnnet"));
-		if(tmp = spawnnet)
+		if(tmp == spawnnet)
 			EraseObjProperty(aux, "spawnnet");
 		endif
  	   else
@@ -139,7 +142,7 @@ case(type)
 	   foreach it in list
 		if(it.amount)
 			Aux:=cint( GetObjProperty( it, "spawnnet" ));
-			if(Aux = SpawnNet and it.objtype != 0xa300)
+			if(Aux == SpawnNet and it.objtype != 0xa300)
 				 destroyitem(it);
 			endif
 		endif
@@ -188,7 +191,7 @@ endfunction
 
 function is_item_spawn(rune)
 
-var props :=cstr(hex(runes.flags[rune]));
+var props := cstr(hex(runes.flags[rune]));
 var type := props[3,1];
 type := cint(type);
 if(type >1)

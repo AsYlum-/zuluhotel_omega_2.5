@@ -4,7 +4,7 @@ include "include/objtype";
 include "include/spelldata";
 include "include/areas";
 include "include/client";
-include "../pkg/std/housing/utility";
+include ":housing:utility";
 
 function Housecheck(character)
 	var multi := character.multi;

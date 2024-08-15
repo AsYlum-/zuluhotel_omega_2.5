@@ -18,13 +18,14 @@ const DMGID_NO_RESIST	:= 0x0800;
 
 include "include/attributes";
 include "include/constants";
-include "../../pkg/opt/karmafame/karmafame";
+include ":karmafame:karmafame";
 include "include/mobileutil";
 include "include/astralfights";
-include "../../pkg/opt/shilhook/shilcombat";
+include ":shilhook:shilcombat";
 include "include/areas";
 include "include/classes";
 include "include/client";
+include ":lootlottery:include/storedamage";
 
 const MAX_SERIAL_IN_HITLIST := 5;
 
@@ -158,7 +159,6 @@ function ApplyTheDamage( who, by_who, dmg, attack_type := DMGID_PHYSICAL )
 
 endfunction
 
-
 function ApplyTheAstralDamage( who, by_who, dmg, attack_type := DMGID_ASTRAL )
 
 	dmg := Cint(dmg);
@@ -220,7 +220,6 @@ function ApplyTheAstralDamage( who, by_who, dmg, attack_type := DMGID_ASTRAL )
 
 endfunction
 
-
 function GenerateHitlist( who, serial, factor )
 
 	var hitlist := GetObjProperty( who, PROPID_MOBILE_HITLIST );
@@ -237,7 +236,6 @@ function GenerateHitlist( who, serial, factor )
 	SetObjProperty( who, PROPID_MOBILE_HITLIST, hitlist );
 	
 endfunction
-
 
 function ReplaceOldestInHitlist( byref hitlist, serial, factor )
 
@@ -269,7 +267,6 @@ function ReplaceOldestInHitlist( byref hitlist, serial, factor )
 	
 endfunction
 
-			
 function AddSerialToHitlist( byref hitlist, serial, factor )
 
 	foreach arr in hitlist
@@ -286,7 +283,6 @@ function AddSerialToHitlist( byref hitlist, serial, factor )
 	return hitlist.append(add);
 	
 endfunction
-
 
 function IsImmunedFromThisDamageType( who, byref dmg, attack_type )
 
@@ -319,7 +315,6 @@ function IsImmunedFromThisDamageType( who, byref dmg, attack_type )
 	
 endfunction
 
-
 function TryToInflictFinalDeath( who, attack_type )
 	
 	var final_death := GetObjProperty(who, PROPID_MOBILE_FINAL_DEATH);
@@ -340,7 +335,6 @@ function TryToInflictFinalDeath( who, attack_type )
 	
 endfunction
 
-
 function FindMaster( byref mobile )
 
 	var serial := Cint( GetObjProperty( mobile, PROPID_MOBILE_MASTER_SERIAL ) );
@@ -351,7 +345,6 @@ function FindMaster( byref mobile )
 	return FindMobile( serial );
 	
 endfunction
-
 
 function FindMobile( byref serial )
 
@@ -369,20 +362,17 @@ function FindMobile( byref serial )
 	
 endfunction
 
-
 function IsAnimated( byref mobile )
 
 	return GetObjProperty( mobile, PROPID_MOBILE_ANIMATED );
 	
 endfunction
 
-
 function IsCharmed( byref mobile )
 
 	return GetObjProperty( mobile, PROPID_MOBILE_CHARMED );
 	
 endfunction
-
 
 function IsSummoned( byref mobile )
 

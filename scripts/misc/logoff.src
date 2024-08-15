@@ -77,7 +77,9 @@ program logoff(who)
 	// online time counter
 	var sessiontime:=ReadGameClock()-GetObjProperty(who,"#logontime");
 	var timer:=GetObjProperty(who,"onlinetimer");
-	if(!timer) timer:=0; endif
+	if(!timer)
+		timer:=0;
+	endif
 	SetObjProperty(who,"onlinetimer",timer+sessiontime);
 /*
 	//reset newbie status
@@ -116,20 +118,25 @@ endprogram
 
 function setchat(who)
 
-	while (getglobalproperty("plylock")=1)
+	while (getglobalproperty("plylock") ==1 )
 	sleep(10);
 	endwhile
 	set_critical(1);
 
 	setglobalproperty("plylock",1);
 
-	var i,plychat:=getglobalproperty("plychat"),csize:=plychat.size();
+	var i, plychat:=getglobalproperty("plychat"), csize:=plychat.size();
 
-	for (i:=1;i<=csize;i:=i+1)
-		if (plychat[i]=who.serial) plychat.erase(i); break; endif
+	for (i:=1; i<=csize; i:=i+1)
+		if (plychat[i] == who.serial) 
+			plychat.erase(i); 
+			break; 
+		endif
 	endfor
 
-	if (plychat.size()=0) plychat:={"NONE"}; endif
+	if (plychat.size() == 0) 
+		plychat := {"NONE"};
+	endif
 	setglobalproperty("plychat",plychat);
 	setglobalproperty("plylock",0);
 	set_critical(0);
@@ -186,19 +193,19 @@ function fixcolor(who)
 
 	var newcolor, racepicked := who.title_race;
 
-	if (racepicked="Elf")
+	if (racepicked == "Elf")
 		newcolor := 770;
-	elseif (racepicked="Dark-Elf")
+	elseif (racepicked == "Dark-Elf")
 		newcolor := 33877;
-	elseif (racepicked="Goblin")
+	elseif (racepicked == "Goblin")
 		newcolor := 34186;
-	elseif (racepicked="Barbarian")
+	elseif (racepicked == "Barbarian")
 		newcolor := 33804;
-	elseif (racepicked="Dwarf")
+	elseif (racepicked == "Dwarf")
 		newcolor := 33888;
-	elseif (racepicked="Orc")
+	elseif (racepicked == "Orc")
 		newcolor := 1056;
-	elseif (racepicked="Frost-Elf")
+	elseif (racepicked == "Frost-Elf")
 		newcolor := 91;
 	else
 		newcolor := who.truecolor;

@@ -2,7 +2,7 @@ use uo;
 use os;
 
 include "include/objtype";
-include "../pkg/std/housing/utility";
+include ":housing:utility";
 
 program redeed( who )
 

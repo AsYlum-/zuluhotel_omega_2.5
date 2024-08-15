@@ -2,6 +2,7 @@ use uo;
 use os;
 
 include "include/client";
+include "include/attributes";
 
 function StoreDamage(attacker, defender, damage)
 

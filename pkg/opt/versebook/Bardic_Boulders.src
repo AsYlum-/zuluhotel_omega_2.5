@@ -138,7 +138,8 @@ function HitWithBoulder(who, targ, damage, range)
 			MoveObjectToLocation(rock, rock.x, rock.y, z+3, rock.realm, MOVEOBJECT_FORCELOCATION);
 			rock.movable := 0;
 			SetObjProperty(rock, "f", 1);
-			Start_Script("::misc/deleter", {rock, (10+RandomInt(60))});
+			Start_Script("::misc/deleter", {rock, 1});
+			//Start_Script("::misc/deleter", {rock, (10+RandomInt(60))});
 		else
 			return 0;
 		endif

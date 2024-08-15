@@ -15,7 +15,7 @@ include "include/spelldata";
 include "ai/setup/modsetup";
 include "include/random";
 include "include/attributes";
-include "../pkg/std/housing/utility";
+include ":housing:utility";
 
 const HALT_THRESHOLD := 10;
 Const MOVING_EFFECT_FIREBALL	:= 0x36D4;
@@ -668,7 +668,7 @@ function OpenMyPack();
 		132:	mounttype := 0x3ead;	// Kirin
 		118:	mounttype := 0x3eb2;	// War Horse (Purple)
 		122:	mounttype := 0x3eb4;	// Unicorn
-		116:	mounttype := 0x3eb5;	// Nightmare
+		//116:	mounttype := 0x3eb5;	// Nightmare
 		179:	mounttype := 0x3eb7;	// Dark Steed
 		187:	mounttype := 0x3eb8;	// Ridgeback
 		188:	mounttype := 0x3eba;	// Ridgeback, Savage
@@ -681,7 +681,7 @@ function OpenMyPack();
 		277:	mounttype := 0x3e91;	// Storm Wolf
 		284:	mounttype := 0x3e92;	// Mondain's Steed
 		243:	mounttype := 0x3e94;	// Hai Riyo
-		191:	mounttype := 0x3e9c;	// Kirin
+		//191:	mounttype := 0x3e9c;	// Kirin
 		0x9:	mounttype := 0x3f6f;	// Demon (looks awful)
 			
 	endcase

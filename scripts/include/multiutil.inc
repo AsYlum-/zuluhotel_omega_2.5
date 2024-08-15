@@ -1,3 +1,7 @@
+use uo;
+
+include "include/constants/propids";
+include "include/damages";
 
 function FindMultiOwner( house )
 
@@ -43,7 +47,7 @@ endfunction
 
 function IsHouseOwner( mobile, house )
 
-	if( GetObjProperty( house, PROPID_MULTI_OWNER ) = mobile.serial )
+	if( GetObjProperty( house, PROPID_MULTI_OWNER ) == mobile.serial )
 		return 1;
 	else
 		return 0;
@@ -58,7 +62,7 @@ function IsWelcomeInHouse( mobile, house )
 		return 1;
 	endif
 	
-	if( GetObjProperty( house, PROPID_MULTI_OWNER ) = mobile.serial )
+	if( GetObjProperty( house, PROPID_MULTI_OWNER ) == mobile.serial )
 		return 1;
 	endif
 	

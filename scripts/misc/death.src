@@ -7,12 +7,12 @@ include "include/areas";
 include "include/starteqp";
 include "include/npcbackpacks";
 include "include/eventid";
-include "../../pkg/opt/karmafame/karmafame";
+include ":karmafame:karmafame";
 include "include/dismount";
 include "include/managers";
-include "../../pkg/opt/shilhook/shilcombat";
+include ":shilhook:shilcombat";
 include ":champspawns:death";
-include ":lootlottery:include/lootlottery";
+include ":lootlottery:lootlottery";
 
 program npcdeath(corpse)
 

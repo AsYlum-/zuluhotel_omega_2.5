@@ -79,7 +79,9 @@ function SpawnChampion(altar)
 	  SetName(item, name);
 	  item.desc := name;  
 	  if(GetObjProperty(creature, "Champion") == 2)
-		item.color := 1948;
+		  item.color := 1948;
+    elseif(GetObjProperty(creature, "Champion") == 3)
+		  item.color := 1183;
 	  endif
   endif
 

@@ -16,35 +16,35 @@ function castspell( caster, cast_on, spellname )
 
 	case (spellname)
 	"summondrag":
-		SummonDrag(caster,cast_on);	
+		SummonDrag(caster);	
 	"summonskel":
-		SummonSkel(caster,cast_on);	
+		SummonSkel(caster);	
 	"gluttons":
-		Gluttons(caster,cast_on);	
+		Gluttons(caster);	
 	"superspider":
-		Superspider(caster,cast_on);	
+		Superspider(caster);	
 	"summonskelarmy":
-		SummonSkelarmy(caster,cast_on);
+		SummonSkelarmy(caster);
 	"massvatten":
-		Massvatten(caster, cast_on);
+		Massvatten(caster);
 	"masseld":
 		Masseld(caster, cast_on);
 	"massgust":
-		Massgust(caster, cast_on);
+		Massgust(caster);
 	"masswyvern":
-		Masswyvern(caster, cast_on);
+		Masswyvern(caster);
 	"masskill":
-		Masskill(caster, cast_on);
+		Masskill(caster);
 	"masscalllightning":
-		Masscalllightning(caster, cast_on);
+		Masscalllightning(caster);
 	"massicestrike":
-		Massicestrike(caster, cast_on);
+		Massicestrike(caster);
 	"massshiftingearth":
-		Massshiftingearth(caster, cast_on);
+		Massshiftingearth(caster);
 	"massholybolt":
-		MassHolyBolt(caster, cast_on);
+		MassHolyBolt(caster);
 	"champfire":
-		ChampFire(caster, cast_on);
+		ChampFire(caster);
 
 	default:
 		var SpellID := GetSpellID(spellname);
@@ -67,7 +67,7 @@ function castspell( caster, cast_on, spellname )
 	endcase
 endfunction
 
-function Massvatten(me, onwho)
+function Massvatten(me)
 	var players := ListMobilesNearLocation( me.x , me.y , me.z , 20 , me.realm );
 	say("Vas Fluctus Perturbo Magus Navitas");
 	sleep(2);
@@ -83,7 +83,7 @@ function Massvatten(me, onwho)
 	endforeach
 endfunction
 
-function Massgust(me, onwho)
+function Massgust(me)
 	var players := ListMobilesNearLocation( me.x , me.y , me.z , 20 , me.realm );
 	say("Vas Gust Do Ar");
 	sleep(2);
@@ -99,7 +99,7 @@ function Massgust(me, onwho)
 	endforeach
 endfunction
 
-function Masswyvern(me, onwho)
+function Masswyvern(me)
 	var players := ListMobilesNearLocation( me.x , me.y , me.z , 20 , me.realm );
 	say("Vas Umbrae Tenebrae Venarent");
 	sleep(2);
@@ -115,7 +115,7 @@ function Masswyvern(me, onwho)
 	endforeach
 endfunction
 
-function Masskill(me, onwho)
+function Masskill(me)
 	var players := ListMobilesNearLocation( me.x , me.y , me.z , 20 , me.realm );
 	say("Vas Ulties Manum Necarent");
 	sleep(2);
@@ -131,7 +131,7 @@ function Masskill(me, onwho)
 	endforeach
 endfunction
 
-function Masscalllightning(me, onwho)
+function Masscalllightning(me)
 	var players := ListMobilesNearLocation( me.x , me.y , me.z , 20 , me.realm );
 	say("Vas Batida Do Deus");
 	sleep(2);
@@ -147,7 +147,7 @@ function Masscalllightning(me, onwho)
 	endforeach
 endfunction
 
-function Massicestrike(me, onwho)
+function Massicestrike(me)
 	var players := ListMobilesNearLocation( me.x , me.y , me.z , 20 , me.realm );
 	say("Vas Geada Com Inverno");
 	sleep(2);
@@ -163,7 +163,7 @@ function Massicestrike(me, onwho)
 	endforeach
 endfunction
 
-function Massshiftingearth(me, onwho)
+function Massshiftingearth(me)
 	var players := ListMobilesNearLocation( me.x , me.y , me.z , 20 , me.realm );
 	say("Vas Esmagamento Con Pedra");
 	sleep(2);
@@ -179,7 +179,7 @@ function Massshiftingearth(me, onwho)
 	endforeach
 endfunction
 
-function MassHolyBolt(me, onwho)
+function MassHolyBolt(me)
 	var players := ListMobilesNearLocation( me.x , me.y , me.z , 20 , me.realm );
 	say("Vas Sanctus Utor Telum");
 	sleep(2);
@@ -232,7 +232,7 @@ function Masseld(me, onwho)
 	Start_script( ":summoning:npcremovefields", buffParms );
 endfunction
 
-function ChampFire(me, onwho)
+function ChampFire(me)
 	var players := ListMobilesNearLocation( me.x , me.y , me.z , 20 , me.realm );
 
 	var ele := Random(6)+1;
@@ -258,7 +258,7 @@ function ChampFire(me, onwho)
 	endforeach
 endfunction
 
-function SummonDrag(me, onwho)
+function SummonDrag(me)
 
 	var timescasted := GetObjProperty(me, "timescasted");
 	if(!timescasted)
@@ -301,7 +301,7 @@ function SummonDrag(me, onwho)
 endfunction
 
 
-function SummonSkelarmy(me, onwho)
+function SummonSkelarmy(me)
 
 	var timescasted := GetObjProperty(me, "timescasted");
 	if(!timescasted)
@@ -330,7 +330,7 @@ function SummonSkelarmy(me, onwho)
 
 endfunction
 
-function SummonSkel(me, onwho)
+function SummonSkel(me)
 
 
 	var timescasted := GetObjProperty(me, "timescasted");
@@ -356,7 +356,7 @@ function SummonSkel(me, onwho)
 
 endfunction
 
-function Gluttons(me, onwho)
+function Gluttons(me)
 
 	var timescasted := GetObjProperty(me, "timescasted");
 	if(!timescasted)
@@ -377,7 +377,7 @@ function Gluttons(me, onwho)
 	endcase
 endfunction
 
-function Superspider(me, onwho)
+function Superspider(me)
 
 	var timescasted := GetObjProperty(me, "timescasted");
 	if(!timescasted)

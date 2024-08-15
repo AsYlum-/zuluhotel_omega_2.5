@@ -13,6 +13,7 @@ include "include/damages";
 include "include/bitwise";
 include "include/attributes";
 include ":lootlottery:storedamage";
+include "include/skillpoints";
 
 var combat_settingscfg := ReadConfigFile(":combat:settings");
 
@@ -571,7 +572,7 @@ function DealDamage( attacker, defender, weapon, armor, basedamage, rawdamage )
 
 		//Check if the armor have an on hit script and launch it
 		if( onhit )
-			start_script(":combat:onhitscript/"+onhit , {attacker, defender, weapon, armor, basedamage, rawdamage} );
+			start_script( onhit , {attacker, defender, weapon, armor, basedamage, rawdamage} );
 		else
 			ApplyTheDamage( defender , attacker , rawdamage );
 		endif
@@ -585,7 +586,7 @@ endfunction
 function DestroyEquipment( who, item )
 
 	// Wrestling, core error 
-	if (item.objtype == 0xF020)
+	if (item.objtype == 0x1F020)
 		return 0;
 	endif
 

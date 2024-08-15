@@ -2,6 +2,11 @@ use uo;
 use cfgfile;
 
 include ":gumps:yesno";
+include "include/client";
+include "include/classes";
+include "include/math";
+
+const GOLD_COLOR	:= 0x0033;
 
 function ApplyMaterialProperties(byref product_desc, material, is_exceptional, character, skill_id)
 
@@ -41,15 +46,16 @@ function ApplyMaterialProperties(byref product_desc, material, is_exceptional, c
 		endif
 		product_desc.Cprops.insert( "IsExceptional", 1 );
 		product_desc.Desc := "Exceptional " + product_desc.Desc;
-
+	
 		var multiplier := 5 + Cint(GetEffectiveSkill(character, SKILLID_ARMSLORE) / 10 );
-
+		
 		if(GetObjProperty(character , CLASSEID_CRAFTER))
 			multiplier := Cint(multiplier * ClasseBonus(character, CLASSEID_CRAFTER));
 		endif
 
-		multiplier	:= (100 + multiplier) / 100.0 ;
-		product_desc.Quality *= multiplier;
+		multiplier := (100 + multiplier);
+        product_desc.Quality := Trunc((product_desc.Quality * multiplier) / 100.0, 2);
+
 	endif
 
 	

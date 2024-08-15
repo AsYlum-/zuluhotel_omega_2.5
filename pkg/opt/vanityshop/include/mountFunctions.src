@@ -1,13 +1,14 @@
 
+
 function CopyProps(item, mount)
     var prop_list :={
         "poisonkillpcs",
         "spellkillpcs",
-        "firebreather",
+        "firebreather"
     };
 
     foreach prop in proplist
-        if GetObjProperty(item, prop)
+        if (GetObjProperty(item, prop))
             SetObjProperty(mount, prop, 1);
         endif
     endforeach

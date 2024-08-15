@@ -4,7 +4,7 @@ use uo;
 include "include/client";
 include "include/objtype";
 include "util/key";
-include "../pkg/std/boat/plankutil";
+include "plankutil";
 
 /*
  * the searchoffset matrix is for an east-facing plank.

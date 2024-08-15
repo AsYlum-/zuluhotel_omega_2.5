@@ -14,6 +14,7 @@ include "include/skillpoints";
 include "include/utility";
 include "include/eventid";
 include "include/attributes";
+include "include/random";
 
 
 program stealing(who)
