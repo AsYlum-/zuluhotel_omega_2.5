@@ -19,7 +19,6 @@ var itemcount := 1;
 set_script_option( 4, 1 );
 
 program convertworld( who )
-/*
 /* 		BACK UP CHARACTERS
 
 Note: Only characters skills, stats, and hair type (not colour) is saved.
@@ -30,6 +29,7 @@ to set a new pword for every account if you remake it.
 
 */
 
+/*
 var file := OpenDataFile(":convertworld:characters");
 
 if (!file)
