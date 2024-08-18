@@ -166,7 +166,27 @@ function RegisterSpawnPoints()
 	spawnpoints := {};
 	var start := ReadGameClock();
 	SysLog( "Starting spawnpoints registration..." );
-	foreach object in ListObjectsInBox( 0, 0, -128, 7167, 4094, 128 )
+	foreach object in ListObjectsInBox( 0, 0, -128, 7167, 4095, 128, realm := "britannia" )
+		if( object.objtype == UOBJ_SPAWNPOINT )
+			spawnpoints.append(object);
+		endif
+	endforeach
+	foreach object in ListObjectsInBox( 0, 0, -128, 7167, 4095, 128, realm := "britannia_alt" )
+		if( object.objtype == UOBJ_SPAWNPOINT )
+			spawnpoints.append(object);
+		endif
+	endforeach
+	foreach object in ListObjectsInBox( 0, 0, -128, 2559, 2047, 128, realm := "malas" )
+		if( object.objtype == UOBJ_SPAWNPOINT )
+			spawnpoints.append(object);
+		endif
+	endforeach
+	foreach object in ListObjectsInBox( 0, 0, -128, 1447, 1447, 128, realm := "tokuno" )
+		if( object.objtype == UOBJ_SPAWNPOINT )
+			spawnpoints.append(object);
+		endif
+	endforeach
+	foreach object in ListObjectsInBox( 0, 0, -128, 2301, 1597, 128, realm := "ilshenar" )
 		if( object.objtype == UOBJ_SPAWNPOINT )
 			spawnpoints.append(object);
 		endif

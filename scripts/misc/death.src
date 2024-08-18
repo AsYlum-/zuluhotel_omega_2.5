@@ -88,7 +88,7 @@ program npcdeath(corpse)
 		endif
 		resnum := resnum + 1;
 		if (resnum < 4 and GetObjProperty(corpse,"master") != 0) 
-			heart := CreateItemAtLocation(corpse.x,corpse.y,corpse.z,0x1CED,1);
+			heart := CreateItemAtLocation(corpse.x,corpse.y,corpse.z,0x1CED,1,corpse.realm);
 			heart.newbie := 1;	
 			heart.color := 1172;
 			heart.usescript := "";
@@ -172,7 +172,7 @@ program npcdeath(corpse)
 	if( nocorpse )
 		foreach item in EnumerateItemsInContainer( corpse )
 			if( item.container == corpse )
-				MoveObjectToLocation( item, corpse.x, corpse.y, corpse.z );	
+				MoveObjectToLocation( item, corpse.x, corpse.y, corpse.z, corpse.realm );	
 			endif
 		endforeach
 		DestroyItem(corpse);
