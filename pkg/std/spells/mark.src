@@ -20,7 +20,7 @@ program cast_mark( caster, spell_id )
 		return 0;
 	endif
 
-	var Near_Items := ListItemsNearLocation(caster.x, caster.y, caster.z,10, caster.realm);
+	var Near_Items := ListItemsNearLocation(caster.x, caster.y, caster.z, 10, caster.realm);
 	foreach thing in Near_Items
 		if (thing.objtype == 0xa3c7)
 			SendSysMessage( caster, "You can't mark a rune here." );
@@ -73,10 +73,11 @@ program cast_mark( caster, spell_id )
 
 	var cast_on2;
 
+	Print($"Cast_on: {cast_on} / o.r: {cast_on.realm}  cast_on.x: {cast_on.x} cast_ony: {cast_on.y} cast_on.z: {cast_on.z}");
 	if (cast_on.container)
 		cast_on2 := CreateItemInContainer(cast_on.container, 0x1f14, 1);
 	else
-		cast_on2 := CreateItemAtLocation(cast_on.x, cast_on.y, cast_on.z, 0x1f14, 1);
+		cast_on2 := CreateItemAtLocation(cast_on.x, cast_on.y, cast_on.z, 0x1f14, 1, cast_on.realm);
 	endif
 
 	SubtractAmount(cast_on, 1);	
@@ -84,6 +85,9 @@ program cast_mark( caster, spell_id )
 	SetObjProperty(cast_on2, "x", caster.x);
 	SetObjProperty(cast_on2, "y", caster.y);
 	SetObjProperty(cast_on2, "z", caster.z);
+	SetObjProperty(cast_on2, "realm", caster.realm);
+	
+	Print($"Cast_o2n: {cast_on2} / o.r: {cast_on2.realm}  cast_on.x: {cast_on2.x} cast_ony: {cast_on2.y} cast_on.z: {cast_on2.z}");
 
 	SetName(cast_on2, "a marked recall rune");
 

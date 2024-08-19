@@ -193,7 +193,7 @@ function IsForbiddenAreaToRecallFrom( byref who )
 endfunction
 
 
-function IsForbiddenAreaToRecallTo( byref who, byref x, byref y )
+function IsForbiddenAreaToRecallTo( byref who, byref x, byref y)
 	
 	if( who.cmdlevel )
 		return 0;
@@ -201,7 +201,7 @@ function IsForbiddenAreaToRecallTo( byref who, byref x, byref y )
 
 	var old_prio := set_priority(100);
 
-	if( !CheckPoz( x, y ) )
+	if( !CheckPoz( x, y) )
 		set_priority(old_prio);
 		return 1;
 	endif
