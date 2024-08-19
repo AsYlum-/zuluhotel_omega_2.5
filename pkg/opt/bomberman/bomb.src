@@ -21,7 +21,7 @@ program kegBomb(who)
 		bmPlaced := GetObjProperty(who, "bmPlaced");
 	endif
 
-	if(!IsInBox(who, 5508, 5527, 1655, 1674))
+	if(!IsInBox(who, 5508, 5527, 1655, 1674, who.realm))
 		SendSysMessage(who, "Can't use that here.");
 		return;
 	endif
