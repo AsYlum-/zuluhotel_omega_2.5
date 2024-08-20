@@ -225,20 +225,85 @@ program textcmd_mobedit(who)
 			SendSysMessage(who, "Adding AR_MOD of " +new_stats[11]+ " to base AR of "+mobile.ar);
 			mobile.ar_mod := (Cint(new_stats[11]) - who.ar);
 		endif
-		//Print($"Old Stats Array 12:" +old_stats);
-		//Print($"New Stats Array 12:" +new_stats);
 		if (old_stats[12] != new_stats[12])
-			Print($"Earth Start is:" +earth);
-			EraseObjProperty(who, "EarthProtection");
-			earth := CInt(GetObjProperty(who, "EarthProtection"));
-			Print($"Earth 2nd is:" +earth);
-			earth := Cint(new_stats[12]);
-			Print($"Earth 3rd is:" +earth);
-			SetObjProperty(who, "EarthProtection", earth);
-			var earth2 := CInt(GetObjProperty(who, "EarthProtection"));
-			Print($"New Earth is:" +earth2);
-
+			EraseObjProperty(mobile, "EarthProtection");
+			SetObjProperty(mobile, "EarthProtection", Cint(new_stats[12]));
 			SendSysMessage(who, "Changing Earth Protection to: "+new_stats[12]);
+		endif
+		if (old_stats[13] != new_stats[13])
+			EraseObjProperty(mobile, "FireProtection");
+			SetObjProperty(mobile, "FireProtection", Cint(new_stats[13]));
+			SendSysMessage(who, "Changing Fire Protection to: "+new_stats[13]);
+		endif
+		if (old_stats[14] != new_stats[14])
+			EraseObjProperty(mobile, "WaterProtection");
+			SetObjProperty(mobile, "WaterProtection", Cint(new_stats[14]));
+			SendSysMessage(who, "Changing Water Protection to: "+new_stats[14]);
+		endif
+		if (old_stats[15] != new_stats[15])
+			EraseObjProperty(mobile, "AirProtection");
+			SetObjProperty(mobile, "AirProtection", Cint(new_stats[15]));
+			SendSysMessage(who, "Changing Air Protection to: "+new_stats[15]);
+		endif
+		if (old_stats[16] != new_stats[16])
+			EraseObjProperty(mobile, "HolyProtection");
+			SetObjProperty(mobile, "HolyProtection", Cint(new_stats[16]));
+			SendSysMessage(who, "Changing Holy Protection to: "+new_stats[16]);
+		endif
+		if (old_stats[17] != new_stats[17])
+			EraseObjProperty(mobile, "NecroProtection");
+			SetObjProperty(mobile, "NecroProtection", Cint(new_stats[17]));
+			SendSysMessage(who, "Changing Necro Protection to: "+new_stats[17]);
+		endif
+		if (old_stats[18] != new_stats[18])
+			EraseObjProperty(mobile, "PhysicalProtection");
+			SetObjProperty(mobile, "PhysicalProtection", Cint(new_stats[18]));
+			SendSysMessage(who, "Changing Physical Protection to: "+new_stats[18]);
+		endif
+		if (old_stats[19] != new_stats[19])
+			EraseObjProperty(mobile, "PermPoisonImmunity");
+			SetObjProperty(mobile, "PermPoisonImmunity", Cint(new_stats[19]));
+			SendSysMessage(who, "Changing Perm PoisonImmunity to: "+new_stats[19]);
+		endif
+		if (old_stats[20] != new_stats[20])
+			EraseObjProperty(mobile, "FreeAction");
+			SetObjProperty(mobile, "FreeAction", Cint(new_stats[20]));
+			SendSysMessage(who, "Changing Free Action to: "+new_stats[20]);
+		endif
+		if (old_stats[21] != new_stats[21])
+			EraseObjProperty(mobile, "HealingIncrease");
+			SetObjProperty(mobile, "HealingIncrease", Cint(new_stats[21]));
+			SendSysMessage(who, "Changing Healing Increase to: "+new_stats[21]);
+		endif
+		if (old_stats[22] != new_stats[22])
+			EraseObjProperty(mobile, "magicefficiency");
+			SetObjProperty(mobile, "magicefficiency", Cint(new_stats[22]));
+			SendSysMessage(who, "Changing Magic Efficiency to: "+new_stats[22]);
+		endif
+		if (old_stats[23] != new_stats[23])
+			EraseObjProperty(mobile, "magicimmunity");
+			SetObjProperty(mobile, "magicimmunity", Cint(new_stats[23]));
+			SendSysMessage(who, "Changing Blackrock to: "+new_stats[23]);
+		endif
+		if (old_stats[24] != new_stats[24])
+			EraseObjProperty(mobile, "magicreflection");
+			SetObjProperty(mobile, "magicreflection", Cint(new_stats[24]));
+			SendSysMessage(who, "Changing Moonstone to: "+new_stats[24]);
+		endif
+		if (old_stats[25] != new_stats[25])
+			EraseObjProperty(mobile, "tempmagicimmunity");
+			SetObjProperty(mobile, "tempmagicimmunity", Cint(new_stats[25]));
+			SendSysMessage(who, "Changing Absorbsion to: "+new_stats[25]);
+		endif
+		if (old_stats[26] != new_stats[26])
+			EraseObjProperty(mobile, "tempmagicreflection");
+			SetObjProperty(mobile, "tempmagicreflection", Cint(new_stats[26]));
+			SendSysMessage(who, "Changing Warding to: "+new_stats[26]);
+		endif
+		if (old_stats[27] != new_stats[27])
+			EraseObjProperty(mobile, "temppoisonimmunity");
+			SetObjProperty(mobile, "temppoisonimmunity", Cint(new_stats[27]));
+			SendSysMessage(who, "Changing Anitdotes to: "+new_stats[27]);
 		endif
 
 		j := 28;
