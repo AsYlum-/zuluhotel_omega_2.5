@@ -48,7 +48,7 @@ program textcmd_gotomobtype( character , text )
 	var chr := MakeAndProcessGump( character, found, realm );
 	if( chr )
         //LogCommand(character, GetProcess(GetPid()).name, chr.name+"/"+chr.serial, "XYZ - "+chr.x+","+chr.y+","+chr.z);
-        Print($"mobs: {realm}");
+        //Print($"mobs: {realm}");
         var moved := MoveObjecttoLocation( character , chr.x , chr.y , chr.z , chr.realm, MOVEOBJECT_FORCELOCATION );
               if (moved.errortext)
                SendSysMessage(character, "oh no an error... can't go to: " + moved.errortext);
@@ -133,7 +133,7 @@ function MakeAndProcessGump( character, found, realm )
 
 	var result := GFSendGump(character, gump);
 	result := Cint(result[0]);
-	Print($"Result: {result}");
+	//Print($"Result: {result}");
 	return found[result];
 	
 endfunction
