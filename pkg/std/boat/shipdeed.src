@@ -54,8 +54,10 @@ function BuildShip( character, deed )
 			if(where.x <= 7167)
 				if(where.y >= 1)
 					if(where.y <= 2299)
-						PrintTextAbovePrivate( deed, "You can't place boats in dungeons.", character );
-						return;
+            if(where.realm == "britannia");
+						  PrintTextAbovePrivate( deed, "You can't place boats in dungeons.", character );
+						  return;
+            endif
 					endif
 				endif
 			endif
@@ -95,7 +97,7 @@ function BuildShip( character, deed )
 	return;
   endif
 
-  var created := CreateShipKeysAndBuiltDeed( character, shiptype, where.x, where.y, where.z, flags );
+  var created := CreateShipKeysAndBuiltDeed( character, shiptype, where.x, where.y, where.z, where.realm, flags );
   if (!created) 
     if ( deed.graphic == 5363 )
       deed.graphic := 5364;
@@ -150,29 +152,29 @@ function ShipFacingFlags( facing )
   return flags;
 endfunction
 
-function CreateShipKeysAndBuiltDeed( character, shiptype, x, y, z, flags )
+function CreateShipKeysAndBuiltDeed( character, shiptype, x, y, z, realm, flags )
   var bankbox := FindBankBox( character );
   /*var packkey := CreateItemInBackpack( character, UOBJ_COPPER_KEY );
   if (!packkey)
 	PrintTextAbovePrivate( character, "My backpack is too full!", character );
 	return 0;
   endif*/
-  var ship := CreateMultiAtLocation( x, y, z, shiptype, flags );
+  var ship := CreateMultiAtLocation( x, y, z, shiptype, flags, realm );
   if (!ship)
-	PrintTextAbovePrivate( character, "I can't place the ship there.", character );
-	//DestroyItem( packkey );
-	return 0;
+	  PrintTextAbovePrivate( character, "The ship is not there!", character );
+	  //DestroyItem( packkey );
+	  return 0;
   endif
-  SetObjProperty( ship.hold,"owner", character.serial );
-  if(!getObjProperty( ship.hold,"owner" ))
-	PrintTextAbovePrivate( character, "I can't place the ship there.", character );
-	//DestroyItem( packkey );
-	return 0;
+  SetObjProperty( ship.hold, "owner", character.serial );
+  if(!getObjProperty( ship.hold, "owner" ))
+	  PrintTextAbovePrivate( character, "I can't get the ship hold working!", character );
+	  //DestroyItem( packkey );
+	  return 0;
   endif
   var result := {}; 
   //result .+ packkey := packkey;
   result .+ ship := ship;
-  sendsysmessage(character,"All aboard!");
+  SendSysMessage(character,"All aboard!");
   //var sh := GetStandingHeight( ship.x, ship.y, ship.z );
   var xtele := ship.x;
   var ytele := ship.y;
@@ -199,9 +201,9 @@ endfunction
 
 function DeedAlreadyBuiltFrom( deed )
   if (GetObjProperty( deed, "builtserial" ))
-	return 1;
+	  return 1;
   else
-	return 0;
+	  return 0;
   endif
 endfunction
 
