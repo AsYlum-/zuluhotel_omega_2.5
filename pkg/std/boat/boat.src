@@ -23,6 +23,24 @@ var boat;
 var tillerman;
 var owner := getobjproperty(boat.hold,"owner");
 
+
+program autostart_boat( param )
+  boat := param;
+  Print($"Boat Params: "+boat);
+  if (!boat)
+    syslog( "No boat! Huh?" );
+    return;
+  endif
+  tillerman := boat.tillerman;
+  Print($"Tillerman: "+tillerman);
+  if (!tillerman)
+    syslog( "No tillerman for boat at: " + (boat.x-1) +", "+ boat.y +", "+ boat.z +", "+ boat.realm );
+    DestroyMulti( boat );
+    return;
+  endif
+  boat_script();
+endprogram
+
 function handle_speech( event )
   var text := lower( event.text );
   if (text["unfurl sail"] or text["unfurl"])
@@ -118,72 +136,57 @@ function boat_script()
   while (boat)
     case (state)
 	  STATE_MOVING:     if ( ReadGameClock() > nextsound )
-				          PlayBoatSounds();
-				          nextsound := ReadGameClock()+5;
+				        	PlayBoatSounds();
+				        	nextsound := ReadGameClock()+5;
 			            endif
 			            x := boat.x;
 			            y := boat.y;
 			            MoveBoatRelative( boat, cint(relative_direction) );
 			            if ( (x == boat.x) and (y == boat.y) )
-				          state := STATE_STATIONARY;
-				          PrintTextAbove(tillerman, "Aaargh!  We've run ashore!");
-				          SmackEveryone();
+				        	state := STATE_STATIONARY;
+				        	PrintTextAbove(tillerman, "Aaargh!  We've run ashore!");
+				        	SmackEveryone();
 			            endif
                 	    sleepms( ms_delay_between_moves );
 			            if ( ReadGameClock() > nextencounter )
-				          DoEncounter();
-				          nextencounter := ReadGameClock()+120;
+				        	DoEncounter();
+				        	nextencounter := ReadGameClock()+120;
 			            endif
                     	while (events_waiting())
-				         process_event( wait_for_event(0) );
+				        	process_event( wait_for_event(0) );
                 	    endwhile
       STATE_DRIFTING:   if ( ReadGameClock() > nextsound )
-				          PlayBoatSounds();
-				          nextsound := ReadGameClock()+5;
+				        	PlayBoatSounds();
+				        	nextsound := ReadGameClock()+5;
 			            endif
 			            if ( driftcounter > 15 )
-				          MoveBoatRelative( boat, cint(Random(8)) );
-				          driftcounter := 1;
+				        	MoveBoatRelative( boat, cint(Random(8)) );
+				        	driftcounter := 1;
 			            else
-				          driftcounter := driftcounter + 1;
+				        	driftcounter := driftcounter + 1;
 			            endif
                 	    sleepms(1000);
                 	    while (events_waiting())
-				          process_event( wait_for_event(0) );
+				        	process_event( wait_for_event(0) );
                 	    endwhile
 			            if ( ReadGameClock() > nextencounter )
-				          DoEncounter();
-				          nextencounter := ReadGameClock()+120;
+				        	DoEncounter();
+				        	nextencounter := ReadGameClock()+120;
 			            endif
       STATE_STATIONARY: var ev := wait_for_event( 120 );
 			            if (ev)
-				          process_event( ev);
+				        	process_event( ev);
 			            endif
 			            if ( ReadGameClock() > nextencounter )
-				          DoEncounter();
-				          nextencounter := ReadGameClock()+120;
+				        	DoEncounter();
+				        	nextencounter := ReadGameClock()+120;
 			            endif
 	endcase
   endwhile
 endfunction
 
-program autostart_boat( param )
-  boat := param;
-  if (!boat)
-    syslog( "No boat! Huh?" );
-    return;
-  endif
-  tillerman := boat.tillerman;
-  if (!tillerman)
-    syslog( "No tillerman for boat at: " + (boat.x-1) +","+ boat.y +","+ boat.z );
-    DestroyMulti( boat );
-    return;
-  endif
-  boat_script();
-endprogram
-
 function DoEncounter()
-  foreach who in  ListMobilesNearLocationEx(cint(boat.x), cint(boat.y), cint(GetMapInfo( cint(boat.x), cint(boat.y) ).z), 4, LISTEX_FLAG_GHOST )
+  foreach who in  ListMobilesNearLocationEx(cint(boat.x), cint(boat.y), cint(GetMapInfo( cint(boat.x), cint(boat.y) ).z), 4, LISTEX_FLAG_GHOST, boat.realm )
 	  PlaySoundEffect(who, SFX_SPELL_RESURRECTION);
 	  ResurrectMobile( who );
   endforeach
@@ -280,7 +283,7 @@ function DryDock(event)
 		if (item.isa(POLCLASS_CORPSE) && !GetObjProperty( item, "npctemplate" ) )
 			foreach thing in EnumerateItemsInContainer(item)
 				if (thing.container.serial == item.serial)	
-					MoveObjectToLocation(thing,me.x, me.y, me.z, me.realm,  MOVEOBJECT_FORCELOCATION);
+					MoveObjectToLocation(thing, me.x, me.y, me.z, me.realm, MOVEOBJECT_FORCELOCATION);
 				endif
 			endforeach
 			DestroyItem(item);
@@ -307,7 +310,7 @@ function DryDock(event)
 
     items := ListRootItemsInContainer(boat.hold);
     foreach item in items;
-      MoveObjectToLocation(item, me.x, me.y, me.z, MOVEOBJECT_FORCELOCATION);
+      MoveObjectToLocation(item, me.x, me.y, me.z, me.realm, MOVEOBJECT_FORCELOCATION);
     endforeach
 	var shiptype := getobjproperty(boat.hold,"shiptype");
 	var newboat := CreateItemInContainer(me.backpack,shiptype,1);
@@ -344,9 +347,9 @@ endfunction
 
 function SmackEveryone()
   foreach mob in (boat.mobiles)
-	ApplyDamage(mob,Random(10));
-	PerformAction(mob,0x14);
-	PlaySoundEffect(mob,0x110);
+	ApplyDamage(mob, Random(10));
+	PerformAction(mob, 0x14);
+	PlaySoundEffect(mob, 0x110);
   endforeach
 endfunction
 
@@ -354,8 +357,8 @@ function PlayBoatSounds()
   var who := Random( len(boat.mobiles)+1 );
   var mobs := (boat.mobiles);
   if ( Random(2) == 1)
-	PlaySoundEffect(mobs[who],0x13);
+	PlaySoundEffect(mobs[who], 0x13);
   else
-	PlaySoundEffect(mobs[who],0x14);
+	PlaySoundEffect(mobs[who], 0x14);
   endif
 endfunction
