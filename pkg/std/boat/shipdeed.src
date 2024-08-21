@@ -9,7 +9,7 @@ include "include/multicommands";
 
 program useshipdeed( character, deed )
 
-  Print($"I am using this script");
+  //Print($"I am using this script");
 	var boat_ser := character.getprop("BoatOwned");
 	if(boat_ser)
 		var boat := SystemFindObjectBySerial(boat_ser);
