@@ -174,14 +174,13 @@ function MakeAndProcessMenu( character, use_on, id )
 
 endfunction
 
-
 function CanMake( who, key, resource )
 
 	var diff := tailor_cfg[key].Skill + Cint( resource_diff / DIVIDER );
 	if( diff < 1 )
 		diff := 1;
-	elseif( diff > 130 )
-		diff := 130;
+	elseif( diff > 150 )
+		diff := 150;
 	endif
 
 	if( GetEffectiveSkill( who, SKILLID_TAILORING ) >= ( diff + APPEAR_AT ) )
@@ -194,41 +193,52 @@ function CanMake( who, key, resource )
 
 endfunction
 
-
 function TryToMakeItem( character, resource, to_make_objtype )
 
-	var skill;
-	var element;
 	var material;
-	var points;
 	var itemname;
 
-	element := FindConfigElem( tailor_cfg, to_make_objtype );
+	var element := FindConfigElem( tailor_cfg, to_make_objtype );
 	if( element )
 		material	:= element.Material;
 	else
 		return;
 	endif
+
+	var skill := element.Skill + CInt( resource_diff / DIVIDER );
+
+	if( skill < 1 )
+		skill := 1;
+	elseif( skill > 150 )
+		skill := 150;
+	endif
+
+	var points	:= CInt( (skill + element.Material) * POINTS_MULTIPLIER );
+
 	//Require half resources during Crafting PH
 	if(GetGlobalProperty("PHC") || GetObjProperty(character, "#PPHC"))
 		material := CInt(Ceil(material/2));
 	endif
 	
+	var excep_ch := 10;
+	var excep_diff	:= skill;
+
+	if( GetObjProperty( character, CLASSEID_CRAFTER ) )
+		excep_ch := Cint( excep_ch * ClasseBonus( character, CLASSEID_CRAFTER ) );
+		excep_diff += 20;
+	else
+		excep_diff += 40;
+	endif
+
+	if( excep_diff < 90 )
+		excep_diff := 90;
+	endif
+
 	AutoLoop_init( character );
 	while( AutoLoop_more() && ( resource.amount >= material ) && NOT character.dead)
 
-		skill := element.Skill;
-		skill := skill + CInt( resource_diff / DIVIDER );
-
-		if( skill < 1 )
-			skill := 1;
-		elseif( skill > 140 )
-			skill := 140;
-		endif
-		
 		sendDiff( character , skill );
 
-		points	:= CInt( (skill + element.Material) * POINTS_MULTIPLIER );
 		itemname := element.Name;
 
 		_Play_Sound( character );
@@ -245,7 +255,6 @@ function TryToMakeItem( character, resource, to_make_objtype )
 
 			if( theitem )
 
-				var excep_ch := 10;
 				var cprops   := GetConfigStringArray( tailor_cfg[resource.objtype], "CProp" );
 
 				if( resource_name )
@@ -256,17 +265,7 @@ function TryToMakeItem( character, resource, to_make_objtype )
 					theitem.quality := resource_qual;
 				endif
 
-				if( GetObjProperty( character, CLASSEID_CRAFTER ) )
-					excep_ch := Cint( excep_ch * ClasseBonus( character, CLASSEID_CRAFTER ) );
-				else
-					skill := skill + 20;
-				endif
-
-				if( skill < 90 )
-					skill := 90;
-				endif
-
-				if( ( Random(150) < excep_ch ) && CheckSkill( character, SKILLID_TAILORING, skill, 0 ) )
+				if( ( Random(100) < excep_ch ) && CheckSkill( character, SKILLID_TAILORING, excep_diff, 0 ) )
 
 					//Made something Exceptional
 					if( theitem.quality )
@@ -296,10 +295,10 @@ function TryToMakeItem( character, resource, to_make_objtype )
 
 					SendSysmessage( character, "You make an exceptional item and put it in your pack" );
 					SetObjProperty( theitem, "IsExceptional", 1 );
-					if( skill >= 130 )
+					if( excep_diff >= 130 )
 						SendSysmessage( character, "This masterpiece will make you famous around the world." );
 						AwardFame( character, FAME_BONUS );
-					elseif( GetObjProperty( character, CLASSEID_CRAFTER ) and skill >= 110 )
+					elseif( GetObjProperty( character, CLASSEID_CRAFTER ) and excep_diff >= 110 )
 						SendSysmessage( character, "This masterpiece will make you famous around the world." );
 						AwardFame( character, FAME_BONUS );
 					endif
@@ -466,7 +465,7 @@ function FortifyHat( who, hat )
 	endif
 
 	SetObjProperty(helm, "FortifiedWith", hat.desc);
-	hat.quality := 1.3; 
+	hat.quality := 1.8; 
 	DupeItem( hat, helm );
 	SetName( helm, "a fortified " + TruncateArticle(hat.desc) );
 	helm.hp := helm.maxhp;

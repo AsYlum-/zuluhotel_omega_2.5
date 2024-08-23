@@ -220,7 +220,7 @@ function CreateSpawnPointContainer( byref point, byref pt_data )
 		return 0;
 	endif
 	
-	var chest	:= CreateItemAtLocation( 0, 0, 0, objtype, 1 );
+	var chest	:= CreateItemAtLocation( 0, 0, 0, objtype, 1, realm := "britannia" );
 	if( !chest )
 		return 0;
 	elseif( !chest.IsA(POLCLASS_CONTAINER) )
@@ -277,7 +277,7 @@ function CreateSpawnPointContainer( byref point, byref pt_data )
 	
 	var count := 1;
 	chest.movable := 1;
-	while( !MoveObjectToLocation( chest, cint(x), cint(y), cint(z), MOVEOBJECT_NORMAL ) && (count <= 10) )
+	while( !MoveObjectToLocation( chest, cint(x), cint(y), cint(z), point.realm, MOVEOBJECT_NORMAL ) && (count <= 10) )
 		if( appear )
 			x := point.x + RandomInt((appear*2)+1) - appear;
 			y := point.y + RandomInt((appear*2)+1) - appear;
@@ -355,7 +355,7 @@ function CreateSpawnPointItem( byref point, byref pt_data )
 			z := point.z;
 		endif
 		
-		item := CreateItemAtLocation( x, y, z, objtype, amount );
+		item := CreateItemAtLocation( x, y, z, objtype, amount, point.realm );
 	endwhile
 
 	if( !item )
@@ -409,7 +409,7 @@ function CreateSpawnPointNpc( byref point, byref template, byref pt_data )
     if (GetObjProperty(point, "CustomPoint"))
 		critter := CreateCustomNpc(point, template);
 	else
-		critter	:= CreateNpcFromTemplate( template, 5283, 1184, 0, 0, "britannia");
+		critter	:= CreateNpcFromTemplate( template, 5283, 1184, 0, 0, realm := "britannia");
 	endif
 
 	if( !critter )
@@ -523,7 +523,7 @@ function CreateSpawnPointNpcFromGroup( byref point, byref pt_data )
     if (GetObjProperty(point, "CustomPoint"))
 		critter := CreateCustomNpc(point, template);
 	else
-		critter	:= CreateNpcFromTemplate( template, 5283, 1184, 0, 0, "britannia");
+		critter	:= CreateNpcFromTemplate( template, 5283, 1184, 0, 0, realm := "britannia");
 	endif
 
 	if( !critter )
@@ -713,7 +713,7 @@ function CreateCustomNPC(point, template)
 	var vits := GetObjProperty(point, "NPCVits"); 
 	var overw := GetObjProperty(point, "overw");
 
-	var critter := CreateNpcFromTemplate( template, 5283, 1184, 0, overw, point.realm);
+	var critter := CreateNpcFromTemplate( template, 5283, 1184, 0, overw, realm := "britannia");
 
 	var i := 0;
 	foreach skill in skills

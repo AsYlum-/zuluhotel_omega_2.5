@@ -1,6 +1,9 @@
 use uo;
 use os;
+
+//include "include/areas";
 include ":staff:include/staff";
+
 program textcmd_summon( character , whom )
 
 	if( !whom )

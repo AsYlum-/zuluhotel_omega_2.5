@@ -3,27 +3,27 @@ use os;
 use basic;
 use cfgfile;
 
-include "include/multiutil";
+//include "include/multiutil";
 include "include/constants/cfgfiles";
 include "include/constants/propids";
 
-const AREAID_BRITAIN		:= "Britain";
-const AREAID_BRITISH_CASTLE	:= "British Castle";
+const AREAID_BRITAIN			:= "Britain";
+const AREAID_BRITISH_CASTLE		:= "British Castle";
 const AREAID_BLACKTHORN_CASTLE	:= "Blackthorn Castle";
-const AREAID_BUCCANEERS_DEN	:= "Buccaneer's Den";
-const AREAID_COVE		:= "Cove";
-const AREAID_DELUCIA		:= "Delucia";
-const AREAID_JHELOM		:= "Jhelom";
-const AREAID_MAGINCIA		:= "Magincia";
-const AREAID_MINOC		:= "Minoc";
-const AREAID_MOONGLOW		:= "Moonglow";
-const AREAID_NUJELM		:= "Nujel'm";
-const AREAID_OCLLO		:= "Ocllo";
-const AREAID_PAPUA		:= "Papua";
-const AREAID_SERPENTS_HOLD	:= "Serpent's Hold";
-const AREAID_SKARA_BRAE		:= "Skara Brae";
-const AREAID_TRINSIC		:= "Trinsic";
-const AREAID_YEW		:= "Yew";
+const AREAID_BUCCANEERS_DEN		:= "Buccaneer's Den";
+const AREAID_COVE				:= "Cove";
+const AREAID_DELUCIA			:= "Delucia";
+const AREAID_JHELOM				:= "Jhelom";
+const AREAID_MAGINCIA			:= "Magincia";
+const AREAID_MINOC				:= "Minoc";
+const AREAID_MOONGLOW			:= "Moonglow";
+const AREAID_NUJELM				:= "Nujel'm";
+const AREAID_OCLLO				:= "Ocllo";
+const AREAID_PAPUA				:= "Papua";
+const AREAID_SERPENTS_HOLD		:= "Serpent's Hold";
+const AREAID_SKARA_BRAE			:= "Skara Brae";
+const AREAID_TRINSIC			:= "Trinsic";
+const AREAID_YEW				:= "Yew";
 
 
 
@@ -131,14 +131,14 @@ function IsForbiddenAreaFor( who, x, y )
 	for( i := 1; i <= areas.size(); i := i + 1 )
 		if( banned[i] )
 			splited := SplitWords( areas[i] );
-			if( IsInBox( where, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]) ) )
+			if( IsInBox( where, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]), splited[5]) )
 				set_priority(old_prio);
 				return 1;
 			endif
 		elseif( disabled[i] )
 			if( !allowed[i] )
 				splited := SplitWords( areas[i] );
-				if( IsInBox( where, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]) ) )
+				if( IsInBox( where, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]), splited[5]) )
 					set_priority(old_prio);
 					return 1;
 				endif
@@ -178,7 +178,7 @@ function IsForbiddenAreaToRecallFrom( byref who )
     
     foreach area in areas
         var splited := SplitWords(area);
-        if( IsInBox( who, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]) ) )
+        if( IsInBox( who, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]), splited[5]) )
      			if (GetGlobalProperty(PROPID_GLOBAL_AREAS_NORECALLFROM)[_area_iter]);
      				return 1;
      			else
@@ -189,23 +189,11 @@ function IsForbiddenAreaToRecallFrom( byref who )
 
     //Is somewhereelse thats not in the areas file
     return 0;
-	/*
-	if( who.cmdlevel )
-		return 0;
-	endif
-	var old_prio := set_priority(100);	
-	if( !CheckPoz( who.x, who.y ) )
-		set_priority(old_prio);
-		return 1;
-	endif
-	
-	set_priority(old_prio);
-	return 0;*/
 	
 endfunction
 
 
-function IsForbiddenAreaToRecallTo( byref who, byref x, byref y )
+function IsForbiddenAreaToRecallTo( byref who, byref x, byref y)
 	
 	if( who.cmdlevel )
 		return 0;
@@ -213,7 +201,7 @@ function IsForbiddenAreaToRecallTo( byref who, byref x, byref y )
 
 	var old_prio := set_priority(100);
 
-	if( !CheckPoz( x, y ) )
+	if( !CheckPoz( x, y) )
 		set_priority(old_prio);
 		return 1;
 	endif
@@ -273,14 +261,14 @@ function IsForbiddenAreaToRecallTo( byref who, byref x, byref y )
 	for( i := 1; i <= areas.size(); i := i + 1 )
 		if( banned[i] )
 			splited := SplitWords( areas[i] );
-			if( IsInBox( object, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]) ) )
+			if( IsInBox( object, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]), splited[5]) )
 				set_priority(old_prio);
 				return 1;
 			endif
 		elseif( disabled_recall[i] )
 			if( !allowed_recall[i] )
 				splited := SplitWords( areas[i] );
-				if( IsInBox( object, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]) ) )
+				if( IsInBox( object, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]), splited[5]) )
 					set_priority(old_prio);
 					return 1;
 				endif
@@ -288,7 +276,7 @@ function IsForbiddenAreaToRecallTo( byref who, byref x, byref y )
 		elseif( forbidden[i] )
 			if( !allowed_forbidden[i] )
 				splited := SplitWords( areas[i] );
-				if( IsInBox( object, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]) ) )
+				if( IsInBox( object, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]), splited[5]) )
 					set_priority(old_prio);
 					return 1;
 				endif
@@ -302,29 +290,29 @@ function IsForbiddenAreaToRecallTo( byref who, byref x, byref y )
 endfunction
 
 
-function IsInACity( byref what )
-			// 		min_x	max_x	min_y	max_y	name
-	var cities := {		{	1361,	1589,	1536,	1765,	AREAID_BRITAIN		},	// Britain
-				{	1295,	1360,	1558,	1765,	AREAID_BRITISH_CASTLE	},	// British Castle
-				{	1500,	1545,	1400,	1490,	AREAID_BLACKTHORN_CASTLE},	// Blackthorn Castle
-				{	2592,	2783,	2080,	2271,	AREAID_BUCCANEERS_DEN	},	// Buccanner's Den
-				{	2207,	2292,	1114,	1241,	AREAID_COVE		},	// Cove
-				{	5151,	5312,	3930,	4059,	AREAID_DELUCIA		},	// Delucia
-				{	1020,	1531,	3340,	4055,	AREAID_JHELOM		},	// Jhelom
-				{	3644,	3839,	2040,	2283,	AREAID_MAGINCIA		},	// Magincia
-				{	2385,	2635,	376,	626,	AREAID_MINOC		},	// Minoc
-				{	4368,	4495,	1020,	1235,	AREAID_MOONGLOW		},	// Moonglow
-				{	3484,	3819,	1064,	1399,	AREAID_NUJELM		},	// Nujel'm
-				{	3592,	3763,	2440,	2699,	AREAID_OCLLO		},	// Ocllo
-				{	5652,	5840,	3116,	3309,	AREAID_PAPUA		},	// Papua
-				{	2865,	3069,	3334,	3582,	AREAID_SERPENTS_HOLD	},	// Serpent's Hold
-				{	532,	695,	2108,	2271,	AREAID_SKARA_BRAE	},	// Skara Brae
-				{	1822,	2145,	2654,	2899,	AREAID_TRINSIC		},	// Rennance
-				{	494,	600,	927,	1033,	AREAID_YEW		}};	// Yew
+function IsInACity( byref what )	
+	var cities := {	//min_x	max_x	min_y	max_y	realm			name
+				{	1361,	1589,	1536,	1765,	"britannia",	AREAID_BRITAIN		},	// Britain
+				{	1295,	1360,	1558,	1765,	"britannia",	AREAID_BRITISH_CASTLE	},	// British Castle
+				{	1500,	1545,	1400,	1490,	"britannia",	AREAID_BLACKTHORN_CASTLE},	// Blackthorn Castle
+				{	2592,	2783,	2080,	2271,	"britannia",	AREAID_BUCCANEERS_DEN	},	// Buccanner's Den
+				{	2207,	2292,	1114,	1241,	"britannia",	AREAID_COVE		},	// Cove
+				{	5151,	5312,	3930,	4059,	"britannia",	AREAID_DELUCIA		},	// Delucia
+				{	1020,	1531,	3340,	4055,	"britannia",	AREAID_JHELOM		},	// Jhelom
+				{	3644,	3839,	2040,	2283,	"britannia",	AREAID_MAGINCIA		},	// Magincia
+				{	2385,	2635,	376,	626,	"britannia",	AREAID_MINOC		},	// Minoc
+				{	4368,	4495,	1020,	1235,	"britannia",	AREAID_MOONGLOW		},	// Moonglow
+				{	3484,	3819,	1064,	1399,	"britannia",	AREAID_NUJELM		},	// Nujel'm
+				{	3592,	3763,	2440,	2699,	"britannia",	AREAID_OCLLO		},	// Ocllo
+				{	5652,	5840,	3116,	3309,	"britannia",	AREAID_PAPUA		},	// Papua
+				{	2865,	3069,	3334,	3582,	"britannia",	AREAID_SERPENTS_HOLD	},	// Serpent's Hold
+				{	532,	695,	2108,	2271,	"britannia",	AREAID_SKARA_BRAE	},	// Skara Brae
+				{	1822,	2145,	2654,	2899,	"britannia",	AREAID_TRINSIC		},	// Rennance
+				{	494,	600,	927,	1033,	"britannia",	AREAID_YEW		}};	// Yew
 		
 	foreach city in cities
-		if( IsInBox( what, city[1], city[2], city[3], city[4] ) )
-			return city[5];
+		if( IsInBox( what, city[1], city[2], city[3], city[4], city[5] ) )
+			return city[6];
 		endif
 	endforeach
 	
@@ -371,14 +359,14 @@ function IsInAntiLootingArea( byref who )
 	for( i := 1; i <= areas.size(); i := i + 1 )
 		if( banned[i] )
 			splited := SplitWords( areas[i] );
-			if( IsInBox( who, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]) ) )
+			if( IsInBox( who, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]), splited[5]) )
 				set_priority(old_prio);
 				return 1;
 			endif
 		elseif( disabled[i] )
 			if( !allowed[i] )
 				splited := SplitWords( areas[i] );
-				if( IsInBox( who, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]) ) )
+				if( IsInBox( who, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]), splited[5]) )
 					set_priority(old_prio);
 					return 1;
 				endif
@@ -399,7 +387,7 @@ function IsInAntiMagicArea( byref who )
 		return 0;
 	endif
 
-	if(IsInBox(who, 5508, 5527, 1655, 1674))
+	if(IsInBox(who, 5508, 5527, 1655, 1674, "britannia"))
 		return 0;
 	endif
 
@@ -428,7 +416,7 @@ function IsInAntiMagicArea( byref who )
 		if( disabled[i] )
 			if( !allowed[i] )
 				splited := SplitWords( areas[i] );
-				if( IsInBox( who, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]) ) )
+				if( IsInBox( who, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]), splited[5]) )
 					set_priority(old_prio);
 					return 1;
 				endif
@@ -444,24 +432,25 @@ endfunction
 
 
 function IsInAProtectedCity( byref what )
-			// 		min_x	max_x	min_y	max_y	name
-	var p_cities := {	{	1361,	1589,	1536,	1765,	AREAID_BRITAIN		},	// Britain
-				{	1295,	1360,	1558,	1765,	AREAID_BRITISH_CASTLE	},	// British Castle
-				{	1500,	1545,	1400,	1490,	AREAID_BLACKTHORN_CASTLE},	// Blackthorn Castle
-				{	2207,	2292,	1114,	1241,	AREAID_COVE		},	// Cove
-				{	1292,	1508,	3667,	3883,	AREAID_JHELOM		},	// Jhelom
-				{	3647,	3837,	2041,	2280,	AREAID_MAGINCIA		},	// Magincia
-				{	2385,	2635,	376,	626,	AREAID_MINOC		},	// Minoc
-				{	4371,	4493,	1023,	1232,	AREAID_MOONGLOW		},	// Moonglow
-				{	3487,	3817,	1067,	1397,	AREAID_NUJELM		},	// Nujel'm
-				{	3591,	3761,	2441,	2696,	AREAID_OCLLO		},	// Ocllo
-				{	534,	692,	2111,	2269,	AREAID_SKARA_BRAE	},	// Skara Brae
-				{	288,	480,	1408,	1504,	AREAID_TRINSIC		},	// Rennance
-				{	494,	600,	927,	1033,	AREAID_YEW		}};	// Yew
+			
+	var p_cities := {//min_x	max_x	min_y	max_y	realm			name
+					{	1361,	1589,	1536,	1765,	"britannia",	AREAID_BRITAIN		},	// Britain
+					{	1295,	1360,	1558,	1765,	"britannia",	AREAID_BRITISH_CASTLE	},	// British Castle
+					{	1500,	1545,	1400,	1490,	"britannia",	AREAID_BLACKTHORN_CASTLE},	// Blackthorn Castle
+					{	2207,	2292,	1114,	1241,	"britannia",	AREAID_COVE		},	// Cove
+					{	1292,	1508,	3667,	3883,	"britannia",	AREAID_JHELOM		},	// Jhelom
+					{	3647,	3837,	2041,	2280,	"britannia",	AREAID_MAGINCIA		},	// Magincia
+					{	2385,	2635,	376,	626,	"britannia",	AREAID_MINOC		},	// Minoc
+					{	4371,	4493,	1023,	1232,	"britannia",	AREAID_MOONGLOW		},	// Moonglow
+					{	3487,	3817,	1067,	1397,	"britannia",	AREAID_NUJELM		},	// Nujel'm
+					{	3591,	3761,	2441,	2696,	"britannia",	AREAID_OCLLO		},	// Ocllo
+					{	534,	692,	2111,	2269,	"britannia",	AREAID_SKARA_BRAE	},	// Skara Brae
+					{	288,	480,	1408,	1504,	"britannia",	AREAID_TRINSIC		},	// Rennance
+					{	494,	600,	927,	1033,	"britannia",	AREAID_YEW		}};	// Yew
 		
 	foreach protected_city in p_cities
-		if( IsInBox( what, protected_city[1], protected_city[2], protected_city[3], protected_city[4] ) )
-			return protected_city[5];
+		if( IsInBox( what, protected_city[1], protected_city[2], protected_city[3], protected_city[4], protected_city[5] ) )
+			return protected_city[6];
 		endif
 	endforeach
 	
@@ -473,23 +462,23 @@ endfunction
 function IsInArea( byref what, byref area )
 
 	case( area )				//		      x1    x2    y1    y2
-		AREAID_BRITAIN:			return IsInBox( what, 1361, 1589, 1536, 1765 );
-		AREAID_BRITISH_CASTLE:		return IsInBox( what, 1295, 1360, 1558, 1765 );
-		AREAID_BLACKTHORN_CASTLE:	return IsInBox( what, 1500, 1545, 1400, 1490 );
-		AREAID_BUCCANEERS_DEN:		return IsInBox( what, 2592, 2783, 2080, 2271 );
-		AREAID_COVE:			return IsInBox( what, 2207, 2292, 1114, 1241 );
-		AREAID_DELUCIA:			return IsInBox( what, 5151, 5312, 3930, 4059 );
-		AREAID_JHELOM:			return IsInBox( what, 1292, 1508, 3667, 3883 );
-		AREAID_MAGINCIA:		return IsInBox( what, 3647, 3837, 2041, 2280 );
-		AREAID_MINOC:			return IsInBox( what, 2385, 2635, 376 , 626  );
-		AREAID_MOONGLOW:		return IsInBox( what, 4371, 4493, 1023, 1232 );
-		AREAID_NUJELM:			return IsInBox( what, 3487, 3817, 1067, 1397 );
-		AREAID_OCLLO:			return IsInBox( what, 3591, 3761, 2441, 2696 );
-		AREAID_PAPUA:			return IsInBox( what, 5652, 5840, 3116, 3309 );
-		AREAID_SERPENTS_HOLD:		return IsInBox( what, 2865, 3069, 3334, 3582 );
-		AREAID_SKARA_BRAE:		return IsInBox( what, 534 , 692 , 2111, 2269 );
-		AREAID_TRINSIC:			return IsInBox( what, 1791, 2160, 2639, 2905 );
-		AREAID_YEW:			return IsInBox( what, 494 , 600 , 927 , 1033 );
+		AREAID_BRITAIN:			return IsInBox( what, 1361, 1589, 1536, 1765, "britannia" );
+		AREAID_BRITISH_CASTLE:		return IsInBox( what, 1295, 1360, 1558, 1765, "britannia" );
+		AREAID_BLACKTHORN_CASTLE:	return IsInBox( what, 1500, 1545, 1400, 1490, "britannia" );
+		AREAID_BUCCANEERS_DEN:		return IsInBox( what, 2592, 2783, 2080, 2271, "britannia" );
+		AREAID_COVE:			return IsInBox( what, 2207, 2292, 1114, 1241, "britannia" );
+		AREAID_DELUCIA:			return IsInBox( what, 5151, 5312, 3930, 4059, "britannia" );
+		AREAID_JHELOM:			return IsInBox( what, 1292, 1508, 3667, 3883, "britannia" );
+		AREAID_MAGINCIA:		return IsInBox( what, 3647, 3837, 2041, 2280, "britannia" );
+		AREAID_MINOC:			return IsInBox( what, 2385, 2635, 376 , 626, "britannia"  );
+		AREAID_MOONGLOW:		return IsInBox( what, 4371, 4493, 1023, 1232, "britannia" );
+		AREAID_NUJELM:			return IsInBox( what, 3487, 3817, 1067, 1397, "britannia" );
+		AREAID_OCLLO:			return IsInBox( what, 3591, 3761, 2441, 2696, "britannia" );
+		AREAID_PAPUA:			return IsInBox( what, 5652, 5840, 3116, 3309, "britannia" );
+		AREAID_SERPENTS_HOLD:		return IsInBox( what, 2865, 3069, 3334, 3582, "britannia" );
+		AREAID_SKARA_BRAE:		return IsInBox( what, 534 , 692 , 2111, 2269, "britannia" );
+		AREAID_TRINSIC:			return IsInBox( what, 1791, 2160, 2639, 2905, "britannia" );
+		AREAID_YEW:			return IsInBox( what, 494 , 600 , 927 , 1033, "britannia" );
 	endcase
 	
 	return 0;
@@ -497,8 +486,13 @@ function IsInArea( byref what, byref area )
 endfunction
 
 
-function IsInBox( byref object, byref x1, byref x2, byref y1, byref y2 )
+function IsInBox( byref object, byref x1, byref x2, byref y1, byref y2, byref realm )
 
+	//Print($"who: {object} / o.r: {object.realm}  x1: {x1} x2: {x2} y1: {y1} y2: {y2} realm {realm}");
+	if( object.realm != realm)
+		return 0;
+	endif
+		
 	if( object.x >= x1 )
 		if( object.x <= x2 )
 			if( object.y >= y1 )
@@ -553,14 +547,14 @@ function IsInForbiddenArea( who )
 	for( i := 1; i <= areas.size(); i := i + 1 )
 		if( banned[i] )
 			splited := SplitWords( areas[i] );
-			if( IsInBox( who, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]) ) )
+			if( IsInBox( who, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]), splited[5]) )
 				set_priority(old_prio);
 				return 1;
 			endif
 		elseif( disabled[i] )
 			if( !allowed[i] )
 				splited := SplitWords( areas[i] );
-				if( IsInBox( who, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]) ) )
+				if( IsInBox( who, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]), splited[5]) )
 					set_priority(old_prio);
 					return 1;
 				endif
@@ -577,23 +571,17 @@ endfunction
 
 function IsInGuardedArea( byref who )
 
-// Ok wtf, why do we WANT a staff to always be in guarded territory?
-	//if( who.cmdlevel )
-	//	return 1;
-	//<div></div>endif
-	
 	var i;
 	var splited;
 	var old_prio	:= set_priority(100);
 	var areas_cfg	:= ReadConfigfile(CFGFILE_AREAS);
-	
 	// These are ALWAYS unguarded areas - JUST Jhelom arena atm
 	// Get rid of this probably
 	var areas	:= GetConfigStringArray( areas_cfg[2], "Area" );
 	if( areas )
 		for( i := 1; i <= areas.size(); i := i + 1 )
 			splited := SplitWords( areas[i] );
-			if( IsInBox( who, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]) ) )
+			if( IsInBox( who, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]), splited[5] ) )
 				set_priority(old_prio);
 				return 0;
 			endif
@@ -615,7 +603,7 @@ function IsInGuardedArea( byref who )
 	for( i := 1; i <= areas.size(); i := i + 1 )
 		if( guarded[i] )
 			splited := SplitWords( areas[i] );
-			if( IsInBox( who, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]) ) )
+			if( IsInBox( who, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]), splited[5]) )
 				set_priority(old_prio);
 				return 1;
 			endif
@@ -641,7 +629,7 @@ function IsForbiddenAreaToMark( byref who )
 	if( areas )
 		for( i := 1; i <= areas.size(); i := i + 1 )
 			splited := SplitWords( areas[i] );
-			if( IsInBox( who, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]) ) )
+			if( IsInBox( who, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]), splited[5]) )
 				set_priority(old_prio);
 				return 0;
 			endif
@@ -663,7 +651,7 @@ function IsForbiddenAreaToMark( byref who )
 	for( i := 1; i <= areas.size(); i := i + 1 )
 		if( guarded[i] )
 			splited := SplitWords( areas[i] );
-			if( IsInBox( who, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]) ) )
+			if( IsInBox( who, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]), splited[5]) )
 				set_priority(old_prio);
 				return 1;
 			endif
@@ -677,16 +665,17 @@ endfunction
 
 function IsInSafeArea(who)
 
-   var areas_cfg	:= ReadConfigfile( CFGFILE_AREAS );
+	var areas_cfg	:= ReadConfigfile( CFGFILE_AREAS );
 	var areas	:= GetConfigStringArray( areas_cfg[1], "Area" );
-	
+
     if( !areas )
 		return 0;
 	endif
     
     foreach area in areas
         var splited := SplitWords(area);
-        if( IsInBox( who, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]) ) )
+        if( IsInBox( who, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]), splited[5]) )
+				//Print("gprop: " + GetGlobalProperty(PROPID_GLOBAL_AREAS_SAFEAREA)[_area_iter]);
      			if (GetGlobalProperty(PROPID_GLOBAL_AREAS_SAFEAREA)[_area_iter]);
      				return 1;
      			else
@@ -709,7 +698,7 @@ function IsInNOPKArea(who)
     
     foreach area in areas
         var splited := SplitWords(area);
-        if( IsInBox( who, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]) ) )
+        if( IsInBox( who, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]), splited[5]) )
      			if (GetGlobalProperty(PROPID_GLOBAL_AREAS_NOPK)[_area_iter]);
      				return 1;
      			else
@@ -732,7 +721,7 @@ function IsInRPArea(who)
     
     foreach area in areas
         var splited := SplitWords(area);
-        if( IsInBox( who, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]) ) )
+        if( IsInBox( who, Cint(splited[1]), Cint(splited[2]), Cint(splited[3]), Cint(splited[4]), splited[5]) )
      			if (GetGlobalProperty(PROPID_GLOBAL_AREAS_RPAREA)[_area_iter]);
      				return 1;
      			else
