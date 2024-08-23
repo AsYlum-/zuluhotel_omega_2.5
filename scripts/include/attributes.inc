@@ -38,6 +38,8 @@ use vitals;
 
 // Include client.inc to get the SKILLID_* constants
 include "include/client";
+include "include/areas";
+include "include/classes";
 
 
 /**************************************************************************************************

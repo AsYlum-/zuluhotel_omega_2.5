@@ -56,16 +56,8 @@ program goto_spawnpoint( who, text )
 				pt_data[15]	:= 0;	// Trigger Tile Control
 				SetObjProperty( point, PROPID_SPAWNPOINT_SETTING, pt_data );
 			endif
-/*
-			// search via magic level
-			if (CInt(wanted) > 0 && CInt(wanted) < 201)
-				npc := FindConfigElem( cfgfile, pt_data[2] );
-				search := CInt(npc.MagicItemLevel);
-			else
-*/
-				search := pt_data[2];
-			//endif
 
+			search := pt_data[2];
 
 			if( search == wanted )
 				// Min time!
@@ -91,8 +83,8 @@ program goto_spawnpoint( who, text )
 	
 	var res := MakeAndProcessGump( who, found );
 	if( res )
-		MoveObjecttoLocation( who, res.x, res.y, res.z, "britannia", MOVEOBJECT_FORCELOCATION );
-	LogCommand(who, GetProcess(GetPid()).name, "Went to Location: "+res.x+","+res.y+","+res.z, text);
+		MoveObjecttoLocation( who, res.x, res.y, res.z, res.realm, MOVEOBJECT_FORCELOCATION );
+	LogCommand(who, GetProcess(GetPid()).name, "Went to Location: "+res.x+","+res.y+","+res.z+","+res.realm, text);
 	endif
 	
 endprogram

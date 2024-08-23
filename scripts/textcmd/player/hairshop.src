@@ -208,7 +208,7 @@ function findcolor(who)
 	if(!targ)
 		return 0;
 	endif
-	if(!IsInBox(targ, 5129, 5210, 1161, 1215))
+	if(!IsInBox(targ, 5129, 5210, 1161, 1215, "britannia"))
 		SendSysMessage(who, "You need to be inside the hair shop to do this.");
 		return 0;
 	endif

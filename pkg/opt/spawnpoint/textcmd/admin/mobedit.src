@@ -7,6 +7,7 @@ include "include/attributes";
 include "include/client";
 include ":gumps:gumps";
 include ":gumps:gumps_ex";
+include "include/math";
 
 const TEXT_COLOR := 657;
 
@@ -67,8 +68,11 @@ program textcmd_mobedit(who)
 		endfor
 		if ( gump_ret[0] <= 7 )
 			var multiplier := ((Cdbl(gump_ret[0])/7) - CInt(gump_ret[0]/7))*7;
+			multiplier := Trunc(multiplier, 1);
 			var skill_change := 0;
-			if (multiplier)
+			if (multiplier == 0)
+				skill_change := 0;
+			else
 				skill_change := 60+(15*multiplier);
 			endif
 			new_stats[11+SKILLID_ANATOMY ] := skill_change;
@@ -81,7 +85,7 @@ program textcmd_mobedit(who)
 			new_stats[11+SKILLID_WRESTLING ] := skill_change;
 		elseif ( gump_ret[0] <= 14 )
 			var multiplier := ((Cdbl(gump_ret[0])/7) - CInt(gump_ret[0]/7))*7;
-			
+			multiplier := Trunc(multiplier, 1);
 			var skill_change := 0;
 			if (multiplier)
 				skill_change := 60+(15*multiplier);
@@ -97,6 +101,7 @@ program textcmd_mobedit(who)
 			new_stats[11+SKILLID_FORENSICS ] := skill_change;
 		elseif ( gump_ret[0] <= 21 )
 			var multiplier := ((Cdbl(gump_ret[0])/7) - CInt(gump_ret[0]/7))*7;
+			multiplier := Trunc(multiplier, 1);
 			var skill_change := 0;
 			if (multiplier)
 				skill_change := 60+(15*multiplier);
@@ -111,6 +116,7 @@ program textcmd_mobedit(who)
 			new_stats[11+SKILLID_SPIRITSPEAK ] := skill_change;
 		elseif ( gump_ret[0] <= 28 )
 			var multiplier := ((Cdbl(gump_ret[0])/7) - CInt(gump_ret[0]/7))*7;
+			multiplier := Trunc(multiplier, 1);
 			var skill_change := 0;
 			if (multiplier)
 				skill_change := 60+(15*multiplier);
@@ -125,6 +131,7 @@ program textcmd_mobedit(who)
 			new_stats[11+SKILLID_STEALTH ] := skill_change;
 		elseif ( gump_ret[0] <= 35 )
 			var multiplier := ((Cdbl(gump_ret[0])/7) - CInt(gump_ret[0]/7))*7;
+			multiplier := Trunc(multiplier, 1);
 			var skill_change := 0;
 			if (multiplier)
 				skill_change := 60+(15*multiplier);
@@ -139,6 +146,7 @@ program textcmd_mobedit(who)
 			new_stats[11+SKILLID_TINKERING ] := skill_change;
 		elseif ( gump_ret[0] <= 42 )
 			var multiplier := ((Cdbl(gump_ret[0])/7) - CInt(gump_ret[0]/7))*7;
+			multiplier := Trunc(multiplier, 1);
 			var skill_change := 0;
 			if (multiplier)
 				skill_change := 60+(15*multiplier);
@@ -243,6 +251,8 @@ function gump_mobedit(who)
 	GFTextLine(mobedit, 218, 226, TEXT_COLOR, "Bard");
 	
 	GFTextLine(mobedit, 333, 293, TEXT_COLOR, "Set Lvl");
+	
+	//Left Side Boxes
 	GFResizePic(mobedit, 400, 146, 9550, 57, 22);
 	GFResizePic(mobedit, 400, 236, 9550, 57, 22);
 	GFResizePic(mobedit, 400, 191, 9550, 57, 22);
@@ -251,6 +261,8 @@ function gump_mobedit(who)
 	GFResizePic(mobedit, 400, 124, 9550, 57, 22);
 	GFResizePic(mobedit, 400, 101, 9550, 57, 22);
 	GFResizePic(mobedit, 400, 79, 9550, 57, 22);
+
+	// Right side Boxes
 	GFResizePic(mobedit, 123, 168, 9550, 65, 22);
 	GFResizePic(mobedit, 123, 88, 9550, 65, 22);
 	GFResizePic(mobedit, 123, 115, 9550, 65, 22);
