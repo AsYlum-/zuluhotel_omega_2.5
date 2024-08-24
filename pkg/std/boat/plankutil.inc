@@ -1,5 +1,9 @@
-include "include/objtype";
+use boat;
 use storage;
+use os;
+use uo;
+
+include "include/objtype";
 
 Const KEYSTART := 0x100E;
 Const KEYEND := 0x1013;
@@ -10,7 +14,7 @@ function IsExtended( plank )
 endfunction                           
 
 function IsPlankOccupied( plank )
-  return ListMobilesNearLocation( plank.x, plank.y, plank.z, 0 ).size();
+  return ListMobilesNearLocation( plank.x, plank.y, plank.z, 0, plank.realm ).size();
 endfunction
 
 function Extend( plank )
