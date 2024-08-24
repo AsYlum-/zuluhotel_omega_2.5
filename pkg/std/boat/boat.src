@@ -190,6 +190,9 @@ function DoEncounter()
 	  PlaySoundEffect(who, SFX_SPELL_RESURRECTION);
 	  ResurrectMobile( who );
   endforeach
+ 
+ //Resurrect only, no more spawning near boats
+ 
   /*var who := (boat.mobiles);
   who := who[1];
   if (!who)
