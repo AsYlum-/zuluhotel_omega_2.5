@@ -37,7 +37,6 @@
 use uo;
 use os;
 use basic;
-use cfgfile;
 
 include ":gumps:autoClose";
 include ":gumps:gumpprompt";
@@ -71,7 +70,6 @@ CONST GF_DUMMY_BTN	:= 0x2;
  * The gump object.
  *
  */
-
 function GFCreateGump(x:=0, y:=0, width:=0, height:=0)
 	var gump := struct;
 

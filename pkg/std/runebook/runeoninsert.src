@@ -59,9 +59,7 @@ function AddRuneToRunebook( runebook, rune )
 	var tox := Cint(GetObjProperty( rune, "x" ));
 	var toy := Cint(GetObjProperty( rune, "y" ));
 	var toz := Cint(GetObjProperty( rune, "z" ));
-	var torealm := GetObjProperty( rune, "realm" );
-
-	if( !tox and !toy and !toz and !torealm )
+	if( !tox and !toy and !toz )
 		set_critical(0);
 		return 0;
 	endif
@@ -75,12 +73,10 @@ function AddRuneToRunebook( runebook, rune )
 	rune_data.+tox		:= tox;
 	rune_data.+toy		:= toy;
 	rune_data.+toz		:= toz;
-	rune_data.+torealm	:= torealm;
 	rune_data.+name		:= name;
 	rune_data.+defloc	:= 0;
-	rune_data.+dtindex	:= 6;
+	rune_data.+dtindex	:= 5;
 	
-	//Print($"Rune Data: " +rune_data);
 	if( !runes_def.append(rune_data) )
 		set_critical(0);
 		return 0;

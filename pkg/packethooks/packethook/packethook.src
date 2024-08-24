@@ -30,7 +30,7 @@ Exported Function CheckDrop(char, ByRef packet)
 		return CORE_OK;
 	endif */
 
-	if(!char.cmdlevel && IsInBox(char, 5125, 7167, 0, 2303, char.realm) && packet.GetInt32(10) == -1)
+	if(!char.cmdlevel && IsInBox(char, 5125, 7167, 0, 2303) && packet.GetInt32(10) == -1)
 		var item := SystemFindObjectBySerial( packet.GetInt32(1) );
 		var conf := ReadConfigFile( "::tiles" );
 		var element := FindConfigElem( conf , item.objtype );
@@ -92,7 +92,7 @@ Exported Function CheckDrop6017(char, ByRef packet)
 		return CORE_OK;
 	endif */
 
-	if(!char.cmdlevel && IsInBox(char, 5125, 7167, 0, 2303, char.realm) && packet.GetInt32(11) == -1)
+	if(!char.cmdlevel && IsInBox(char, 5125, 7167, 0, 2303) && packet.GetInt32(11) == -1)
 		var item := SystemFindObjectBySerial( packet.GetInt32(1) );
 		var conf := ReadConfigFile( "::tiles" );
 		var element := FindConfigElem( conf , item.objtype );

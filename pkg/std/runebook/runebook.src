@@ -395,9 +395,8 @@ function RecallWithCharges( who, runebook, byref charges, byref runes_def, index
 		var tox := Cint(runes_def[index].tox);
 		var toy := Cint(runes_def[index].toy);
 		var toz := Cint(runes_def[index].toz);
-		var torealm := runes_def[index].torealm;
 
-		if( !tox and !toy and !toz and !torealm)
+		if( !tox and !toy and !toz )
 			SendSysMessage( who, "Error 2: Blank rune!" );
 			DestroyRune( runebook, runes_def, index );
 			return 0;
@@ -409,7 +408,7 @@ function RecallWithCharges( who, runebook, byref charges, byref runes_def, index
 		charges	:= new_charges;
 		SetObjProperty( who, "betatest", 1 );
 
-		if( !CustomRecall( who, tox, toy, toz, torealm, 1 ) )
+		if( !CustomRecall( who, tox, toy, toz, 1 ) )
 			return 0;
 		endif
 	endif
@@ -429,15 +428,14 @@ function RecallWithoutCharges( who, runebook, byref runes_def, index )
 	var tox := Cint(runes_def[index].tox);
 	var toy := Cint(runes_def[index].toy);
 	var toz := Cint(runes_def[index].toz);
-	var torealm := runes_def[index].torealm;
 
-	if( !tox and !toy and !toz and !torealm )
+	if( !tox and !toy and !toz )
 		SendSysMessage( who, "Error 2: Blank rune!" );
 		DestroyRune( runebook, runes_def, index );
 		return 0;
 	endif
 
-	if( !CustomRecall( who, tox, toy, toz, torealm ) )
+	if( !CustomRecall( who, tox, toy, toz ) )
 		return 0;
 	endif
 
@@ -455,7 +453,6 @@ function GateWithoutCharges( who, runebook, byref runes_def, index )
 	var tox := Cint(runes_def[index].tox);
 	var toy := Cint(runes_def[index].toy);
 	var toz := Cint(runes_def[index].toz);
-	var torealm := runes_def[index].torealm;
 
 	if( !tox and !toy and !toz )
 		SendSysMessage( who, "Error 2: Blank rune!" );
@@ -466,7 +463,7 @@ function GateWithoutCharges( who, runebook, byref runes_def, index )
     //A gate is about to be opened from this runebook.
     //sets its opengate prop to 1
     SetObjProperty(runebook, "opengate", 1);
-	if( !CustomGate( who, tox, toy, toz, torealm ) )
+	if( !CustomGate( who, tox, toy, toz ) )
 		SetObjProperty(runebook, "opengate", 0);
 		return 0;
 	endif
@@ -488,9 +485,8 @@ function SetDefaultLocation( runebook, byref runes_def, index, defloc := 0 )
 	var tox := Cint(runes_def[index].tox);
 	var toy := Cint(runes_def[index].toy);
 	var toz := Cint(runes_def[index].toz);
-	var torealm := runes_def[index].torealm;
 
-	if( !tox and !toy and !toz and !torealm )
+	if( !tox and !toy and !toz )
 		DestroyRune( runebook, runes_def, index );
 		set_priority(old_prio);
 		return 0;
@@ -506,8 +502,6 @@ function SetDefaultLocation( runebook, byref runes_def, index, defloc := 0 )
 	SetObjProperty( runebook, "x", tox );
 	SetObjProperty( runebook, "y", toy );
 	SetObjProperty( runebook, "z", toz );
-	SetObjProperty( runebook, "realm", torealm );
-
 	runes_def[index].defloc := 1;
 
 	set_priority(old_prio);
@@ -528,8 +522,6 @@ function ResetDefaultLocation( runebook, byref runes_def, index )
 	EraseObjProperty( runebook, "x" );
 	EraseObjProperty( runebook, "y" );
 	EraseObjProperty( runebook, "z" );
-	EraseObjProperty( runebook, "realm" );
-
 	runes_def[index].defloc := 0;
 
 	set_priority(old_prio);
@@ -571,7 +563,6 @@ function DropRune( who, runebook, byref runes_def, index )
 	var tox  := Cint(runes_def[index].tox);
 	var toy  := Cint(runes_def[index].toy);
 	var toz  := Cint(runes_def[index].toz);
-	var torealm := runes_def[index].torealm;
 
 	if( !runes_def.erase(index) )
 		SendSysMessage( who, "Error 3: Couldn't erase the rune data from the book." );
@@ -580,7 +571,7 @@ function DropRune( who, runebook, byref runes_def, index )
 		return 0;
 	endif
 
-	if( !tox and !toy and !toz and !torealm )
+	if( !tox and !toy and !toz )
 		SendSysMessage( who, "Error 4: Blank rune!" );
 		DestroyItem( rune );
 		set_critical(0);
@@ -599,8 +590,7 @@ function DropRune( who, runebook, byref runes_def, index )
 
 	if( !SetObjProperty( rune, "x", tox ) and
 	    !SetObjProperty( rune, "y", toy ) and
-	    !SetObjProperty( rune, "z", toz ) and
-		!SetObjProperty( rune, "realm", torealm ) )
+	    !SetObjProperty( rune, "z", toz ) )
 	    	SendSysMessage( who, "Error 5: Couldn't copy the destination data on the rune!" );
 	    	DestroyItem( rune );
 	    	set_critical(0);

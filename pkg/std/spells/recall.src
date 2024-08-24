@@ -26,7 +26,7 @@ program cast_recall( caster, spell_id )
 		return 0;
 	endif
 
-	var multi2 := GetStandingHeight( caster.x, caster.y, caster.z, caster.realm ).multi;
+	var multi2 := GetStandingHeight( caster.x, caster.y, caster.z ).multi;
 	if( multi2 )
 		if( !Iscowner( caster, multi2 )  )
 			if( !IsFriend( caster, multi2, RECALL_TO) )
@@ -69,11 +69,9 @@ program cast_recall( caster, spell_id )
 	var tox := CInt( GetObjProperty( cast_on, "x" ) );
 	var toy := CInt( GetObjProperty( cast_on, "y" ) );
 	var toz := CInt( GetObjProperty( cast_on, "z" ) );
-	var torealm := GetObjProperty( cast_on, "realm" );
-	//var sx  := caster.x;
-	//var sy  := caster.y;
-	//var sz  := caster.z;
-	//var srealm  := caster.realm;
+	var sx  := caster.x;
+	var sy  := caster.y;
+	var sz  := caster.z;
 
 	if( !tox && !toy && !toz )
 		SendSysmessage( caster, "This is a blank rune!") ;
@@ -88,7 +86,7 @@ program cast_recall( caster, spell_id )
 
 	endif
 
-	var multi := GetStandingHeight( tox, toy, toz, torealm ).multi;
+	var multi := GetStandingHeight( tox, toy, toz ).multi;
 	if( multi )
 		if( !Iscowner( caster, multi )  )
 			if( !IsFriend( caster, multi, RECALL_TO) )
@@ -99,7 +97,7 @@ program cast_recall( caster, spell_id )
 	endif
 	var owner;
 	var lamp;
-	var Near_Items := ListItemsNearLocation(tox, toy, toz, 10, torealm);
+	var Near_Items := ListItemsNearLocation(tox, toy, toz,10);
 	foreach thing in Near_Items
 		if (thing.objtype == 0xf156)
 			lamp := thing;
@@ -113,7 +111,7 @@ program cast_recall( caster, spell_id )
 		endif
 	endif
 	//Same check as above but for static houses
-	serialstatichouse := StaticHouseSerialAtLocation( tox, toy, toz, torealm );
+	serialstatichouse := StaticHouseSerialAtLocation( tox, toy, toz );
 	if(serialstatichouse)
 		var sign := SystemFindObjectBySerial(serialstatichouse);
 		if( !Iscowner( caster, sign )  )
@@ -126,7 +124,7 @@ program cast_recall( caster, spell_id )
 
 	PlaySoundEffect( caster, SFX_SPELL_RECALL1 );
 	sleepms(250);
-	MoveObjectToLocation( caster, tox, toy, toz, torealm );
+	MoveObjectToLocation( caster, tox, toy, toz );
 	PlaySoundEffect( caster, SFX_SPELL_RECALL2 );
 
 endprogram

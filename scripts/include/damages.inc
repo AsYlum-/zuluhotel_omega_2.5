@@ -21,9 +21,9 @@ include "include/constants";
 include ":karmafame:karmafame";
 include "include/mobileutil";
 include "include/astralfights";
-//include ":shilhook:shilcombat";
+include ":shilhook:shilcombat";
 include "include/areas";
-//include "include/classes";
+include "include/classes";
 include "include/client";
 include ":lootlottery:include/storedamage";
 

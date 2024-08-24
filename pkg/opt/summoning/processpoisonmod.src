@@ -18,7 +18,7 @@ program processtempmods( parms )
 	var serial	:= who.serial;
 	var shuriken := parms[5];
 
-	if (IsInSafeArea(who) && !IsInBox(who, 5508, 5527, 1655, 1674, who.realm))
+	if (IsInSafeArea(who) && !IsInBox(who, 5508, 5527, 1655, 1674))
 		return 0;
 	endif
 	

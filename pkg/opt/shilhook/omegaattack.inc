@@ -9,9 +9,7 @@ include ":armor:armorZones";
 
 function OmegaAttack(attacker, defender)
 
-	var weapfile := ReadConfigFile( ":combat:itemdesc" );
-
-	var attackerweaponType := weapfile[attacker.weapon.objtype];
+	var attackerweaponType := cfg[attacker.weapon.objtype];
 			
 	if(attacker.weapon.attribute == ATTRIBUTEID_ARCHERY)
 		if (!checkForAndDecrementAmmunition( attacker, attackerweaponType))	

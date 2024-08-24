@@ -24,34 +24,28 @@ function ProcessRacalacConversion( runebook )
 	var y;
 	var z;
 	var name;
-	var realm;
 	
 	var defs := GetObjProperty( runebook, "runedefs" );
 	var defx := Cint( GetObjProperty( runebook, "x" ) );
 	var defy := Cint( GetObjProperty( runebook, "y" ) );
 	var defz := Cint( GetObjProperty( runebook, "z" ) );
-	var defrealm := GetObjProperty( runebook, "realm" ) ;
 	
 	var runes_def := array;
 	var rune_data	:= struct;
 	rune_data.+tox;
 	rune_data.+toy;
 	rune_data.+toz;
-	rune_data.+torealm;
 	rune_data.+name;
 	rune_data.+defloc;
-	rune_data.+dtindex	:= 6;
+	rune_data.+dtindex	:= 5;
 	
-	//Print($"Rune Data: " +rune_data);
-
 	foreach def in defs
 		name	:= defs[1];
 		x	:= defs[2];
 		y	:= defs[3];
 		z	:= defs[4];
-		realm := defs[5];
 	
-		if( x or y or z or realm )
+		if( x or y or z )
 			if( !name )
 				name := "a marked recall rune";
 			endif
@@ -60,8 +54,7 @@ function ProcessRacalacConversion( runebook )
 			rune_data.tox  := x;
 			rune_data.toy  := y;
 			rune_data.toz  := z;
-			rune_data.torealm := realm;
-			if( (x == defx) and (y == defy) and (z == defz) and (realm == defrealm) )
+			if( (x == defx) and (y == defy) and (z == defz) )
 				rune_data.defloc := 1;
 			else
 				rune_data.defloc := 0;
@@ -89,22 +82,19 @@ function ProcessShilohenConversion( runebook )
 	var y;
 	var z;
 	var name;
-	var realm;
 
 	var defx := Cint( GetObjProperty( runebook, "x" ) );
 	var defy := Cint( GetObjProperty( runebook, "y" ) );
 	var defz := Cint( GetObjProperty( runebook, "z" ) );
-	var defrealm := GetObjProperty( runebook, "realm" ) ;
 	
 	var runes_def := array;
 	var rune_data	:= struct;
 	rune_data.+tox;
 	rune_data.+toy;
 	rune_data.+toz;
-	rune_data.+torealm;
 	rune_data.+name;
 	rune_data.+defloc;
-	rune_data.+dtindex	:= 6;
+	rune_data.+dtindex	:= 5;
 	
 	foreach rune in EnumerateItemsInContainer( runebook )
 		name := rune.name - "A recall rune for ";
@@ -115,15 +105,13 @@ function ProcessShilohenConversion( runebook )
 		x := Cint( GetObjProperty( rune, "x" ) );
 		y := Cint( GetObjProperty( rune, "y" ) );
 		z := Cint( GetObjProperty( rune, "z" ) );
-		realm := GetObjProperty( runebook, "realm" ) ;
 		
-		if( x or y or z or realm )			
+		if( x or y or z )			
 			rune_data.name := name;
 			rune_data.tox  := x;
 			rune_data.toy  := y;
 			rune_data.toz  := z;
-			rune_data.torealm := realm;
-			if( (x == defx) and (y == defy) and (z == defz) and (realm == defrealm) )
+			if( (x == defx) and (y == defy) and (z == defz) )
 				rune_data.defloc := 1;
 			else
 				rune_data.defloc := 0;

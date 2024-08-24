@@ -39,7 +39,6 @@ program walk_on_moongate( mobile , gate )
 	var x := GetObjProperty( gate, "GateDestX" );
 	var y := GetObjProperty( gate, "GateDestY" );
 	var z := GetObjProperty( gate, "GateDestZ" );
-	var realm := GetObjProperty( gate , "GateDestRealm" );
 
 	if( !x or !y )
 		return;
@@ -66,7 +65,7 @@ program walk_on_moongate( mobile , gate )
 	endif
 	
 	set_critical(1);
-	if( MoveObjectToLocation( mobile, x, y, z, realm ) )
+	if( MoveObjectToLocation( mobile , x , y , z ) )
 		SetObjProperty( mobile, "JustGated", 1 );
 	endif
 	
