@@ -11,7 +11,6 @@
 use os;
 use uo;
 use cfgfile;
-
 include ":staff:include/staff";
 include ":gumps:include/gumps";
 include "include/areas";
@@ -222,15 +221,13 @@ endfunction
 function GetAreaName(area)
 
 	var areaname := "";
-	var splited := SplitWords(area);
-	//area.reverse();
-	//area.shrink(area.size()-4);
-	//area.reverse();
-	var description := splited[6];
-
-	//foreach word in area
-		areaname := " " + description;
-	//endforeach
+	area := SplitWords(area);
+	area.reverse();
+	area.shrink(area.size()-4);
+	area.reverse();
+	foreach word in area
+		areaname := areaname+" "+word;
+	endforeach
 
 	return areaname;
 

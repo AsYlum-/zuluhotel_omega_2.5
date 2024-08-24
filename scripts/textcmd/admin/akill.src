@@ -8,14 +8,14 @@ program akill( who, dist )
 	dist := CInt(dist);
         SendSysMessage( who, "Killing all npcs in range of "+dist+" tiles." );
 
-	foreach mob in ListMobilesNearLocation( who.x, who.y, LIST_IGNORE_Z, dist, who.realm )
+	foreach mob in ListMobilesNearLocation( who.x, who.y, LIST_IGNORE_Z, dist )
 		if (mob != who)
 			RevokePrivilege( mob, "invul" );
 			ApplyRawDamage( mob, GetMaxHP(mob) + 3 );
 		endif
 	endforeach
 		
-	foreach mob in ListMobilesNearLocationEx( who.x, who.y, LIST_IGNORE_Z, dist && LISTEX_FLAG_HIDDEN, who.realm )
+	foreach mob in ListMobilesNearLocationEx( who.x, who.y, LIST_IGNORE_Z, dist, LISTEX_FLAG_HIDDEN )
 		if (mob != who)
 			RevokePrivilege( mob, "invul" );
 			ApplyRawDamage( mob, GetMaxHP(mob) + 3 );

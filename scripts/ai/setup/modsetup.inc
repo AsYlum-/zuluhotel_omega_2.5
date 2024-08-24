@@ -1,10 +1,8 @@
 use uo;
 use os;
-use npc;
 use cfgfile;
 
 include "include/attributes";
-include "include/random";
 
 var modnpc := Self();
 
