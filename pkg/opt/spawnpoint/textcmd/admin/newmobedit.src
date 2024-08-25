@@ -1,3 +1,10 @@
+//Edited August 25, 2024
+
+////////////////////////////////////
+//Created by Developer Alryc
+//Aug 25, 2024
+///////////////////////////////////
+
 use uo;
 use os;
 use vitals;
@@ -251,9 +258,9 @@ program textcmd_mobedit(who)
 			new_stats[28+SKILLID_TINKERING ] := skill_change;
 		endif
 	endwhile
-	if (gump_ret[0] == 100)
+	if (gump_ret[0] == 100)//Exit
 		return 0;
-	elseif (gump_ret[0] == 777)
+	elseif (gump_ret[0] == 777)  //Save Button
         SendSysMessage(who, "Saved mob info to cfg!", FONT_NORMAL, 43);
         var props := array;
         Print($"props is currently 1: " +props);
@@ -265,18 +272,7 @@ program textcmd_mobedit(who)
             Print($"elem: {el[1]} -> {el[2]}");
         endforeach
         AppendConfigFileElem( ":spawnpoint:newnpcs", "npctemplate", old_stats[1], props );
-/*
-	elseif (gump_ret[0] == 777)
-		SendSysMessage(who, "Saved mob info to cfg!", FONT_NORMAL, 43);
-		var props := array;
-		Print($"props is currently 1: " +props);
-		for (i := 1; i <= 76; i := i + 1)
-			props.append(desc_list[i] + "	" +old_stats[i]);
-		endfor
-		Print($"props is currently 2: " +props);
-		AppendConfigFileElem( ":spawnpoint:newnpcs", "npctemplate", old_stats[1], props );
-		*/
-	elseif (gump_ret[0] == 999)
+	elseif (gump_ret[0] == 999)//Apply Button
 		if (old_stats == new_stats)
 			SendSysMessage(who, "No change detected.");
 			return 0;
@@ -835,86 +831,3 @@ endforeach
 return charges;
 
 endfunction
-
-/*
-
-	desc_list[1] := "Name";
-	desc_list[2] := "Strength"
-	desc_list[3] := "Dexterity"
-	desc_list[4] := "Inteligence"
-	desc_list[5] := "HP"
-	desc_list[6] := "Stamina"
-	desc_list[7] := "Mana"
-	desc_list[8] := "MoveSpeed"
-	desc_list[9] := "Graphic"
-	desc_list[10] := "Color"
-	desc_list[11] := "AR"
-	desc_list[12] := "EarthProtection"
-	desc_list[13] := "FireProtection"
-	desc_list[14] := "WaterProtection"
-	desc_list[15] := "AirProtection"
-	desc_list[16] := "HolyProtection"
-	desc_list[17] := "NecroProtection"
-	desc_list[18] := "PhysicalProtection"
-	desc_list[19] := "PermPoisonImmunity"
-	desc_list[20] := "FreeAction"
-	desc_list[21] := "HealingIncrease"
-	desc_list[22] := "magicefficiency"
-	desc_list[23] := "PermMagicImmunity"
-	desc_list[24] := "Permmr"
-	desc_list[25] := "tempmagicimmunity"
-	desc_list[26] := "tempmagicreflection"
-	desc_list[27] := "temppoisonimmunity"
-	desc_list[28] := "alchemy"
-	desc_list[29] := "anatomy"
-	desc_list[30] := "animallore"
-	desc_list[31] := "itemidentification"
-	desc_list[32] := "armslore"
-	desc_list[33] := "parry"
-	desc_list[34] := "begging"
-	desc_list[35] := "blacksmithy"
-	desc_list[36] := "bowcraft"
-	desc_list[37] := "peacemaking"
-	desc_list[38] := "camping"
-	desc_list[39] := "carpentry"
-	desc_list[40] := "cartography"
-	desc_list[41] := "cooking"
-	desc_list[42] := "detectinghidden"
-	desc_list[43] := "enticement"
-	desc_list[44] := "evaluatingintelligence"
-	desc_list[45] := "healing"
-	desc_list[46] := "fishing"
-	desc_list[47] := "forensics"
-	desc_list[48] := "herding"
-	desc_list[49] := "hiding"
-	desc_list[50] := "provocation"
-	desc_list[51] := "inscription"
-	desc_list[52] := "lockpicking"
-	desc_list[53] := "magery"
-	desc_list[54] := "magicresistance"
-	desc_list[55] := "tactics"
-	desc_list[56] := "snooping"
-	desc_list[57] := "musicianship"
-	desc_list[58] := "poisoning"
-	desc_list[59] := "archery"
-	desc_list[60] := "spiritspeak"
-	desc_list[61] := "stealing"
-	desc_list[62] := "tailoring"
-	desc_list[63] := "taming"
-	desc_list[64] := "tasteidentification"
-	desc_list[65] := "tinkering"
-	desc_list[66] := "tracking"
-	desc_list[67] := "veterinary"
-	desc_list[68] := "swordsmanship"
-	desc_list[69] := "macefighting"
-	desc_list[70] := "fencing"
-	desc_list[71] := "wrestling"
-	desc_list[72] := "lumberjacking"
-	desc_list[73] := "mining"
-	desc_list[74] := "meditation"
-	desc_list[75] := "stealth"
-	desc_list[76] := "removetrap"
-
-
-
-*/

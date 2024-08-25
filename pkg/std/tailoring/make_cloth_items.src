@@ -1,15 +1,9 @@
+//Edited August 25, 2024
+
 /////////////////////////////////////////////////////////////////////////////
 //
 //	Tailoring: Original Code by Racalac
-//	Updated: 8/25/1999	 By: Sentack
-//	TODO: Move all the UOBJ objects to "include/objtype.inc"
-//
-//	NOTES: Lines 129 and 196 are optional statments that are designed to
-//		replace lines 127 and 194.	They are used to remove a random amount of
-//		cloth from the players inventory instead of just one unit of cloth
-//		as does the OSI way of dealing with failer.	Sometimes you lose a little
-//		while other times you lose a lot.	But never more then the amount of
-//		cloth the object original was going to take.
+//		
 /////////////////////////////////////////////////////////////////////////////
 
 use uo;
@@ -465,7 +459,7 @@ function FortifyHat( who, hat )
 	endif
 
 	SetObjProperty(helm, "FortifiedWith", hat.desc);
-	hat.quality := 1.8; 
+	hat.quality := 2.0; 
 	DupeItem( hat, helm );
 	SetName( helm, "a fortified " + TruncateArticle(hat.desc) );
 	helm.hp := helm.maxhp;

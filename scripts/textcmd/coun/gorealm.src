@@ -1,6 +1,7 @@
+//Edited August 25, 2024
+
 // command .go  started June 19, 2000
 // Zulu (zulu@zuluhotel.com)
-// last updated Aug 2, 2024
 
 use os;
 use uo;

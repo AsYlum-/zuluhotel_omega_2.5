@@ -1,4 +1,4 @@
-//Realm Fixes Added
+//Edited August 25, 2024
 
 use cfgfile;
 use uo;
@@ -11,7 +11,6 @@ include "include/multicommands";
 
 program useshipdeed( character, deed )
 
-  //Print($"I am using this script");
 	var boat_ser := character.getprop("BoatOwned");
 	if(boat_ser)
 		var boat := SystemFindObjectBySerial(boat_ser);
@@ -184,18 +183,18 @@ function CreateShipKeysAndBuiltDeed( character, shiptype, x, y, z, realm, flags 
   var check := 0;
   if(ship.y == ship.tillerman.y)
     check := 1;
-	if(ship.x - ship.tillerman.x < 0)
-		xtele := xtele+1;
-	else
-		xtele := xtele-1;
-	endif
+	  if(ship.x - ship.tillerman.x < 0)
+		   xtele := xtele+1;
+	  else
+		  xtele := xtele-1;
+	  endif
   endif
   if(ship.x == ship.tillerman.x)
-	check := 1;
-	ytele := ytele-1;
+	  check := 1;
+	  ytele := ytele-1;
   endif
   if(!check)
-	ytele := ytele+1;
+	  ytele := ytele+1;
   endif
 	
   MoveObjectToLocation( character, xtele, ytele, ship.z+3, ship.realm, MOVEOBJECT_FORCELOCATION );
