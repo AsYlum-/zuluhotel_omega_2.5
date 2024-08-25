@@ -2,7 +2,9 @@
 
 use uo;
 use os;
+
 include ":staff:include/staff";
+
 program textcmd_summon( character , whom )
 
 	if( !whom )

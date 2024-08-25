@@ -40,7 +40,7 @@ function LookAround( who )
 	var found := 0;
 	var wfh;
 	var crimMaster := 0;
-	foreach mobile in ListMobilesNearLocation( who.x, who.y, who.z, SEARCH_RANGE )
+	foreach mobile in ListMobilesNearLocation( who.x, who.y, who.z, SEARCH_RANGE, who.realm )
 		wfh := GetObjProperty(mobile,"WarriorForHire");
 		if( mobile.IsA(POLCLASS_NPC) )
 			if(mobile.script == "tamed")
@@ -57,7 +57,7 @@ function LookAround( who )
 			if( !elem.guardignore && !GetObjProperty(mobile,"guardignore") and !wfh)					
 				if( IsInGuardedArea(mobile) && (mobile.script != "tamed" || crimMaster) )
 					set_critical(1);
-					guard := CreateNpcFromTemplate( "guard", mobile.x, mobile.y, mobile.z );
+					guard := CreateNpcFromTemplate( "guard", mobile.x, mobile.y, mobile.z, 0, who.realm );
 					if( guard )
 						SetObjproperty(mobile,"guardkill", 1);
 						SetObjProperty( guard, "target", mobile.serial );
@@ -71,7 +71,7 @@ function LookAround( who )
 			if( mobile.criminal || mobile.murderer )
 				if( IsInGuardedArea(mobile))
 					set_critical(1);
-					guard := CreateNpcFromTemplate( "guard", mobile.x, mobile.y, mobile.z );
+					guard := CreateNpcFromTemplate( "guard", mobile.x, mobile.y, mobile.z, 0, mobile.realm );
 					if( guard )
 						SetObjProperty( guard, "target", mobile.serial );
 						SetObjProperty( mobile, "#KillMe", guard.serial );

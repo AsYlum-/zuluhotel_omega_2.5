@@ -185,7 +185,7 @@ program autostart_boat( param )
 endprogram
 
 function DoEncounter()
-  foreach who in  ListMobilesNearLocationEx(cint(boat.x), cint(boat.y), cint(GetMapInfo( cint(boat.x), cint(boat.y) ).z), 4, LISTEX_FLAG_GHOST )
+  foreach who in  ListMobilesNearLocationEx(cint(boat.x), cint(boat.y), cint(GetMapInfo( cint(boat.x), cint(boat.y) ).z), 4, LISTEX_FLAG_GHOST, boat.realm )
 	  PlaySoundEffect(who, SFX_SPELL_RESURRECTION);
 	  ResurrectMobile( who );
   endforeach
@@ -285,7 +285,7 @@ function DryDock(event)
 		if (item.isa(POLCLASS_CORPSE) && !GetObjProperty( item, "npctemplate" ) )
 			foreach thing in EnumerateItemsInContainer(item)
 				if (thing.container.serial == item.serial)	
-					MoveObjectToLocation(thing,me.x, me.y, me.z, me.realm,  MOVEOBJECT_FORCELOCATION);
+					MoveObjectToLocation(thing,me.x, me.y, me.z, me.realm, MOVEOBJECT_FORCELOCATION);
 				endif
 			endforeach
 			DestroyItem(item);

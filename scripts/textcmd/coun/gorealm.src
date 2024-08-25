@@ -1,7 +1,8 @@
 //Edited August 25, 2024
 
-// command .go  started June 19, 2000
-// Zulu (zulu@zuluhotel.com)
+// based on the command .go  
+// Created by Developer Alryc
+
 
 use os;
 use uo;
@@ -31,19 +32,7 @@ var data := array(      // The data array that holds all the text to be displaye
        "Send"
 );
 
-program textcmd_go( who, text )
-
-/* 	var gCmd := GetObjProperty(who, ".go");
-	if(!gCmd)
-		SendSysMessage( who , "You havn't been granted this command." );
-		LogCommand(who, GetProcess(GetPid()).name, who.name+" is trying to use .go without permission!");
-		return;
-	endif
-	if(who.cmdlevel < 4 && ReadGameClock() > gCmd)
-		SendSysMessage( who , "You can't use this command anymore." );
-		EraseObjProperty(who, ".go");
-		return;
-	endif */
+program textcmd_gorealm( who, text )
 
   // Test to see if the user sent a location via command text.  if not show gump, else attempt travel to that location
   if(!text)
@@ -87,9 +76,9 @@ program textcmd_go( who, text )
 	if(result[0] == MaxLocs)
 		Dest    := locs[mod(result[0], MaxLocs+1)];
 	endif
-	LogCommand(who, GetProcess(GetPid()).name, traveler.name+"/"+traveler.serial, "Sent TO "+dest.x+" "+dest.y+" "+GetMapInfo(Dest.X, Dest.Y).Z);
-    // Teleport moble
-    var move := MoveObjecttoLocation(Traveler, Dest.X, Dest.Y, Dest.Z, Dest.R ,MOVEOBJECT_FORCELOCATION );
+  LogCommand(who, GetProcess(GetPid()).name, traveler.name+"/"+traveler.serial, "Sent TO "+dest.x+" "+dest.y+" "+dest.realm+" "+GetMapInfo(Dest.X, Dest.Y, dest.realm).Z);
+  // Teleport moble
+  var move := MoveObjecttoLocation(Traveler, Dest.X, Dest.Y, Dest.Z, Dest.R ,MOVEOBJECT_FORCELOCATION );
 	if(!move)
         SendSysMessage( who, "Unable to go there: " + move.errortext );
 	endif
@@ -152,4 +141,3 @@ endfunction
 function GetgoDataLength();
     return (len(data));
 endfunction
-
