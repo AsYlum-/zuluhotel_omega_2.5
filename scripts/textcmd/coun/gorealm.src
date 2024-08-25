@@ -1,22 +1,7 @@
-//Original Code
-
-/*
-use uo;
-
-program gofacet(who, text)
-	case(text)
-		"britannia":		SendSysMessage(who, CStr(MoveObjectToLocation(who, 1475, 1645, 20, "britannia", MOVEOBJECT_FORCELOCATION)));
-		"britannia_alt":	SendSysMessage(who, CStr(MoveObjectToLocation(who, 1475, 1645, 20, "britannia_alt", MOVEOBJECT_FORCELOCATION)));
-		"ilshenar":			SendSysMessage(who, CStr(MoveObjectToLocation(who, 831, 623, -40, "ilshenar", MOVEOBJECT_FORCELOCATION)));
-		"malas":			SendSysMessage(who, CStr(MoveObjectToLocation(who, 1014, 519, -70, "malas", MOVEOBJECT_FORCELOCATION)));
-		"tokuno":			SendSysMessage(who, CStr(MoveObjectToLocation(who, 736, 1257, 30, "tokuno", MOVEOBJECT_FORCELOCATION)));
-  	endcase
-endprogram
-*/
+//Edited August 25, 2024
 
 // command .go  started June 19, 2000
 // Zulu (zulu@zuluhotel.com)
-// last updated Aug 2, 2024
 
 use os;
 use uo;

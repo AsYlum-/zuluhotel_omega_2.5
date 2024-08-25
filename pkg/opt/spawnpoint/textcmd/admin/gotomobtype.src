@@ -1,3 +1,4 @@
+//Edited August 25, 2024
 
 use uo;
 use os;
@@ -47,8 +48,7 @@ program textcmd_gotomobtype( character , text )
 	//Once found the mobs wanted, send to gump to list
 	var chr := MakeAndProcessGump( character, found, realm );
 	if( chr )
-        //LogCommand(character, GetProcess(GetPid()).name, chr.name+"/"+chr.serial, "XYZ - "+chr.x+","+chr.y+","+chr.z);
-        Print($"mobs: {realm}");
+        LogCommand(character, GetProcess(GetPid()).name, chr.name+"/"+chr.serial, "XYZ - "+chr.x+","+chr.y+","+chr.z);
         var moved := MoveObjecttoLocation( character , chr.x , chr.y , chr.z , chr.realm, MOVEOBJECT_FORCELOCATION );
               if (moved.errortext)
                SendSysMessage(character, "oh no an error... can't go to: " + moved.errortext);
@@ -83,9 +83,6 @@ function MakeAndProcessGump( character, found, realm )
 	var page := 1;
 	var i := 0;
 	var start := 1;
-
-	//Print($"mobs: {found.size()}");
-	//Print($"Total Pages: {totalpages}");
 
 	// The main gump screen
 	GFResizePic(gump, 20, 20, 9250, 500, 725);
@@ -133,7 +130,7 @@ function MakeAndProcessGump( character, found, realm )
 
 	var result := GFSendGump(character, gump);
 	result := Cint(result[0]);
-	Print($"Result: {result}");
+
 	return found[result];
 	
 endfunction
