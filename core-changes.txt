@@ -1,4 +1,102 @@
 -- POL100.2.0 --
+08-24-2024 Kevin:
+    Fixed: Resolved an issue where the Z coordinate of objects on a boat was incorrectly
+           calculated during turns (introduced in the 07-08-2024 nightly build).
+08-11-2024 Turley:
+  Changed: EScript Formatter
+           variable declaration list if it doesnt fit to the line, split on the commas.
+           if a newline happens while a parenthesis is open align the following line with this parenthesis.
+08-08-2024 Kevin:
+    Added: Function Objects can now be called across different scripts.
+
+           For example, an item use script can pass to pass an "initializer"
+           function to another script that provides a new color for the item as
+           a parameter:
+
+             program item_usescript( who, item )
+               // Find the color changer process.
+               var color_changer := GetProcess( ... );
+
+               // Send it an event, containing the item and the initializer function.
+               color_changer.SendEvent( struct{
+                 type := "new",
+                 item := item,
+                 initializer := @SetupItem
+               } );
+
+               // Wait for the script to send us a result.
+               do
+                 if ( Wait_For_Event( 1 ) )
+                   break;
+                 endif
+               while ( true );
+
+               SendSysMessage( who, $"Item color changed: {item.color}" );
+             endprogram
+
+             function SetupItem( item, color )
+               Print( $"Changing color: {item.color} -> {color}" );
+               item.color := color;
+             endfunction
+08-06-2024 Kevin:
+  Changed: Performance improvements handling function references in the executor during runtime.
+           These changes increases the Escript version, therefore a recompilation of all scripts is required.
+08-05-2024 Kevin:
+    Added: Support for spread operator -- used to expand an array's elements into arguments of
+           a function call or elements of a new array.
+
+           For example, to pass an array's elements as arguments to a function call:
+
+             function SendMessageToPlayers( message, players... )
+               foreach player in players
+                 SendSysMessage( player, $"[Server] {message}" );
+                endforeach
+             endfunction
+
+             var players := array{};
+
+             if (condition1)
+               // Add a single player to the array
+               players.append( player1 );
+             endif
+
+             if (condition2)
+               // Get an array of players from somewhere else
+               var more_players := GetMorePlayers();
+
+               // Set `players` to a new array of the elements from both `players` and `more_players`
+               players := { players..., more_players... };
+             endif
+
+             // Pass all the elements of `players` as arguments
+             SendMessageToPlayers( "Hello!", players... );
+
+          See the Racalac Escript Guide for additional details.
+08-04-2024 Kevin:
+    Added: Support for variadic user functions -- user functions that accept any number of arguments.
+           For example, to define a function that sends a message to any number of players:
+
+             function SendMessageToPlayers( message, players... )
+                foreach player in players
+                  SendSysMessage( player, $"[Server] {message}" );
+                endforeach
+              endfunction
+
+              SendMessageToPlayers( "Hello!", player1, player2, player3 );
+
+          See the Racalac Escript Guide for additional details.
+08-03-2024 Kevin:
+    Added: House script method `set_multiid( int multiid | string name )`
+08-02-2024 Kevin:
+    Added: Array script method `find(FunctionObject testFn)`.
+    Added: Array script method `findIndex(FunctionObject testFn)`.
+    Added: Array script method `map(FunctionObject mapFn)`.
+    Added: Array script method `reduce(FunctionObject testFn, [initialValue])`.
+08-01-2024 Kevin:
+    Fixed: Resolved an issue where function expression assignments to locals and captures was mis-targetted.
+    Fixed: Resolved an issue where function expression captures were not being captured by reference.
+07-31-2024 Turley:
+ Improved: EScript ECompile Formatter: formatting of if statements and function parameters
 07-29-2024 Kevin:
     Added: Compiler support for function expressions via syntax `@(param1, param2, ..., paramN) { ... }`.
            For example, to get all hidden online players:
