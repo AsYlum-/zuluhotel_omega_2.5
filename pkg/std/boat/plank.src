@@ -43,12 +43,12 @@ function TimedOpenClose( plank )
 endfunction
 
 function YankOntoBoat( mob, plank )
-  var sh := GetStandingHeight( plank.x, plank.y, plank.z );
+  var sh := GetStandingHeight( plank.x, plank.y, plank.z, plank.realm );
   if (sh)
     //print( "sh.multi: " + sh.multi );
     var nx := (plank.x + plank.multi.x) / 2;
     var ny := (plank.y + plank.multi.y) / 2;
-    MoveObjectToLocation( mob, nx, ny, plank.z );
+    MoveObjectToLocation( mob, nx, ny, plank.z, plank.realm );
     return;
   endif
 endfunction
@@ -71,7 +71,7 @@ function CanWalkOntoPlank( plank )
     GID_PLANK_RETRACTED_FACING_SOUTH:   dx := 0;
                                         dy := 1;
   endcase 
-  if (GetStandingHeight( plank.x + dx, plank.y + dy, plank.z ))
+  if (GetStandingHeight( plank.x + dx, plank.y + dy, plank.z, plank.realm ))
     return 1;
   else
      return 0;

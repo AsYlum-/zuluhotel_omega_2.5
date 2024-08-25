@@ -475,10 +475,10 @@ const UOBJ_ZULU_ORE			:= 0xc503;
 //Systemreserved
 ///////////////////////////////////////////////////////////////
 
-const EXTOBJ_HOLD		:= 0xF013;
-const EXTOBJ_PORT_PLANK		:= 0xF011;
-const EXTOBJ_STARBOARD_PLANK	:= 0xF012;
-const EXTOBJ_TILLERMAN		:= 0xF010;
+const EXTOBJ_HOLD		:= 0x1F013;
+const EXTOBJ_PORT_PLANK		:= 0x1F011;
+const EXTOBJ_STARBOARD_PLANK	:= 0x1F012;
+const EXTOBJ_TILLERMAN		:= 0x1F010;
 
 const GID_PLANK_EXTENDED_FACING_EAST	:= 0x3ed4;
 const GID_PLANK_EXTENDED_FACING_NORTH	:= 0x3e89;
@@ -489,4 +489,4 @@ const GID_PLANK_RETRACTED_FACING_NORTH	:= 0x3e8a;
 const GID_PLANK_RETRACTED_FACING_SOUTH	:= 0x3e85;
 const GID_PLANK_RETRACTED_FACING_WEST	:= 0x3eb1;
 
-const SYSOBJ_MOUNT			:= 0xF021;
+const SYSOBJ_MOUNT			:= 0x1F021;
