@@ -99,7 +99,7 @@ program chrdeath(corpse,ghost)
 		SetStamina(ghost, GetMaxStamina(ghost));
 		ghost.warmode:= 0;
 		var mount2;
-		foreach item in ListRootItemsInContainerOfObjtype(corpse,0xF021)
+		foreach item in ListRootItemsInContainerOfObjtype(corpse,0x1F021)
 			mount2:=item;
 		endforeach
 		if(mount2) 
@@ -154,7 +154,7 @@ program chrdeath(corpse,ghost)
 		SetStamina(ghost, GetMaxStamina(ghost));
 		ghost.warmode:= 0;
 		var mount2;
-		foreach item in ListRootItemsInContainerOfObjtype(corpse,0xF021)
+		foreach item in ListRootItemsInContainerOfObjtype(corpse,0x1F021)
 			mount2:=item;
 		endforeach
 		if(mount2) 
@@ -247,7 +247,7 @@ program chrdeath(corpse,ghost)
 
 	// Dismount ghost is mounted, check if this is needed.
 	var mount;
-	foreach item in ListRootItemsInContainerOfObjtype(corpse,0xF021)
+	foreach item in ListRootItemsInContainerOfObjtype(corpse,0x1F021)
 		mount:=item;
 	endforeach
 

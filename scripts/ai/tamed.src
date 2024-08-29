@@ -693,7 +693,7 @@ function OpenMyPack();
 
 			set_critical(1);
 			master.facing := me.facing;
-			var mount := CreateItemAtLocation(5288 , 1176 , 0, 0xF021,1);
+			var mount := CreateItemAtLocation(5288 , 1176 , 0, 0x1F021,1);
 			mount.color := me.color;
 			setobjproperty(mount,"petname",me.name);
 			setobjproperty(mount,"pethp",GetHP(me));

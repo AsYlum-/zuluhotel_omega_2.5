@@ -90,7 +90,7 @@ function mountostard( who, item )
 		return 0;
 	endif
 
-	pet := CreateItemAtLocation(5288,1176,0,0xF021,1);
+	pet := CreateItemAtLocation(5288,1176,0,0x1F021,1);
 	pet.color := color;
 	pet.graphic := 0x3ea5;
 	SetObjProperty( who, "DonatorMounted", 1);

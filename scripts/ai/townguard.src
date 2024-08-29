@@ -295,7 +295,7 @@ function SetMeUp()
 		3:	mounttype := 0x3ea1;
 		endcase
 
-		var mount := CreateItemAtLocation(5288 , 1176 , 0,0xF021,1);
+		var mount := CreateItemAtLocation(5288 , 1176 , 0,0x1F021,1);
 		mount.graphic := mounttype;
 		EquipItem(me,mount);
 

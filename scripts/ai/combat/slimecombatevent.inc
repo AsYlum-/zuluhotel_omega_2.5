@@ -83,7 +83,7 @@ function CanEat(character, item)
 	if ( ( item.objtype >= 0x2030 ) and (item.objtype <= 0x2060) )
 		return 0;
 	endif
-	if ( (item.objtype == 0x0E75) or (item.objtype == 0xF021 ) )
+	if ( (item.objtype == 0x0E75) or (item.objtype == 0x1F021 ) )
 		return 0;
 	endif
 

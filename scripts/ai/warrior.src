@@ -1285,7 +1285,7 @@ function MountHorse(horse)
 		if ( MoveObjectToLocation(me,horse.x,horse.y,horse.z,0) )
 			set_critical(1);
 			me.facing := horse.facing;
-			var mount := CreateItemAtLocation(5288 , 1176 , 0, 0xF021,1);
+			var mount := CreateItemAtLocation(5288 , 1176 , 0, 0x1F021,1);
 			mount.color := horse.color;
 			setobjproperty(mount,"petname",horse.name);
 			setobjproperty(mount,"pethp",GetHP(horse));
