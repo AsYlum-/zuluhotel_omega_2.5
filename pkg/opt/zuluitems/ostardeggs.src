@@ -1,101 +1,110 @@
+//Edited Sept 6, 2024
+
 use uo;
 include "include/random";
 include "include/areas";
 
 program ostardeggs(who, item)
 
-var secclock:=ReadGameClock();
-var lasthatch :=CInt(GetObjProperty(who, "#LastHatch"));
+	var secclock:=ReadGameClock();
+	var lasthatch :=CInt(GetObjProperty(who, "#LastHatch"));
 
-if(!ReserveItem(item)) 
-	return 0; 
-endif
-
-	if ( secclock< lasthatch)
-		SendSysMessage( who, "You have to wait " + (lasthatch-secclock) + " seconds to hatch another egg.");
-		return 0;
+	if(!ReserveItem(item)) 
+		return 0; 
 	endif
 
+		if ( secclock< lasthatch)
+			SendSysMessage( who, "You have to wait " + (lasthatch-secclock) + " seconds to hatch another egg.");
+			return 0;
+		endif
 
-	if (IsInSafeArea(who))
-		SendSysMessage( who, "You can't hatch eggs in this area.");
-		return 0;
-	endif
 
-	if (IsInGuardedArea(who))
-		SendSysMessage( who, "You can't hatch eggs in this area.");
-		return 0;
-	endif
+		if (IsInSafeArea(who))
+			SendSysMessage( who, "You can't hatch eggs in this area.");
+			return 0;
+		endif
 
-	if( IsInNOPKArea(who) )
-		SendSysMessage( who, "You can't hatch eggs in this area.");
-		return 0;
-	endif
+		if (IsInGuardedArea(who))
+			SendSysMessage( who, "You can't hatch eggs in this area.");
+			return 0;
+		endif
 
-SendSysMessage( who, "The egg begins to move and " );
+		if( IsInNOPKArea(who) )
+			SendSysMessage( who, "You can't hatch eggs in this area.");
+			return 0;
+		endif
 
-var ostard, typeofostard :=Random(36), masteralone := Random(100);
+	SendSysMessage( who, "The egg begins to move and " );
 
-case (typeofostard)
+	var ostard, typeofostard :=Random(36), masteralone := Random(100);
 
-0: ostard := "goldenostard";
-1: ostard := "goldenostard";
-2: ostard := "goldenostard";
-3: ostard := "goldenostard";
-4: ostard := "plainsostard";
-5: ostard := "plainsostard";
-6: ostard := "plainsostard";
-7: ostard := "plainsostard";
-8: ostard := "mountainostard";
-9: ostard := "mountainostard";
-10: ostard := "mountainostard";
-11: ostard := "mountainostard";
-12: ostard := "swampostard";
-13: ostard := "swampostard";
-14: ostard := "swampostard";
-15: ostard := "swampostard";
-16: ostard := "highlandostard";
-17: ostard := "highlandostard";
-18: ostard := "highlandostard";
-19: ostard := "highlandostard";
-20: ostard := "shadowostard";
-21: ostard := "shadowostard";
-22: ostard := "valleyostard";
-23: ostard := "valleyostard";
-24: ostard := "stoneostard";
-25: ostard := "stoneostard";
-26: ostard := "emeraldostard";
-27: ostard := "emeraldostard";
-28: ostard := "rubyostard";
-29: ostard := "rubyostard";
-30: ostard := "tropicalostard";
-31: ostard := "snowostard";
-32: ostard := "iceostard";
-33: ostard := "fireostard";
-34: ostard := "heavenlyostard";
-35: if( Random(100) < 1)
-		ostard := "rainbowostard";
+	case (typeofostard)
+		0: ostard := "jungleostard";
+		1: ostard := "desertostard";
+		2: ostard := "plumostard";
+		3: ostard := "goldenostard";
+		4: ostard := "plainsostard";
+		5: ostard := "mountainostard";
+		6: ostard := "swampostard";
+		7: ostard := "highlandostard";
+		8: ostard := "shadowostard";
+		9: ostard := "valleyostard";
+		10: ostard := "stoneostard";
+		11: ostard := "emeraldostard";
+		12: ostard := "rubyostard";
+		13: ostard := "tropicalostard";
+		14: ostard := "snowostard";
+		15: ostard := "iceostard";
+		16: ostard := "fireostard";
+		17: ostard := "heavenlyostard";
+		18: ostard := "amethystostard";
+		19: ostard := "sapphireostard";
+		20: ostard := "mistostard";
+		21: ostard := "earthostard";
+		22: ostard := "necroostard";
+		23: ostard := "terrorostard";
+		24: ostard := "phasedostard";
+		25: ostard := "bloodostard";
+		26: ostard := "plumostard";
+		27: ostard := "windostard";
+		28: ostard := "waterostard";
+		29: ostard := "obsidianostard";
+		30: if( Random(25) < 1)
+				ostard := "dostard";
+			else
+				ostard := "forestostard";
+			endif
+		31: if( Random(50) < 1)
+				ostard := "iostard";
+			else
+				ostard := "forestostard";
+			endif
+		32: ostard := "undeadostard";
+		33: ostard := "mountainostard";
+		34: ostard := "mistostard";
+
+		35: if( Random(100) < 1)
+				ostard := "rainbowostard";
+			else
+				ostard := "forestostard";
+			endif
+	endcase
+
+	var newpet := CreateNpcFromTemplate( ostard, who.x, who.y, who.z, 0, who.realm );
+
+	if (masteralone<75)
+		SendSysMessage( who, "A baby ostard appears and accepts you as his master!");
+		SetObjProperty (newpet, "master", who.serial);
+		SetObjProperty (newpet, "prevtamed", 1);
+		newpet.script := "tamed";
+		RestartScript (newpet);
 	else
-		ostard := "goldenostard";
+	SendSysMessage( who, "A baby ostard appears!");
 	endif
-endcase
+	subtractamount(item, 1);
 
-var newpet := CreateNpcFromTemplate( ostard, who.x, who.y, who.z );
+	// Toadstool - Set hatched info on mob as a string: "players serials, x y z coords of release"
+	SetObjProperty(newpet, "HatchedBy", "Player: "+who.serial+" XYZ: "+newpet.x+" "+newpet.y+" "+newpet.z+" "+newpet.realm);
+	SetObjProperty(who, "#LastHatch", ReadGameClock()+30);
 
-
-
-if (masteralone<75)
- SendSysMessage( who, "A baby ostard appears and accepts you as his master!");
- SetObjProperty (newpet, "master", who.serial);
- SetObjProperty (newpet, "prevtamed", 1);
- newpet.script := "tamed";
- RestartScript (newpet);
-else
- SendSysMessage( who, "A baby ostard appears!");
-endif
-subtractamount(item, 1);
-
-// Toadstool - Set hatched info on mob as a string: "players serials, x y z coords of release"
-SetObjProperty(newpet, "HatchedBy", "Player: "+who.serial+" XYZ: "+newpet.x+" "+newpet.y+" "+newpet.z);
-SetObjProperty(who, "#LastHatch", ReadGameClock()+30);
 endprogram

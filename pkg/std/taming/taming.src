@@ -1,3 +1,5 @@
+//Edited September 6, 2024
+
 use os;
 use uo;
 use cfgfile;
@@ -191,7 +193,7 @@ program tame( character )
 			RestartScript( the_creature );
 
 			if(GetObjProperty(the_creature, "PhysicalProtection") > 100)
-				SetObjProperty(the_creature, "PhysicalProtection", 1);
+				SetObjProperty(the_creature, "PhysicalProtection", 6);
 				EraseObjProperty(the_creature, "AttackTypeImmunities");
 			endif
 
