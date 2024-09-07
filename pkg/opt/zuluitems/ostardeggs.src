@@ -69,12 +69,12 @@ program ostardeggs(who, item)
 		27: ostard := "windostard";
 		28: ostard := "waterostard";
 		29: ostard := "obsidianostard";
-		30: if( Random(25) < 1)
+		30: if( Random(5) < 1)
 				ostard := "dostard";
 			else
 				ostard := "forestostard";
 			endif
-		31: if( Random(50) < 1)
+		31: if( Random(15) < 1)
 				ostard := "iostard";
 			else
 				ostard := "forestostard";

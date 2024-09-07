@@ -40,7 +40,7 @@ program dragoneggs(who, item)
 
 	SendSysMessage( who, "The egg begins to move and" );
 
-	var dragon, typeofdragon :=Random(29), masteralone := Random(100);
+	var dragon, typeofdragon :=Random(33), masteralone := Random(100);
 
 	case (typeofdragon)
 		0: dragon := "waterdrake";
@@ -59,28 +59,24 @@ program dragoneggs(who, item)
 		13: dragon := "cavedrake";
 		14: dragon := "airdrake";
 		15: 
-		16: if( Random(25) < 1)
+		16: if( Random(5) < 1)
 				dragon := "silverdrake";
 			else
 				dragon := "drake1";
 			endif
-		17: if( Random(25) < 1)
+		17: if( Random(5) < 1)
 				dragon := "heavenlydrake";
 			else
 				dragon := "drake2";
 			endif
-		18: if( Random(25) < 1)
+		18: if( Random(5) < 1)
 				dragon := "goldendrake";
 			else
 				dragon := "drake3";
 			endif
 		19: dragon := "tidaldragon";
 		20: dragon := "stormdragon";
-		21: if( Random(25) < 1)
-				dragon := "shadowdragon";
-			else
-				dragon := "dragon1";
-			endif
+		21: dragon := "shadowdragon";
 		22: dragon := "sanddragon";
 		23: dragon := "rockdragon";
 		24: dragon := "poisondragon";
@@ -88,7 +84,26 @@ program dragoneggs(who, item)
 		26: dragon := "frostdragon";
 		27: dragon := "cavedragon";
 		28: dragon := "dragon2";
-
+		29:if( Random(10) < 1)
+				dragon := "goldendragon";
+			else
+				dragon := "dragon1";
+			endif
+		30:if( Random(10) < 1)
+				dragon := "silverdragon";
+			else
+				dragon := "dragon2";
+			endif
+		31:if( Random(10) < 1)
+				dragon := "greatwyrm";
+			else
+				dragon := "dragon1";
+			endif
+		32:if( Random(10) < 1)
+				dragon := "greatearthwyrm";
+			else
+				dragon := "dragon2";
+			endif
 	endcase
 
 	subtractamount(item, 1);

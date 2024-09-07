@@ -1,3 +1,5 @@
+//Edited September 6, 2024
+
 use uo;
 use os;
 use util;
@@ -9,8 +11,11 @@ include ":armor:armorZones";
 
 function OmegaAttack(attacker, defender)
 
-	var attackerweaponType := cfg[attacker.weapon.objtype];
-			
+	//var attackerweaponType := cfg[attacker.weapon.objtype];
+
+	var weapfile := ReadConfigFile( ":combat:itemdesc" );
+	var attackerweaponType := weapfile[attacker.weapon.objtype];
+
 	if(attacker.weapon.attribute == ATTRIBUTEID_ARCHERY)
 		if (!checkForAndDecrementAmmunition( attacker, attackerweaponType))	
 			return;
@@ -190,7 +195,7 @@ endfunction
 function CombatAdvancement( attacker, weapon, defender )
 	
 	AwardSkillPoints( attacker, GetSkillIdByAttributeId( weapon.attribute ), 20 );
-	
+
 	// Don't raise tactics with archery
 	if (weapon.attribute != ATTRIBUTEID_ARCHERY)
 		AwardSkillPoints( attacker, SKILLID_TACTICS, 20 );
