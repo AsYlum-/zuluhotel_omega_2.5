@@ -1,3 +1,5 @@
+//Edited on September 6, 2024
+
 use npc;
 use os;
 use uo;
@@ -54,7 +56,7 @@ if( me.name["<random>"] )
 	SetName ( me , RandomName( me ) );
 endif
 if (!me.backpack)
-	var newbackpack := CreateItemAtLocation(5288 , 1176 , 0, 0xe75,1);
+	var newbackpack := CreateItemAtLocation(5288 , 1176 , 0, 0xe75, 1, "britannia");
 	EquipItem(me, newbackpack);
 endif
 
@@ -87,7 +89,7 @@ program TamedAI()
 		me.frozen := 1;
 	endif
 
-	setobjproperty(me,"color",me.color);
+	SetObjProperty(me, "color", me.color);
 
 	if ( GetObjProperty( me, "regspawn" ) )
 		var SpawnName := GetObjProperty( me, "regspawn" );
@@ -103,7 +105,7 @@ program TamedAI()
 		caster := 1;
 		spells := GetConfigStringArray( npccfg[me.npctemplate], "spell" );
 		saywords := npccfg[me.npctemplate].saywords;
-	elseif (npccfg[me.npctemplate].script == "firebreather")
+	elseif ((npccfg[me.npctemplate].script == "firebreather") || (npccfg[me.npctemplate].script == "chaosfirebreather"))
 		firebreather := 1;
 	elseif (npccfg[me.npctemplate].script == "poisonkillpcs")
 		poisoner := 1;
@@ -409,19 +411,19 @@ function Release()
 	var totem := Cint(GetObjProperty( me , "totem" ));
 	if( totem )
 		set_critical(1);
-		var it := CreateItemAtLocation(me.x,me.y,me.z,totem,1);
+		var it := CreateItemAtLocation( me.x, me.y, me.z, totem, 1, me.realm);
 		if (it)
 			it.decayat := 0;
 			it.name := me.name;
 			it.color := Cint(GetObjProperty( me , "totemcolor" ));
-			SetObjProperty(it,"critter",me.npctemplate);
-			SetObjProperty(it,"critcolor",me.color);
-			SetObjProperty(it,"totemhp",GetHP(me));
+			SetObjProperty(it, "critter",me.npctemplate);
+			SetObjProperty(it, "critcolor",me.color);
+			SetObjProperty(it, "totemhp",GetHP(me));
 			it.usescript := ":dundee:totem";
 			it.decay := 0;
 			it.movable := 1;
 			PlaySoundEffect( me, SFX_SPELL_DISPEL );
-			PlayStationaryEffect( me.x, me.y, me.z, FX_SMOKE, 0xA, 0xA );
+			PlayStationaryEffect( me.x, me.y, me.z, FX_SMOKE, 0xA, 0xA, 0, me.realm );
 			MoveObjectToLocation(me,5288 , 1176 , 0, "britannia", MOVEOBJECT_FORCELOCATION);
 			RevokePrivilege( me, "invul" );
 			ApplyRawdamage( me , GetMaxHP(me) + 3 );
@@ -431,7 +433,7 @@ function Release()
 			return;
 		endif
 	elseif( summoned )
-		PlayStationaryEffect( me.x, me.y, me.z, FX_SMOKE, 0xA, 0xA );
+		PlayStationaryEffect( me.x, me.y, me.z, FX_SMOKE, 0xA, 0xA, 0, me.realm );
 		MoveObjectToLocation(me,5288 , 1176 , 0,"britannia",MOVEOBJECT_FORCELOCATION);
 		RevokePrivilege( me, "invul" );
 		ApplyRawDamage( me , GetMaxHP(me)+3 );
@@ -478,9 +480,9 @@ endfunction
 
 function drop()
 
-	foreach myitems in enumerateitemsincontainer(mypack)
+	foreach myitems in EnumerateItemsInContainer(mypack)
 		if (myitems.container.serial == mypack.serial)
-			moveObjecttolocation(myitems, me.x, me.y, me.z,me.realm, 0);
+			MoveObjectToLocation(myitems, me.x, me.y, me.z, me.realm, 0);
 			sleepms(100);
 		endif
 	endforeach
@@ -521,7 +523,7 @@ function PetCount()
 	//max pets from tame skill/eggs/etc
 	var pets	 := 0;
 	var level := IsRanger(master);
-	var tame_maxx := 3+level;
+	var tame_maxx := 2 + level;
 	//max summons
 	var magic_pets := 0;
 	var control_skill;
@@ -533,13 +535,17 @@ function PetCount()
 	var magic_maxx:= Min(Cint( control_skill / 30 ),5);
 	
 		
-	foreach mob in ListMobilesNearLocation( me.x, me.y, me.z, 8 );
+	foreach mob in ListMobilesNearLocation( me.x, me.y, me.z, 8, me.realm );
 		var mob_template := mob.npctemplate;
 		if( (mob.script == "tamed") and ( GetObjProperty( mob, "master" ) == masterserial ) )
 			if( GetObjProperty( mob , "summoned" ) or GetObjProperty( mob , "animated" ) or GetObjProperty( mob , "charmed" ) )
 				magic_pets := magic_pets + 1;
 			else
-				pets := pets + 1;
+				if ( GetObjProperty( mob , "Boss" ) )
+					pets := pets + 4;
+				else
+					pets := pets + 1;
+				endif
 			endif
 		endif
 	endforeach
@@ -554,7 +560,6 @@ function PetCount()
 	endif
 
 endfunction
-
 
 function SpecialFrenzyRelease( against )
 
@@ -588,7 +593,6 @@ function SpecialFrenzyRelease( against )
 
 endfunction
 
-
 function OpenMyPack();
 
 	if (!master)
@@ -604,7 +608,7 @@ function OpenMyPack();
 		0x123:
 		0x124:
 			if (!me.backpack)
-				var newbackpack := CreateItemAtLocation(5288 , 1176 , 0, 0xe75,1);
+				var newbackpack := CreateItemAtLocation(5288 , 1176 , 0, 0xe75, 1);
 				EquipItem(me, newbackpack);
 			endif
 
@@ -651,7 +655,7 @@ function OpenMyPack();
 		114:	mounttype := 0x3ea9;	// Nightmare
 		115:	mounttype := 0x3eaa;	// Ethereal Horse
 		170:	mounttype := 0x3eab;	// Ethereal Llama
-		//170:	mounttype := 0x3eac;	// Ethereal Ostard
+		171:	mounttype := 0x3eac;	// Ethereal Ostard
 		0xC3:	mounttype := 0x3e97;	// Ethereal Giant Beetle
 		0xC2:	mounttype := 0x3e98;	// Ethereal Swamp Dragon
 		0xC1:	mounttype := 0x3e9a;	// Ethereal Ridgeback
@@ -693,7 +697,7 @@ function OpenMyPack();
 
 			set_critical(1);
 			master.facing := me.facing;
-			var mount := CreateItemAtLocation(5288 , 1176 , 0, 0xF021,1);
+			var mount := CreateItemAtLocation(5288 , 1176 , 0, 0x1F021, 1);
 			mount.color := me.color;
 			setobjproperty(mount,"petname",me.name);
 			setobjproperty(mount,"pethp",GetHP(me));
@@ -772,7 +776,7 @@ function TakeItem(ev)
 
 	if ( (me.graphic == 0x123 ) or (me.graphic == 0x124) )
 		if (!me.backpack)
-			var newbackpack := CreateItemAtLocation(5288 , 1176 , 0, 0xe75,1);
+			var newbackpack := CreateItemAtLocation(5288 , 1176 , 0, 0xe75, 1);
 			EquipItem(me, newbackpack);
 		endif
 		MoveItemToContainer(ev.item,me.backpack);
@@ -920,8 +924,7 @@ function Guard()
 		endforeach
 	endif
 
-	if ( (!GetBaseStrength(guarding)) or (guarding.dead) or (distance(me,guarding) > 
-15) )
+	if ( (!GetBaseStrength(guarding)) or (guarding.dead) or (distance(me,guarding) > 15) )
 		guarding := 0;
 	endif
 
@@ -935,8 +938,8 @@ function Follow()
 		return;
 	endif
 
-	var multi2 := GetStandingHeight( me.x, me.y, me.z ).multi;
-	var multi3 := GetStandingHeight( following.x, following.y, following.z ).multi;
+	var multi2 := GetStandingHeight( me.x, me.y, me.z, me.realm ).multi;
+	var multi3 := GetStandingHeight( following.x, following.y, following.z, following.realm ).multi;
 	if( multi2 and multi3)
 		if( !Iscowner( master, multi3 ) and !Iscowner( master, multi2 ))
 			if( !IsFriend( master, multi3) and !IsFriend( master, multi2))
@@ -1024,18 +1027,21 @@ function Follow()
 		endif
 	endif
 
-	var strongwill:=0;
+	//Antiquated I believe
 
-		if ( me.npctemplate["dragon1"] || me.npctemplate["dragon2"]||me.npctemplate["nightmare"])//too strong to exploit with
-			strongwill := 1;
-		endif
-
+	//var strongwill := 0;
+	//	if ( me.npctemplate["dragon1"] || me.npctemplate["dragon2"] || me.npctemplate["nightmare"])//too strong to exploit with
+	//		strongwill := 1;
+	//	endif
+	
 	if ( (me.frozen) )
 		sleep(10);
 		return;
 	endif
 
-	SetDexterityMod(me, 5000); // := 5000;
+	//SetDexterityMod(me, 5000); // := 5000;
+	RecalcVitals(me);
+
 	var d := Distance( me, following );
 	if (d < 2)
 		sleep(1);
@@ -1054,7 +1060,9 @@ function Follow()
 		following := 0;
 	endif
 	
-	SetDexterityMod(me, 5000); //me.dexterity_mod := 0;
+	//SetDexterityMod(me, 5000); //me.dexterity_mod := 0;
+	RecalcVitals(me);
+
 	if (guarding)
 		Guard();
 	endif
@@ -1161,7 +1169,9 @@ endfunction
 
 function AllCommand(evtype,what)
 	
-	var mobs := ListMobilesNearLocation( master.x, master.y, master.z, 9 );
+	PetCount();
+
+	var mobs := ListMobilesNearLocation( master.x, master.y, master.z, 9, master.realm );
 	var eve array;
 	eve.+type := evtype;
 	eve.+source := me;
@@ -1278,7 +1288,7 @@ function GoWild()
 
 
 	// Toadstool - Set released info on mob as a string: "players serials, x y z coords of release"
-	SetObjProperty(me, "ReleasedBy", "Player: "+GetObjProperty(me, "master")+" XYZ: "+me.x+" "+me.y+" "+me.z);
+	SetObjProperty(me, "ReleasedBy", "Player: "+GetObjProperty(me, "master")+" XYZR: "+me.x+" "+me.y+" "+me.z+" "+me.realm);
 
 	me.setmaster( 0 );
 	EraseObjProperty(me, "master");
@@ -1290,7 +1300,7 @@ endfunction
 
 function GoToSleep()
 
-	foreach critter in ListMobilesNearLocation( me.x,me.y,me.z, 10 );
+	foreach critter in ListMobilesNearLocation( me.x,me.y,me.z, 10, me.realm );
 		if (!critter.npctemplate)
 			return 0;
 		endif

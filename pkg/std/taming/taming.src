@@ -1,3 +1,5 @@
+//Edited September 6, 2024
+
 use os;
 use uo;
 use cfgfile;
@@ -83,11 +85,7 @@ program tame( character )
 
 	var thename := GetName( the_creature.name );
 
-	//difficulty := difficulty + 20; // old line
-	difficulty := difficulty + 10; //will be much easier to tame, with the old line, raising taming was not possible
-	// and many high level tamers were failing hellhounds and drakes way too much. anyways we will see how this goes
-	// and can change it if needed,
-
+	difficulty := difficulty + 10; 
 
 	var prev_tame := GetObjProperty( the_creature , "PreviouslyTamed" );
 	if( !prev_tame )
@@ -99,8 +97,6 @@ program tame( character )
 		difficulty := 1;
 	endif
 
-	//var calming_diff := difficulty + 20;
-	//old line ^
 	var calming_diff := difficulty + 10;
 	var ranger := GetObjProperty( character , CLASSEID_RANGER );
 
@@ -183,6 +179,9 @@ program tame( character )
 		EraseObjProperty( the_creature , "tametimer" );
 
 		if( CheckSkill( character , SKILLID_TAMING , difficulty , difficulty * POINT_MULTIPLIER ) )
+			
+			WarnSpawnPointManager( the_creature );
+			
 			SendSysmessage( character , "You successfully tame the " + thename );
 			PrintTextAbove( the_creature, the_creature.name + " accepts you as it's master." );
 			SetObjProperty( the_creature ,"master" , character.serial );
@@ -191,14 +190,13 @@ program tame( character )
 			RestartScript( the_creature );
 
 			if(GetObjProperty(the_creature, "PhysicalProtection") > 100)
-				SetObjProperty(the_creature, "PhysicalProtection", 1);
+				SetObjProperty(the_creature, "PhysicalProtection", 6);
 				EraseObjProperty(the_creature, "AttackTypeImmunities");
 			endif
 
 			SetObjProperty( the_creature , "PreviouslyTamed" , prev_tame + 1 );
 			Detach();
-			WarnSpawnPointManager( the_creature );
-
+			
 		else
 
 			SendSysmessage( character , "You failed to tame the creature." );
@@ -289,16 +287,6 @@ endfunction
 
 
 function WarnSpawnPointManager( the_creature )
-/*return 1;
-	Sleep(300);
-
-	if( !the_creature )
-		return;
-	endif
-
-	if( the_creature.script != "tamed" )
-		return;
-	endif*/
 
 	WarnManagerOfNpcDeath(the_creature);
 

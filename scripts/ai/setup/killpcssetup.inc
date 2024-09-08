@@ -69,7 +69,7 @@ if (!me.backpack)
 	endif
 
 	if ( npccfg[me.npctemplate].mount )
-		var mymount := CreateItemAtLocation(5288,1176,0,0xF021,1);
+		var mymount := CreateItemAtLocation(5288,1176,0,0x1F021,1);
 		var mountparms := splitwords(npccfg[me.npctemplate].mount);
 		mymount.graphic := cint(mountparms[1]);
 		mymount.color := cint(mountparms[2]);

@@ -1,3 +1,5 @@
+//Edited on September 6, 2024
+
 /////////////////////////////////////////////////////////
 //vet.src
 //
@@ -18,6 +20,7 @@ include "include/random";
 include "include/res";
 include "include/attributes";
 include "include/difficulty";
+include "include/math";
 
 const SOUND_EFFECT_RES 	  := 0x215;
 const BLOODY_BANDAGE 	  := 0x0e20;
@@ -95,8 +98,8 @@ function TryToCure( who , patient , bandages )
 	if( GetObjProperty( who , CLASSEID_RANGER ) )
 		delay := Cint( delay / CLASSE_BONUS );
 
-	elseif( GetObjProperty( who , CLASSEID_CLERIC ) )
-		delay := Cint( delay / CLASSE_BONUS );
+	//elseif( GetObjProperty( who , CLASSEID_CLERIC ) )
+	//	delay := Cint( delay / CLASSE_BONUS );
 
 	endif
 
@@ -216,7 +219,8 @@ function TryToHeal( who , patient , bandages )
 		count := 1;
 	endif
 
-	healed := Cint( healed * count / 10 );
+	//Added *1.5 extra healing on base... from 145 to 200 avg heals at max
+	healed := Trunc( ( Cint( healed * count / 10 ) * 1.5 ), 0);
 
 	// First check against maxhp-hp, not good for over 130HP difference
 	if( CheckSkill( who , SKILLID_VETERINARY , diff , points ) )
@@ -245,7 +249,7 @@ function TryToHeal( who , patient , bandages )
 			SendSysmessage( patient , who.name + " healed " + healed + " damage." );
 		endif
 	else
-
+		
 		SendSysmessage( who , "You couldn't heal the creature." );
 	endif
 
@@ -297,7 +301,7 @@ function ResAnimal( who , patient , bandages )
 	endif
 
 	SendSysMessage( who , "You start to resurrect the creature..." );
-	var msgss := tameat+10;
+	var msgss := tameat;
 	sendDiff( who , msgss );
 
 	var delay 	:= DELAY_TO_RES;
@@ -341,7 +345,7 @@ function ResAnimal( who , patient , bandages )
 
 	// First check against maxhp-hp, not good for over 130HP difference
 	if( CheckSkill( who , SKILLID_VETERINARY , diff , points ) )
-		var npc := CreateNPCFromTemplate(GetObjProperty(patient, "npctemplate"), patient.x, patient.y, patient.z);
+		var npc := CreateNPCFromTemplate(GetObjProperty(patient, "npctemplate"), patient.x, patient.y, patient.z, 0, patient.realm);
 		if (npc)
 			var color := getobjproperty(patient,"color");
 			DestroyItem(patient);

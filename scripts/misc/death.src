@@ -123,7 +123,7 @@ program npcdeath(corpse)
 	foreach item in EnumerateItemsInContainer( corpse )
 
 		// destroy boat piece
-		if (item.objtype == 0xf021)
+		if (item.objtype == 0x1f021)
 			DestroyItem(item);
 		endif
 

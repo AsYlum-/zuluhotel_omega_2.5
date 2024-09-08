@@ -21,7 +21,7 @@ function dismount( me, mount := 0 )
 			if( !me.corpseType )
 				mount := GetEquipmentByLayer( me, LAYER_MOUNT );
 			else
-				foreach item in ListRootItemsInContainerOfObjtype(me, 0xf021)
+				foreach item in ListRootItemsInContainerOfObjtype(me, 0x1f021)
 					mount := item;
 				endforeach
 			endif
