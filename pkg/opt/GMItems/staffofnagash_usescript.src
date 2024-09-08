@@ -14,6 +14,8 @@ if (!staff.layer)
 	return 0;
 endif
 
+SetObjProperty(staff, "EnchantColor", staff.color);
+
 var time_now := ReadGameClock();
 var last_use := GetObjProperty(staff, "LastUsed");
 var remaining := (last_use+(USE_TIME*60) - time_now)/60;
