@@ -857,14 +857,14 @@ function MainAILoop()
 			guarding := 0;
 			//ZHS STABILITY FIX
 			if ( firstwander )
-				//SetAnchor( me.x, me.y, 2, 80 );//Removed
+				SetAnchor( me.x, me.y, 2, 80 );// ZHS Stability Removed This
 				waittime := 2;
 			endif
 			firstwander := 0;
 			if ((master) and (!staying))
-				//wander(); //Removed
-				repeat//Added
-				until (! (ev := os::wait_for_event(0)) );//Added
+				wander(); // ZHS Stability Removed This
+				//repeat // ZHS Stability Added This
+				//until (! (ev := os::wait_for_event(0)) ); // ZHS Stability Added This
 			endif
 			//END FIX
 			EraseObjProperty(me,"#flees");
