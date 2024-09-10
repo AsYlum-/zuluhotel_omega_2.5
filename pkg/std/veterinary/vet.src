@@ -226,39 +226,6 @@ function TryToHeal( who , patient , bandages )
 	else 
 		healed := Trunc( ( Cint( healed * count / 10 ) * 1.5 ), 0);
 	endif
-
-	/*  OLD CODE, VET WASNT WORKING	
-	// First check against maxhp-hp, not good for over 130HP difference
-	if( CheckSkill( who , SKILLID_VETERINARY , diff , points ) )
-		HealDamage( patient , healed );
-		SendSysMessage( who , "You healed " + healed + " damage." );
-		if (who != patient)
-			SendSysmessage( patient , who.name + " healed " + healed + " damage." );
-		endif
-
-	// Second check against % TO heal and vet skill % to max.  So if an npc has 1k max hp and is on 500hp, he has
-	// 50% to heal.  If players skill is 100 he will be able to heal it
-	elseif ((healskillper >= percent_to_heal) && CheckSkill( who , SKILLID_VETERINARY , (vet-10) , CInt((vet/2)*POINTS_MULTIPLIER) ) )
-			// players total heal skill perecnt is greater or equal to damage needed healing, HEAL
-			HealDamage( patient , healed );
-			SendSysMessage( who , "You healed " + healed + " damage." );
-			if (who != patient)
-				SendSysmessage( patient , who.name + " healed " + healed + " damage." );
-			endif
-
-	// 3RD and final check.  HP check failed, didn't have enough vet skill to heal based on skill %.  We half the skill and try
-	elseif( CheckSkill( who , SKILLID_VETERINARY , CInt(diff/2.5) , CInt(points/2.5) ) )
-		healed:=Cint(healed/2.5);
-		HealDamage( patient , healed );
-		SendSysMessage( who , "The wounds are too advanced and you only heal " + healed + " damage." );
-		if (who != patient)
-			SendSysmessage( patient , who.name + " healed " + healed + " damage." );
-		endif
-	else
-		
-		SendSysmessage( who , "You couldn't heal the creature." );
-	endif
-	*/
 	
 	// First check against maxhp-hp, not good for over 130HP difference
 	if( CheckSkill( who , SKILLID_VETERINARY , diff , points ) )
