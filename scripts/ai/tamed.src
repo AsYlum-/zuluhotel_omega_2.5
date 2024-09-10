@@ -1,4 +1,4 @@
-//Edited on September 6, 2024
+//Edited on September 10, 2024
 
 use npc;
 use os;
@@ -434,7 +434,7 @@ function Release()
 		endif
 	elseif( summoned )
 		PlayStationaryEffect( me.x, me.y, me.z, FX_SMOKE, 0xA, 0xA, 0, me.realm );
-		MoveObjectToLocation(me,5288 , 1176 , 0,"britannia",MOVEOBJECT_FORCELOCATION);
+		MoveObjectToLocation(me, 5288, 1176, 0, "britannia", MOVEOBJECT_FORCELOCATION);
 		RevokePrivilege( me, "invul" );
 		ApplyRawDamage( me , GetMaxHP(me)+3 );
 	elseif( animated )
@@ -542,7 +542,7 @@ function PetCount()
 				magic_pets := magic_pets + 1;
 			else
 				if ( GetObjProperty( mob , "Boss" ) )
-					pets := pets + 4;
+					pets := pets + 5;
 				else
 					pets := pets + 1;
 				endif

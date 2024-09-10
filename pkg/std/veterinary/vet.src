@@ -1,4 +1,4 @@
-//Edited on September 6, 2024
+//Edited on September 10, 2024
 
 /////////////////////////////////////////////////////////
 //vet.src
@@ -220,8 +220,14 @@ function TryToHeal( who , patient , bandages )
 	endif
 
 	//Added *1.5 extra healing on base... from 145 to 200 avg heals at max
-	healed := Trunc( ( Cint( healed * count / 10 ) * 1.5 ), 0);
+	
+	if( GetObjProperty( who , CLASSEID_RANGER ) )
+		healed := Trunc( ( Cint( healed * count / 10 ) * 2 ), 0);
+	else 
+		healed := Trunc( ( Cint( healed * count / 10 ) * 1.5 ), 0);
+	endif
 
+	/*  OLD CODE, VET WASNT WORKING	
 	// First check against maxhp-hp, not good for over 130HP difference
 	if( CheckSkill( who , SKILLID_VETERINARY , diff , points ) )
 		HealDamage( patient , healed );
@@ -250,6 +256,40 @@ function TryToHeal( who , patient , bandages )
 		endif
 	else
 		
+		SendSysmessage( who , "You couldn't heal the creature." );
+	endif
+	*/
+	
+	// First check against maxhp-hp, not good for over 130HP difference
+	if( CheckSkill( who , SKILLID_VETERINARY , diff , points ) )
+		SetHP( patient, (GetHP(patient) + healed) );
+		//HealDamage( patient , healed );
+		SendSysMessage( who , "You healed " + healed + " damage." );
+		if (who != patient)
+			SendSysmessage( patient , who.name + " healed " + healed + " damage." );
+		endif
+
+	// Second check against % TO heal and vet skill % to max.  So if an npc has 1k max hp and is on 500hp, he has
+	// 50% to heal.  If players skill is 100 he will be able to heal it
+	elseif ((healskillper >= percent_to_heal) && CheckSkill( who , SKILLID_VETERINARY , (vet-10) , CInt((vet/2)*POINTS_MULTIPLIER) ) )
+			// players total heal skill perecnt is greater or equal to damage needed healing, HEAL
+			SetHP( patient, (GetHP(patient) + healed) );
+			//HealDamage( patient , healed );
+			SendSysMessage( who , "You healed " + healed + " damage." );
+			if (who != patient)
+				SendSysmessage( patient , who.name + " healed " + healed + " damage." );
+			endif
+
+	// 3RD and final check.  HP check failed, didn't have enough vet skill to heal based on skill %.  We half the skill and try
+	elseif( CheckSkill( who , SKILLID_VETERINARY , CInt(diff/2.5) , CInt(points/2.5) ) )
+		healed:=Cint(healed/2.5);
+		SetHP( patient, (GetHP(patient) + healed) );
+		//HealDamage( patient , healed );
+		SendSysMessage( who , "The wounds are too advanced and you only heal " + healed + " damage." );
+		if (who != patient)
+			SendSysmessage( patient , who.name + " healed " + healed + " damage." );
+		endif
+	else
 		SendSysmessage( who , "You couldn't heal the creature." );
 	endif
 

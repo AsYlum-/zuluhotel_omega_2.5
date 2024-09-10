@@ -1,4 +1,4 @@
-//Edited August 25, 2024
+//Edited September 10, 2024
 
 // command .info  started June 19, 2000
 // Zulu (zulu@zuluhotel.com)
@@ -560,552 +560,557 @@ program textcmd_info( character , whom )
 		return;
 	endif
 
-    if(!who.isa(POLCLASS_MOBILE)) SendSysmessage(character,"Invalid selection."); return; endif
+  if(!who.isa(POLCLASS_MOBILE)) SendSysmessage(character,"Invalid selection."); return; endif
 
-    whoname := who.name;
+  whoname := who.name;
 	if (GetObjProperty(who,"guardtype")==2)
 		data[1] := "Chaos " + whoname;
 	elseif (GetObjProperty(who,"guardtype")==1)
 		data[1] := "Order " + whoname;
 	else
-	data[1] := whoname;
+	  data[1] := whoname;
 	endif
 
-    data[150] := who.gender;
-    data[151] := who.title_prefix;
-    data[152] := who.title_suffix;
+  data[150] := who.gender;
+  data[151] := who.title_prefix;
+  data[152] := who.title_suffix;
 
-    var acc := who.acct;
-    var release := acc.getprop("Release");
+  var acc := who.acct;
+  var release := acc.getprop("Release");
 
-    tempitem := who.title_race;
-    if (tempitem<>"") data[154] := who.title_race; endif
+  tempitem := who.title_race;
+  if (tempitem<>"") data[154] := who.title_race; endif
 
-    var guild_id:=getobjproperty(who,"guild_id");
-    
-    if (guild_id.errortext)
+  var guild_id:=getobjproperty(who,"guild_id");
+  
+  if (guild_id.errortext)
     layout[13]:="";
     layout[14]:="";
-    endif
+  endif
 
-    FillInStats( who );
-    FillInSkills( who );
-    FillInWeapon( who );
+  FillInStats( who );
+  FillInSkills( who );
+  FillInWeapon( who );
 
-if (!who.script)
+  if (!who.script)
     // jail
     tempitem := (((release - readgameclock())/86400) + 1);
     if (tempitem<0 || !tempitem) tempitem:=0; endif
     data[165] := tempitem;
-else
+  else
     data[154] :="n/a";
     data[165] :="n/a";
     data[146] :="n/a";
-endif
+  endif
 
-    var result := SendDialogGump( character, layout, data );   
-    var reskey;
+  var result := SendDialogGump( character, layout, data );   
+  var reskey;
 
-    foreach key in (result.keys)
-       if( key >= 1000 )
-          reskey := key;
-       endif
-    endforeach
+  foreach key in (result.keys)
+      if( key >= 1000 )
+        reskey := key;
+      endif
+  endforeach
 
-if (result[0]==0) return; endif
+  if (result[0]==0) return; endif
 
-if (result[0]<=15)
-EditStat( who , character , result[0] );
-return;
+  if (result[0]<=15)
+    EditStat( who , character , result[0] );
+    return;
+  endif
 
-endif
-if (result[0]==16)
-EditSkill( who , character , reskey-1000 );
-return;
-endif
+  if (result[0]==16)
+    EditSkill( who , character , reskey-1000 );
+    return;
+  endif
 
-if (result[0]==17)
-if( who.cmdlevel >= character.cmdlevel and character.cmdlevel < 5 )
-	SendSysMessage( who , character.name + " is trying to freeze you.");
-	return;
-endif
-who.frozen := 1;
-SendSysmessage( character , whoname + " is frozen.");
-LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Freeze");
-return;
-endif
+  if (result[0]==17)
+    if( who.cmdlevel >= character.cmdlevel and character.cmdlevel < 5 )
+      SendSysMessage( who , character.name + " is trying to freeze you.");
+      return;
+    endif
+    who.frozen := 1;
+    SendSysmessage( character , whoname + " is frozen.");
+    LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Freeze");
+    return;
+  endif
 
-if (result[0]==18)
-who.frozen := 0;
-SendSysmessage( character , whoname + " is unfrozen.");
-LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Unfreeze");
-return;
-endif
+  if (result[0]==18)
+    who.frozen := 0;
+    SendSysmessage( character , whoname + " is unfrozen.");
+    LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Unfreeze");
+    return;
+  endif
 
-if (result[0]==19) // kick
+  if (result[0]==19) // kick
 
-if( who.cmdlevel >= character.cmdlevel and character.cmdlevel < 5 )
-	SendSysMessage( who , character.name + " is trying to kick you.");
-	return;
-endif
+    if( who.cmdlevel >= character.cmdlevel and character.cmdlevel < 5 )
+      SendSysMessage( who , character.name + " is trying to kick you.");
+      return;
+    endif
 
-if (charcmdlevel<=2)
-noaccess(character);
-return;
-endif
+    if (charcmdlevel<=2)
+      noaccess(character);
+      return;
+    endif
 
-if( !who.npctemplate )
-sendsysmessage(who, "You have been kicked off the server by " + character.name + ".");
-DisconnectClient( who );
-LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Kick");
-endif
-return;
-endif
+    if( !who.npctemplate )
+      sendsysmessage(who, "You have been kicked off the server by " + character.name + ".");
+      DisconnectClient( who );
+      LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Kick");
+    endif
 
-if (result[0]==20) // jail
+    return;
+  endif
 
-if( who.cmdlevel >= character.cmdlevel and character.cmdlevel < 5 )
-	SendSysMessage( who , character.name + " is trying to jail you.");
-	return;
-endif
+  if (result[0]==20) // jail
 
-if (who.npctemplate) return; endif
+    if( who.cmdlevel >= character.cmdlevel and character.cmdlevel < 5 )
+      SendSysMessage( who , character.name + " is trying to jail you.");
+      return;
+    endif
 
-if (release>0)
-SendSysMessage( character, whoname + " is already jailed.");
-return;
-endif
+    if (who.npctemplate) return; endif
 
-var val := cint(SendTextEntryGump( character, "How many days will this account remain jailed? (Max 14)", 40 ));
-var time:=0;
-  case(val)
-     1: time := 86400;
-     2: time := 172800;
-     3: time := 259200;
-     4: time := 345600;
-     5: time := 432000;
-     6: time := 518400;
-     7: time := 604800;
-     8: time := 691200;
-     9: time := 777600;
-    10: time := 864000;
-    11: time := 950400;
-    12: time := 1036800;
-    13: time := 1123200;
-    14: time := 1209600;
-  endcase
+    if (release>0)
+      SendSysMessage( character, whoname + " is already jailed.");
+      return;
+    endif
 
-  if (time==0)
-  SendSysMessage(character, "Canceled.");
+    var val := cint(SendTextEntryGump( character, "How many days will this account remain jailed? (Max 14)", 40 ));
+    var time:=0;
+    case(val)
+      1: time := 86400;
+      2: time := 172800;
+      3: time := 259200;
+      4: time := 345600;
+      5: time := 432000;
+      6: time := 518400;
+      7: time := 604800;
+      8: time := 691200;
+      9: time := 777600;
+      10: time := 864000;
+      11: time := 950400;
+      12: time := 1036800;
+      13: time := 1123200;
+      14: time := 1209600;
+    endcase
+
+    if (time==0)
+      SendSysMessage(character, "Canceled.");
+      return;
+    endif
+
+    acc.setprop("Release", (ReadGameClock() + time));
+    MoveObjectToLocation( who, DEFAULT_LOCATION_JAIL_X, DEFAULT_LOCATION_JAIL_Y, DEFAULT_LOCATION_JAIL_Z, "britannia", MOVEOBJECT_FORCELOCATION);
+    
+    if(val > 1)
+      SendSysMessage( who, "You have been jailed for "+val+" days.");
+      SendSysMessage( character, whoname + " has been jailed for "+val+" days." );
+    else
+      SendSysMessage( who, "You have been jailed for "+val+" day.");
+      SendSysMessage( character, whoname + " has been jailed for "+val+" day." );
+    endif
+
+    LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Jail");
+
+    return;
+  endif
+
+  if (result[0]==29) // forgive
+
+    if (who.npctemplate) return; endif
+
+    if (release==0)
+      SendSysMessage( character, whoname + " wasn't jailed");
+      return;
+    endif
+
+    acc.setprop("Release",0);
+    SendSysMessage( who, "You have been freed.");
+    SendSysMessage( character, whoname + " has been freed." );
+    MoveObjectToLocation( who, 3682, 2517, 0, "britannia", MOVEOBJECT_FORCELOCATION);
+    LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Release from jail");
+
+    return;
+  endif
+
+  if (result[0]==21)
+    if( !who.npctemplate )
+      if( character.cmdlevel > 1 )
+        var bankbox := FindBankBox( who );
+        SendOpenSpecialContainer( character, bankbox );
+  LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Open Bank");
+      endif
+    else
+      SendSysmessage( character, "This can only be used on players." );
+    endif
+    return;
+  endif
+
+  if (result[0]==22)
+    if( !who.npctemplate )
+      if( character.cmdlevel > 1 )
+        SendOpenSpecialContainer( character, who.backpack );
+  LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Open Backpack");
+      endif
+    else
+      SendSysmessage( character, "This can only be used on players." );
+    endif
+    return;
+  endif
+
+  if (result[0]==23) // summon
+    MoveObjectToLocation( who, character.x , character.y , character.z, character.realm );
+    LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Summon");
+    showflame(who);
+    return;
+  endif
+
+  if (result[0]==24) // rename
+
+    newname := RequestInput( character, character.backpack, "Enter a new name:");
+
+    if (!newname)
+      SendSysMessage(character, "Canceled.");
+    else
+      SetName( who , newname );
+      SendSysMessage(who, "Your name has been changed.");
+      LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Name Change: "+newname);
+    endif
+
+    return;
+  endif
+
+  if (result[0]==25) // rename prefix
+
+    newname := RequestInput( character, character.backpack, "Enter a new prefix name:");
+
+    if (!newname)
+      SendSysMessage(character, "Canceled.");
+    else
+      who.title_prefix := newname;
+      SendSysMessage(who, "Your name has been changed.");
+      LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Rename Prefix: "+newname);
+    endif
+
+    return;
+  endif
+
+  if (result[0]==26) // rename suffix
+
+    newname := RequestInput( character, character.backpack, "Enter a new suffix name:");
+
+    if (!newname)
+      SendSysMessage(character, "Canceled.");
+    else
+      who.title_suffix := newname;
+      SendSysMessage(who, "Your name has been changed.");
+      LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Rename Suffix: "+newname);
+    endif
+
+    return;
+  endif
+
+  if (result[0]==27) // Gender
+
+    tempitem := cint(RequestInput( character, character.backpack, "Enter a gender(0=male, 1=female)"));
+
+    if ((tempitem==1) or (tempitem==0))
+      who.gender := tempitem;
+      SendSysMessage(who, "Your gender has been changed.");
+      LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Change Gender: "+tempitem);
+    else
+      SendSysMessage(character, "Canceled.");
+    endif
+
+    return;
+  endif
+
+  if (result[0]==28) // race
+  if (who.npctemplate) return; endif
+
+  if (charcmdlevel<=2)
+    noaccess(character);
+    return;
+  endif
+
+  if ( YesNo(character,"Delete Race?") )
+    who.title_race :="";
+    who.color := who.truecolor;
+    SendSysMessage( character, "Race has been removed." );
+    SendSysMessage( who, "Your race has been removed." );
+    LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Delete Race");
+    else
+    SendSysMessage(character, "Canceled.");
+    endif
+    return;
+  endif
+
+  if (result[0]==40) // guild
+
+    if (who.npctemplate) return; endif
+    if (charcmdlevel<=2)
+      noaccess(character);
+      return;
+    endif
+    removeguild(character,who);
+    LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Remove Guild");
+    return;
+  endif
+
+  if (result[0]==30) // lightning
+    PlayLightningBoltEffect(who);
+    PlaySoundEffect( who, 0x0207 );
+    SendSysMessage( who, "You are being warned." );
+    SendSysMessage( character, whoname + " has been warned." );
+    sleep(2);
+    PlayLightningBoltEffect(who);
+    PlaySoundEffect( who, 0x0029 );
+    LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Warn");
+    return;
+  endif
+
+  if (result[0]==31) // message
+
+  var themessage := requestinput(character, character.backpack, "What message would you like to send " + whoname + "?");
+
+  if (!themessage)
+          SendSysMessage(character, "Canceled.");
+          return;
+  endif
+
+  SendSysMessage(who, "MSG from Staff: " + themessage);
+  SendSysMessage(character, "MSG sent.");
+  LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Message: "+themessage);
   return;
   endif
 
-  acc.setprop("Release", (ReadGameClock() + time));
-  MoveObjectToLocation( who, DEFAULT_LOCATION_JAIL_X, DEFAULT_LOCATION_JAIL_Y, DEFAULT_LOCATION_JAIL_Z, "britannia", MOVEOBJECT_FORCELOCATION);
-	
-  if(val > 1)
-	  SendSysMessage( who, "You have been jailed for "+val+" days.");
-	  SendSysMessage( character, whoname + " has been jailed for "+val+" days." );
+  if (result[0]==32) // resurrect
+  var newcolor, racepicked := who.title_race;
+
+  if (who.dead)
+  Resurrect( who );
+
+  if (racepicked=="Elf")
+    newcolor := 770;
+  elseif (racepicked=="Dark-Elf")
+    newcolor := 33877;
+  elseif (racepicked=="Goblin")
+    newcolor := 34186;
+  elseif (racepicked=="Barbarian")
+    newcolor := 33804;
+  elseif (racepicked=="Dwarf")
+    newcolor := 33888;
   else
-	  SendSysMessage( who, "You have been jailed for "+val+" day.");
-	  SendSysMessage( character, whoname + " has been jailed for "+val+" day." );
+    newcolor := who.truecolor;
+  endif
+    who.color := newcolor;
+  else
+          SendSysMessage( character, whoname + " is not dead!" );
+  endif
+  LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Resurrect");
+  return;
   endif
 
-LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Jail");
-
-return;
-endif
-
-if (result[0]==29) // forgive
-
-if (who.npctemplate) return; endif
-
-if (release==0)
-SendSysMessage( character, whoname + " wasn't jailed");
-return;
-endif
-
-acc.setprop("Release",0);
-SendSysMessage( who, "You have been freed.");
-SendSysMessage( character, whoname + " has been freed." );
-MoveObjectToLocation( who, 3682, 2517, 0, "britannia", MOVEOBJECT_FORCELOCATION);
-LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Release from jail");
-
-return;
-endif
-
-if (result[0]==21)
-	if( !who.npctemplate )
-		if( character.cmdlevel > 1 )
-			var bankbox := FindBankBox( who );
-			SendOpenSpecialContainer( character, bankbox );
-LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Open Bank");
-		endif
-	else
-		SendSysmessage( character, "This can only be used on players." );
-	endif
-	return;
-endif
-
-if (result[0]==22)
-	if( !who.npctemplate )
-		if( character.cmdlevel > 1 )
-			SendOpenSpecialContainer( character, who.backpack );
-LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Open Backpack");
-		endif
-	else
-		SendSysmessage( character, "This can only be used on players." );
-	endif
-	return;
-endif
-
-if (result[0]==23) // summon
-MoveObjectToLocation( who, character.x , character.y , character.z );
-LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Summon");
-showflame(who);
-return;
-endif
-
-if (result[0]==24) // rename
-
-newname := RequestInput( character, character.backpack, "Enter a new name:");
-
-if (!newname)
-SendSysMessage(character, "Canceled.");
-else
-SetName( who , newname );
-SendSysMessage(who, "Your name has been changed.");
-LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Name Change: "+newname);
-endif
-
-return;
-endif
-
-if (result[0]==25) // rename prefix
-
-newname := RequestInput( character, character.backpack, "Enter a new prefix name:");
-
-if (!newname)
-SendSysMessage(character, "Canceled.");
-else
-who.title_prefix := newname;
-SendSysMessage(who, "Your name has been changed.");
-LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Rename Prefix: "+newname);
-endif
-
-return;
-endif
-
-if (result[0]==26) // rename suffix
-
-newname := RequestInput( character, character.backpack, "Enter a new suffix name:");
-
-if (!newname)
-SendSysMessage(character, "Canceled.");
-else
-who.title_suffix := newname;
-SendSysMessage(who, "Your name has been changed.");
-LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Rename Suffix: "+newname);
-endif
-
-return;
-endif
-
-if (result[0]==27) // Gender
-
-tempitem := cint(RequestInput( character, character.backpack, "Enter a gender(0=male, 1=female)"));
-
-if ((tempitem==1) or (tempitem==0))
-who.gender := tempitem;
-SendSysMessage(who, "Your gender has been changed.");
-LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Change Gender: "+tempitem);
-else
-SendSysMessage(character, "Canceled.");
-endif
-
-return;
-endif
-
-if (result[0]==28) // race
-if (who.npctemplate) return; endif
-
-if (charcmdlevel<=2)
-noaccess(character);
-return;
-endif
-
-if ( YesNo(character,"Delete Race?") )
-who.title_race :="";
-who.color := who.truecolor;
-SendSysMessage( character, "Race has been removed." );
-SendSysMessage( who, "Your race has been removed." );
-LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Delete Race");
-else
-SendSysMessage(character, "Canceled.");
-endif
-return;
-endif
-
-if (result[0]==40) // guild
-
-if (who.npctemplate) return; endif
-if (charcmdlevel<=2)
-noaccess(character);
-return;
-endif
-removeguild(character,who);
-LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Remove Guild");
-return;
-endif
-
-if (result[0]==30) // lightning
-PlayLightningBoltEffect(who);
-PlaySoundEffect( who, 0x0207 );
-SendSysMessage( who, "You are being warned." );
-SendSysMessage( character, whoname + " has been warned." );
-sleep(2);
-PlayLightningBoltEffect(who);
-PlaySoundEffect( who, 0x0029 );
-LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Warn");
-return;
-endif
-
-if (result[0]==31) // message
-
-var themessage := requestinput(character, character.backpack, "What message would you like to send " + whoname + "?");
-
-if (!themessage)
-        SendSysMessage(character, "Canceled.");
-        return;
-endif
-
-SendSysMessage(who, "MSG from Staff: " + themessage);
-SendSysMessage(character, "MSG sent.");
-LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Message: "+themessage);
-return;
-endif
-
-if (result[0]==32) // resurrect
-var newcolor, racepicked := who.title_race;
-
-if (who.dead)
-Resurrect( who );
-
-if (racepicked=="Elf")
-	newcolor := 770;
-elseif (racepicked=="Dark-Elf")
-	newcolor := 33877;
-elseif (racepicked=="Goblin")
-	newcolor := 34186;
-elseif (racepicked=="Barbarian")
-	newcolor := 33804;
-elseif (racepicked=="Dwarf")
-	newcolor := 33888;
-else
-	newcolor := who.truecolor;
-endif
-	who.color := newcolor;
-else
-        SendSysMessage( character, whoname + " is not dead!" );
-endif
-LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Resurrect");
-return;
-endif
-
-if (result[0]==33) // notes
-
-if (who.npctemplate) return; endif
-
-var note:=acc.GetProp("Notes");
-if(note)
-	SetNotes(note);
-endif
-var whataction := SendDialogGump( character, layout3, testdata );
-
-if (whataction[0]<>1) return; endif
-
-var subnote, i;
-
-note :="";
-
-For (i:=2; i<=12; i:=i+1)
-subnote:=whataction[i];
-subnote[1, Find(subnote, ": ", 1)+1]:="";
-If (subnote<>"")
-note:=note+" "+subnote;
-EndIf
-EndFor
-
-if(note)
-	acc.setprop("Notes", note);
-endif
-LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Set Note: "+note);
-return;
-endif
-
-if (result[0]==34) // goto
-
-invokegomenu( character);
-
-return;
-endif
-
-if (result[0]==35) // summon cage
-
-if( who.cmdlevel >= character.cmdlevel and character.cmdlevel < 5 )
-	SendSysMessage( who , character.name + " is trying to summon you in cage.");
-	return;
-endif
-
-MoveObjecttoLocation(who, character.x+1, character.y+1, character.z, "britannia", MOVEOBJECT_FORCELOCATION);
-tempitem := CreateItemAtLocation( who.x-1,who.y, who.z, 0x821, 1 );
-tempitem.decay :=20;
-tempitem := CreateItemAtLocation( who.x+1,who.y, who.z, 0x821, 1 );
-tempitem.decay :=20;
-
-tempitem := CreateItemAtLocation( who.x-1,who.y+1, who.z, 0x821, 1 );
-tempitem.decay :=20;
-tempitem := CreateItemAtLocation( who.x+1,who.y+1, who.z, 0x821, 1 );
-tempitem.decay :=20;
-
-tempitem := CreateItemAtLocation( who.x,who.y-1, who.z, 0x823, 1 );
-tempitem.decay :=20;
-tempitem := CreateItemAtLocation( who.x,who.y+1, who.z, 0x823, 1 );
-tempitem.decay :=20;
-
-tempitem := CreateItemAtLocation( who.x+1,who.y-1, who.z, 0x823, 1 );
-tempitem.decay :=20;
-tempitem := CreateItemAtLocation( who.x+1,who.y+1, who.z, 0x823, 1 );
-tempitem.decay :=20;
-who.paralyzed := 1;
-showflame(who);
-LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Summon Cage");
-return;
-endif
-
-if (result[0]==36) // kill
-
-if( who.cmdlevel >= character.cmdlevel and character.cmdlevel < 5 )
-	SendSysMessage( who , character.name + " is trying to kill you.");
-	return;
-endif
-
-if (charcmdlevel<=2)
-noaccess(character);
-return;
-endif
-
-if (!who.dead)
-RevokePrivilege( who, "invul" );
-setobjproperty(who, "guardkill", 1);
-ApplyRawDamage( who, GetMaxHP(who)+3 );
-LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Kill");
-SendSysMessage( character, whoname + " has been killed!" );
-else
-SendSysMessage( character, whoname + " is not dead!" );
-endif
-return;
-endif
-
-if (result[0]==37) // ban
-
-if( who.cmdlevel >= character.cmdlevel and character.cmdlevel < 5 )
-	SendSysMessage( who , character.name + " is trying to ban you.");
-	return;
-endif
-
-if (who.npctemplate) return; endif
-
-if (charcmdlevel<=3)
-noaccess(character);
-return;
-endif
-
-	LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Ban Account");
-sendsysmessage(who, "Your account has been banned by " + character.name + ".");
-var acc := who.acct;
-acc.ban();
-
-return;
-endif
+  if (result[0]==33) // notes
+
+  if (who.npctemplate) return; endif
+
+  var note:=acc.GetProp("Notes");
+  if(note)
+    SetNotes(note);
+  endif
+  var whataction := SendDialogGump( character, layout3, testdata );
+
+  if (whataction[0]<>1) return; endif
+
+  var subnote, i;
+
+  note :="";
+
+  For (i:=2; i<=12; i:=i+1)
+  subnote:=whataction[i];
+  subnote[1, Find(subnote, ": ", 1)+1]:="";
+  If (subnote<>"")
+  note:=note+" "+subnote;
+  EndIf
+  EndFor
+
+  if(note)
+    acc.setprop("Notes", note);
+  endif
+  LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Set Note: "+note);
+  return;
+  endif
+
+  if (result[0]==34) // goto
+
+  invokegomenu( character);
+
+  return;
+  endif
+
+  if (result[0]==35) // summon cage
+
+    if( who.cmdlevel >= character.cmdlevel and character.cmdlevel < 5 )
+      SendSysMessage( who , character.name + " is trying to summon you in cage.");
+      return;
+    endif
+
+    MoveObjecttoLocation(who, character.x+1, character.y+1, character.z, character.realm, MOVEOBJECT_FORCELOCATION);
+    tempitem := CreateItemAtLocation( who.x-1,who.y, who.z, 0x821, 1, who.realm );
+    tempitem.decay :=20;
+    tempitem := CreateItemAtLocation( who.x+1,who.y, who.z, 0x821, 1, who.realm );
+    tempitem.decay :=20;
+
+    tempitem := CreateItemAtLocation( who.x-1,who.y+1, who.z, 0x821, 1, who.realm );
+    tempitem.decay :=20;
+    tempitem := CreateItemAtLocation( who.x+1,who.y+1, who.z, 0x821, 1, who.realm );
+    tempitem.decay :=20;
+
+    tempitem := CreateItemAtLocation( who.x,who.y-1, who.z, 0x823, 1, who.realm );
+    tempitem.decay :=20;
+    tempitem := CreateItemAtLocation( who.x,who.y+1, who.z, 0x823, 1, who.realm );
+    tempitem.decay :=20;
+
+    tempitem := CreateItemAtLocation( who.x+1,who.y-1, who.z, 0x823, 1, who.realm );
+    tempitem.decay :=20;
+    tempitem := CreateItemAtLocation( who.x+1,who.y+1, who.z, 0x823, 1, who.realm );
+    tempitem.decay :=20;
+    who.paralyzed := 1;
+
+    showflame(who);
+    LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Summon Cage");
+
+    return;
+  endif
+
+  if (result[0]==36) // kill
+
+    if( who.cmdlevel >= character.cmdlevel and character.cmdlevel < 5 )
+      SendSysMessage( who , character.name + " is trying to kill you.");
+      return;
+    endif
+
+    if (charcmdlevel<=2)
+      noaccess(character);
+      return;
+    endif
+
+    if (!who.dead)
+      RevokePrivilege( who, "invul" );
+      setobjproperty(who, "guardkill", 1);
+      ApplyRawDamage( who, GetMaxHP(who)+3 );
+      LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Kill");
+      SendSysMessage( character, whoname + " has been killed!" );
+    else
+      SendSysMessage( character, whoname + " is not dead!" );
+    endif
+    
+    return;
+  endif
+
+  if (result[0]==37) // ban
+
+  if( who.cmdlevel >= character.cmdlevel and character.cmdlevel < 5 )
+    SendSysMessage( who , character.name + " is trying to ban you.");
+    return;
+  endif
+
+  if (who.npctemplate) return; endif
+
+  if (charcmdlevel<=3)
+    noaccess(character);
+    return;
+  endif
+
+  LogCommand(character, GetProcess(GetPid()).name, who.name+"/"+who.serial, "Ban Account");
+  sendsysmessage(who, "Your account has been banned by " + character.name + ".");
+  var acc := who.acct;
+  acc.ban();
+
+  return;
+  endif
 
 endprogram
 
 function removeguild(who,client)
 
-var guild_id:=cint(getobjproperty(client,"guild_id"));
-var guild:=FindGuild(guild_id);
+  var guild_id:=cint(getobjproperty(client,"guild_id"));
+  var guild:=FindGuild(guild_id);
 
-SendSysMessage(who,"Remove their guild?",3,34);
+  SendSysMessage(who,"Remove their guild?",3,34);
 
-var answer:=YesNo(who,"Remove Guild?");
+  var answer:=YesNo(who,"Remove Guild?");
 
-if (!answer)
-SendSysMessage(who,"Guild not removed.",3,34);
-return;
-endif
+  if (!answer)
+    SendSysMessage(who,"Guild not removed.",3,34);
+    return;
+  endif
 
-	LogCommand(who, GetProcess(GetPid()).name, client.name+"/"+client.serial, "Remove Guild");
-var gm:=findgm(guild);
+    LogCommand(who, GetProcess(GetPid()).name, client.name+"/"+client.serial, "Remove Guild");
+  var gm:=findgm(guild);
 
-if (client.serial==gm[2]) guild.setprop("gm",0); endif
-guild.removemember(client);
-eraseobjproperty(client,"guild_id");
-eraseobjproperty(client,"fealty");
-fixnameguild(client);
-client.title_guild:="";
-eraseobjproperty(client,"abv");
-eraseobjproperty(client,"talkchat");
-eraseobjproperty(client,"hearchat");
+  if (client.serial==gm[2]) guild.setprop("gm",0); endif
 
-SendSysMessage(client,"You are no longer a member of "+guild.getprop("guildname")+".",3,70);
-SendSysMessage(who,"Guild has been removed.",3,70);
+  guild.removemember(client);
+  eraseobjproperty(client,"guild_id");
+  eraseobjproperty(client,"fealty");
+  fixnameguild(client);
+  client.title_guild:="";
+  eraseobjproperty(client,"abv");
+  eraseobjproperty(client,"talkchat");
+  eraseobjproperty(client,"hearchat");
 
-var i,all:=guild.members;
+  SendSysMessage(client,"You are no longer a member of "+guild.getprop("guildname")+".",3,70);
+  SendSysMessage(who,"Guild has been removed.",3,70);
 
-if (all.size()==0)
-all:=guild.allyguilds;
+  var i,all:=guild.members;
 
-if (all.size()<>0)
-for(i:=1;i<=all.size();i:=i+1)
-guild.removeallyguild(all[i]);
-endfor
-endif
+  if (all.size()==0)
+    all:=guild.allyguilds;
 
-all:=guild.enemyguilds;
+    if (all.size()<>0)
+      for(i:=1;i<=all.size();i:=i+1)
+        guild.removeallyguild(all[i]);
+      endfor
+    endif
 
-if (all.size()<>0)
-for(i:=1;i<=all.size();i:=i+1)
-guild.removeenemyguild(all[i]);
-endfor
-endif
+    all:=guild.enemyguilds;
 
-DestroyGuild(guild);
+    if (all.size()<>0)
+      for(i:=1;i<=all.size();i:=i+1)
+      guild.removeenemyguild(all[i]);
+      endfor
+    endif
 
-SendSysMessage(who,"You will need to delete the old guildstone.",3,34);
-endif
+    DestroyGuild(guild);
+
+    SendSysMessage(who,"You will need to delete the old guildstone.",3,34);
+  endif
 
 endfunction
 
 
 function fixnameguild(who)
-var abv:=getobjproperty(who,"abv"),result:=find(who.name," ["+abv+"]",1),name:=who.name;
+  var abv:=getobjproperty(who,"abv"),result:=find(who.name," ["+abv+"]",1),name:=who.name;
 
-result:=result-1;
-name:=name[1,result];
-who.name:=name;
+  result:=result-1;
+  name:=name[1,result];
+  who.name:=name;
 endfunction
 
 
 function findgm(guild)
 
-var returninfo:={"In Vote","0"},i,all:=guild.members,gm:=guild.getprop("gm");
+  var returninfo:={"In Vote","0"},i,all:=guild.members,gm:=guild.getprop("gm");
 
-for(i:=1;i<=all.size();i:=i+1)
-if (all[i].serial==gm) returninfo[1]:=all[i].name; returninfo[2]:=all[i].serial; returninfo[3]:=all[i]; endif
-endfor
+  for(i:=1;i<=all.size();i:=i+1)
+  if (all[i].serial==gm) returninfo[1]:=all[i].name; returninfo[2]:=all[i].serial; returninfo[3]:=all[i]; endif
+  endfor
 
-return returninfo;
+  return returninfo;
 
 endfunction
 
@@ -1232,9 +1237,9 @@ endif
          1: SetBaseStrength(who, val); //who.setstr(val);
          2: SetBaseIntelligence(who, val);
          3: SetBaseDexterity(who, val);
-         4: MoveObjectToLocation( who, val, who.y, who.z );
-         5: MoveObjectToLocation( who, who.x, val, who.z );
-         6: MoveObjectToLocation( who, who.x, who.y, val );
+         4: MoveObjectToLocation( who, val, who.y, who.z, who.realm );
+         5: MoveObjectToLocation( who, who.x, val, who.z, who.realm );
+         6: MoveObjectToLocation( who, who.x, who.y, val, who.realm );
          7: SetHP(who, val);
          9: SetMana(who, val);
         11: SetStamina(who, val);
@@ -1276,7 +1281,7 @@ function showflame(who)
   var coolflame;
 
   if ((who.cmdlevel>3) and (who.concealed<>1))
-    coolflame := CreateItemAtLocation( who.x, who.y, who.z, 0x3709, 1 );
+    coolflame := CreateItemAtLocation( who.x, who.y, who.z, 0x3709, 1, who.realm );
     playsoundeffect(who, 0x208);
     sleep(3);
     destroyitem(coolflame);
@@ -1338,7 +1343,7 @@ function invokegomenu( who)
     else
       Traveler := who;
     endif
-    MoveObjecttoLocation(Traveler, Dest.X, Dest.Y, GetMapInfo(Dest.X, Dest.Y).Z);
+    MoveObjecttoLocation(Traveler, Dest.X, Dest.Y, GetMapInfo(Dest.X, Dest.Y).Z, dest.realm);
     showflame(Traveler);
     UnloadConfigFile("::golocs");
   endif
