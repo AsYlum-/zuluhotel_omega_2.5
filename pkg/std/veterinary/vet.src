@@ -279,7 +279,7 @@ function TryToHeal( who , patient , bandages )
 	
 	// First check against maxhp-hp, not good for over 130HP difference
 	if( CheckSkill( who , SKILLID_VETERINARY , diff , points ) )
-		Print($"First Checked Skill");
+		//Print($"First Checked Skill");
 		SetHP( patient, (GetHP(patient) + healed) );
 		//HealDamage( patient , healed );
 		SendSysMessage( who , "You healed " + healed + " damage." );
@@ -290,7 +290,7 @@ function TryToHeal( who , patient , bandages )
 	// Second check against % TO heal and vet skill % to max.  So if an npc has 1k max hp and is on 500hp, he has
 	// 50% to heal.  If players skill is 100 he will be able to heal it
 	elseif ((healskillper >= percent_to_heal) && CheckSkill( who , SKILLID_VETERINARY , (vet-10) , CInt((vet/2)*POINTS_MULTIPLIER) ) )
-		Print($"Second Checked Skill");
+		//Print($"Second Checked Skill");
 		// players total heal skill perecnt is greater or equal to damage needed healing, HEAL
 		SetHP( patient, (GetHP(patient) + healed) );
 		//HealDamage( patient , healed );
@@ -301,7 +301,7 @@ function TryToHeal( who , patient , bandages )
 
 	// 3RD and final check.  HP check failed, didn't have enough vet skill to heal based on skill %.  We half the skill and try
 	elseif( CheckSkill( who , SKILLID_VETERINARY , CInt(diff/2.5) , CInt(points/2.5) ) )
-		Print($"Third Checked Skill");
+		//Print($"Third Checked Skill");
 		healed:=Cint(healed/2.5);
 		SetHP( patient, (GetHP(patient) + healed) );
 		//HealDamage( patient , healed );
