@@ -32,7 +32,7 @@ program tame( character )
 		return;
 	endif
 
-	if(GetObjProperty( the_creature, "Boss" ) || GetObjProperty( the_creature, "SuperBoss"))
+	if(GetObjProperty( the_creature, "SuperBoss"))
 		SendSysmessage( character , "You can't tame that!" );
 		return;
 	endif		
