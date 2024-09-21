@@ -1,3 +1,5 @@
+//Edited September 20, 2024
+
 use uo;
 use os;
 use util;
@@ -12,7 +14,6 @@ const ACTIVE_EACH := 5 * DAY;  // active every 5 + Random(2) days. So it can spa
 const ACTIVE_EACH_RANDOM := 2 * DAY;
 
 const LVLDOWNCHECK := 600;  // checks for level down each 10 mins
-
 
 include ":champspawns:skulls";
 include ":champspawns:altar";
