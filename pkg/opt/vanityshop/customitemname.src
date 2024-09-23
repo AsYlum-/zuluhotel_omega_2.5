@@ -12,6 +12,7 @@ program CustomItemName (who, soulpen)
 	ReserveItem(soulpen);
 
 	var charges := GetObjProperty(soulpen, "charges");
+	
 	if(charges < 1)
 		SendSysMessage(who, "The Soul Pen disintegrates in your hands!", color:= 814);
 		PlayObjectCenteredEffectEX( who, 0x377A, 1, 15, soulpen.color, 3);
@@ -21,7 +22,8 @@ program CustomItemName (who, soulpen)
 	SendSysMessage(who, "Select the item you'd like to rename.", color:= 814);
 	var item := Target( who, TGTOPT_NOCHECK_LOS );
 	ReserveItem(item);
-
+	var playerhasnamed := GetObjProperty(item, "playerhasnamed");
+	
 	if(!item)
 		SendSysMessage(who, "Canceled");
 		Releaseitem(soulpen);
@@ -43,6 +45,13 @@ program CustomItemName (who, soulpen)
 		return;
 	endif
 
+	if(playerhasnamed)
+		SendSysmessage( who, "That has already been named!" );
+		Releaseitem(soulpen);
+		Releaseitem(item);
+		return;
+	endif
+
 	var old_item_name := item.name;
 	item.name := who.name +"'s "+old_item_name;
 
@@ -57,6 +66,8 @@ program CustomItemName (who, soulpen)
 			DestroyItem(soulpen);
 		endif
 		PlayObjectCenteredEffectEX( who, 0x377A, 1, 15, soulpen.color, 3);
+		playerhasnamed := 1;
+		SetObjProperty(item, "playerhasnamed", playerhasnamed);
 	else
 		charges += 1;
 		SetObjProperty(soulpen, "charges", charges);
