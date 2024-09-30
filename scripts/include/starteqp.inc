@@ -2816,7 +2816,7 @@ function ApplyWeapHitscript( who , item )
 	Note: Remember, only level 8+ loot could even get here. So ApplySpellHitscript would barely get hit...
 */
 
-	var power := RandomInt(100000)+1;
+	var power := RandomInt(100000);
 	// 1% == 1000
 
  	if (magiclevel <= 0)
@@ -2855,14 +2855,14 @@ function ApplyWeapHitscript( who , item )
 		elseif (power < 96000)
 			ApplySlayerHitscript( item ); // slayer weapons
 
-		// 3.5% chance effect
-		elseif (power < 100000)
+		// 3% chance effect
+		elseif (power < 99000)
 			ApplyEffectHitscript( item ); // blinding/stam,mana, life drain/pzn/banish/piercing
 			SetObjProperty(item, "isRare", 1);
 
-		// .5% chance br void elefury
+		// 1% chance br void elefury
 		else
-			ApplyGreaterHitscript( item ); // only lvl 8+ loot could hit this, brock, void, ele fury
+			ApplyGreaterHitscript( item ); // brock, void, ele fury
 			SetObjProperty(item, "isRare", 1);
 		endif	
 
@@ -2873,59 +2873,59 @@ function ApplyWeapHitscript( who , item )
 			ApplySpellHitscript( item ); // Spell on hit
 
 		// 47% chance slayer
-		elseif (power < 93000)
+		elseif (power < 92000)
 			ApplySlayerHitscript( item ); // slayer weapons
 
-		// 6.5% chance effect
-		elseif (power < 100000)
+		// 7% chance effect
+		elseif (power < 99000)
 			ApplyEffectHitscript( item ); // blinding/stam,mana, life drain/pzn/banish/piercing
 			SetObjProperty(item, "isRare", 1);
 
-		// .5% chance gm
+		// 1% chance gm
 		else
-			ApplyGreaterHitscript( item ); // only lvl 8+ loot could hit this, brock, void, ele fury
+			ApplyGreaterHitscript( item ); // brock, void, ele fury
 			SetObjProperty(item, "isRare", 1);
 		endif	
 
 	elseif (magiclevel == 5)
 		
 		// 45% chance of spell
-		if (power < 45000)
+		if (power < 44000)
 			ApplySpellHitscript( item ); // Spell on hit
 
 		// 45% chance slayer
-		elseif (power < 90000)
+		elseif (power < 88000)
 			ApplySlayerHitscript( item ); // slayer weapons
 
-		// 89.3% chance effect
-		elseif (power < 100000)
+		// 10% chance effect
+		elseif (power < 98000)
 			ApplyEffectHitscript( item ); // blinding/stam,mana, life drain/pzn/banish/piercing
 			SetObjProperty(item, "isRare", 1);
 
-		// .5% chance gm
+		// 2% chance gm
 		else
-			ApplyGreaterHitscript( item ); // only lvl 8+ loot could hit this, brock, void, ele fury
+			ApplyGreaterHitscript( item ); // brock, void, ele fury
 			SetObjProperty(item, "isRare", 1);
 		endif	
 
 	elseif (magiclevel == 6)
 		
-		// 45% chance of spell
-		if (power < 45000)
+		// 42% chance of spell
+		if (power < 42000)
 			ApplySpellHitscript( item ); // Spell on hit
 
-		// 40% chance slayer
-		elseif (power < 85000)
+		// 42% chance slayer
+		elseif (power < 84000)
 			ApplySlayerHitscript( item ); // slayer weapons
 
 		// 14% chance effect
-		elseif (power < 100000)
+		elseif (power < 98000)
 			ApplyEffectHitscript( item ); // blinding/stam,mana, life drain/pzn/banish/piercing
 			SetObjProperty(item, "isRare", 1);
 
-		// ,5% chance gm
+		// 2% chance gm
 		else
-			ApplyGreaterHitscript( item ); // only lvl 8+ loot could hit this, brock, void, ele fury
+			ApplyGreaterHitscript( item ); // brock, void, ele fury
 			SetObjProperty(item, "isRare", 1);
 		endif	
 
@@ -2935,103 +2935,103 @@ function ApplyWeapHitscript( who , item )
 		if (power < 40000)
 			ApplySpellHitscript( item ); // Spell on hit
 
-		// 41% chance slayer
-		elseif (power < 81000)
+		// 40% chance slayer
+		elseif (power < 80000)
 			ApplySlayerHitscript( item ); // slayer weapons
 
-		// 17.7% chance effect
-		elseif (power < 100000)
+		// 17% chance effect
+		elseif (power < 97000)
 			ApplyEffectHitscript( item ); // blinding/stam,mana, life drain/pzn/banish/piercing
 			SetObjProperty(item, "isRare", 1);
 
-		// 1.3% chance gm
+		// 3% chance gm
 		else
-			ApplyGreaterHitscript( item ); // only lvl 8+ loot could hit this, brock, void, ele fury
+			ApplyGreaterHitscript( item ); // brock, void, ele fury
 			SetObjProperty(item, "isRare", 1);
 		endif	
 
 	elseif (magiclevel == 8)
 		
-		// 38% chance of spell
-		if (power < 40000) 
+		// 37% chance of spell
+		if (power < 37000) 
 			ApplySpellHitscript( item ); // Spell on hit
 		
-		// 38% chance slayer
-		elseif (power < 80000) 
+		// 37% chance slayer
+		elseif (power < 74000) 
 			ApplySlayerHitscript( item ); // slayer weapons
 		
-		// 22.4 chance effect
-		elseif (power < 100000)
+		// 22% chance effect
+		elseif (power < 96000)
 			ApplyEffectHitscript( item ); // blinding/stam,mana, life drain/pzn/banish/piercing
 			SetObjProperty(item, "isRare", 1);
 
-		// 1.6% chance gm
+		// 4% chance gm
 		else
-			ApplyGreaterHitscript( item ); // only lvl 8+ loot could hit this, brock, void, ele fury
+			ApplyGreaterHitscript( item ); //brock, void, ele fury
 			SetObjProperty(item, "isRare", 1);
 		endif	
 
 	elseif (magiclevel == 9)
 		
 		// 35% chance of spell
-		if (power < 40000)
+		if (power < 35000)
 			ApplySpellHitscript( item ); // Spell on hit
 
-		// 38% chance slayer
-		elseif (power < 80000)
+		// 35% chance slayer
+		elseif (power < 70000)
 			ApplySlayerHitscript( item ); // slayer weapons
 
-		// 25.1% chance effect
-		elseif (power < 100000)
+		// 25% chance effect
+		elseif (power < 95000)
 			ApplyEffectHitscript( item ); // blinding/stam,mana, life drain/pzn/banish/piercing
 			SetObjProperty(item, "isRare", 1);
 
-		// 1.9% chance gm
+		// 5% chance gm
 		else
-			ApplyGreaterHitscript( item ); // only lvl 8+ loot could hit this, brock, void, ele fury
+			ApplyGreaterHitscript( item ); // brock, void, ele fury
 			SetObjProperty(item, "isRare", 1);
 		endif	
 
 	elseif (magiclevel == 10)
 		
 		// 34% chance of spell
-		if (power < 40000)
+		if (power < 34000)
 			ApplySpellHitscript( item ); // Spell on hit
 
-		// 37% chance slayer
-		elseif (power < 80000)
+		// 34% chance slayer
+		elseif (power < 68000)
 			ApplySlayerHitscript( item ); // slayer weapons
 
-		// 26.7% chance effect
-		elseif (power < 99500)
+		// 26% chance effect
+		elseif (power < 94000)
 			ApplyEffectHitscript( item ); // blinding/stam,mana, life drain/pzn/banish/piercing
 			SetObjProperty(item, "isRare", 1);
 
-		// 2.2% chance gm
+		// 6% chance gm
 		else
-			ApplyGreaterHitscript( item ); // only lvl 8+ loot could hit this, brock, void, ele fury
+			ApplyGreaterHitscript( item ); // brock, void, ele fury
 			SetObjProperty(item, "isRare", 1);
 		endif
 
 	// Higher than 10
 	else
 		
-		// 33% chance of spell
-		if (power < 40000)
+		// 32% chance of spell
+		if (power < 32000)
 			ApplySpellHitscript( item ); // Spell on hit
 
-		// 36% chance slayer
-		elseif (power < 80000)
+		// 32% chance slayer
+		elseif (power < 64000)
 			ApplySlayerHitscript( item ); // slayer weapons
 
-		// 28.5% chance effect
-		elseif (power < 99500)
+		// 29% chance effect
+		elseif (power < 93000)
 			ApplyEffectHitscript( item ); // blinding/stam,mana, life drain/pzn/banish/piercing
 			SetObjProperty(item, "isRare", 1);
 
-		// 2.5% chance gm
+		// 7% chance gm
 		else
-			ApplyGreaterHitscript( item ); // only lvl 8+ loot could hit this, brock, void, ele fury
+			ApplyGreaterHitscript( item ); // brock, void, ele fury
 			SetObjProperty(item, "isRare", 1);
 		endif	
 		
