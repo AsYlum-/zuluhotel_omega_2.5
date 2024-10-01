@@ -482,6 +482,7 @@ function HaveStatDifficulty( who , stat )
 			}; break;
 		"dex":
 			classeids := {
+				CLASSEID_MAGE
 			};	break;
 		"int":
 			classeids := {

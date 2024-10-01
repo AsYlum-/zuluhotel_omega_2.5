@@ -340,6 +340,7 @@ function CreateSpawnPointItem( byref point, byref pt_data )
 	var x;
 	var y;
 	var z;
+	var realm;
 	var item;
 	var try	  := 1;
 	var range := Cint( pt_data[4] );
@@ -349,13 +350,15 @@ function CreateSpawnPointItem( byref point, byref pt_data )
 			x := point.x + Cint( RandomInt((range*2)+1) - range );
 			y := point.y + Cint( RandomInt((range*2)+1) - range );
 			z := Cint( GetWorldHeight( x, y ) );
+			realm := point.realm;
 		else
 			x := point.x;
 			y := point.y;
 			z := point.z;
+			realm := point.realm;
 		endif
 		
-		item := CreateItemAtLocation( x, y, z, objtype, amount );
+		item := CreateItemAtLocation( x, y, z, objtype, amount, realm);
 	endwhile
 
 	if( !item )
@@ -404,10 +407,14 @@ function CreateSpawnPointNpc( byref point, byref template, byref pt_data )
 	var z		:= Cint(point.z);
 	var range	:= Cint(pt_data[5]);
 	var critter;
+	var vits;
 	
 	 // update for customnpc
     if (GetObjProperty(point, "CustomPoint"))
+		vits := GetObjProperty(point, "NPCVits");
+		//Print($"Point Vits is " + GetObjProperty(point, "NPCVits") + " Template is " + template + " vits is " + vits.hits);
 		critter := CreateCustomNpc(point, template);
+		SetHP(critter, vits.hits);
 	else
 		critter	:= CreateNpcFromTemplate( template, 5283, 1184, 0, 0, "britannia");
 	endif
@@ -467,6 +474,8 @@ function CreateSpawnPointNpc( byref point, byref template, byref pt_data )
 			y := point.y + RandomInt((appear*2)+1) - appear;
 			standing := GetStandingHeight( x, y, z, point.realm);
 			count := maxcount;
+			vits := GetObjProperty(point, "NPCVits");
+			SetHP(critter, vits.hits);
 		else
 			var ret := error;
 			ret.errortext := "Invalid spawning location.";
@@ -478,6 +487,7 @@ function CreateSpawnPointNpc( byref point, byref template, byref pt_data )
 	
 	//var ret := error;
 	//ret.errortext := "Invalid spawning location.";
+
 	KillMobile(critter,1);
 	//return ret;
 	

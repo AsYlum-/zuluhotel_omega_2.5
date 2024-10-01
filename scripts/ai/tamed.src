@@ -362,6 +362,11 @@ function Transfer()
 		return;
 	endif
 
+	if( GetObjProperty( me , "Boss" ) )
+		SendSysmessage( master , "You cannot transfer bosses!" );
+		return;
+	endif
+
 	SendSysmessage( master , "Transfer " + me.name + " to whom?" );
 	var whom := Target( master, TGTOPT_NOCHECK_LOS );
 	if(!whom)
@@ -1036,6 +1041,7 @@ function Follow()
 	
 	if ( (me.frozen) )
 		sleep(10);
+		me.frozen := 0;
 		return;
 	endif
 
