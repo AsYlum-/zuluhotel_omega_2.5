@@ -1,6 +1,13 @@
 use uo;
 use os;
 use cfgfile;
+use vitals;
+use attributes;
+
+include "include/attributes";
+include "include/client";
+include "include/constants/gumpids";
+
  
 include ":gumps:old-gumps";
 
@@ -79,6 +86,7 @@ EraseCustomPropsandItems(who, point);
 
 var o := struct, vits := struct, cprops := {}, skillids := {};
 var allprops := GetObjPropertyNames( npc );
+var maxhitsnpc;
 
 o.+Name := npc.name;
 o.+Graphic := npc.graphic;
@@ -102,9 +110,19 @@ o.+titleguild := npc.title_guild;
 o.+titlerace := npc.title_race;
 o.+facing := npc.facing;
 
-vits.+HITS := GetMaxHp(npc);
+if (GetObjProperty(npc, "CustomHitsLevel"))
+	maxhitsnpc := GetObjProperty(npc, "CustomHitsLevel");
+	print($"Max hits for NPC is " + maxhitsnpc);
+	vits.+HITS := maxhitsnpc;
+	print($"Vits 1 is " + vits);
+else
+	vits.+HITS := GetMaxHp(npc);
+	print($"Vits 2 is " + vits);
+endif
 vits.+STAM := GetMaxStamina(npc);
 vits.+MANA := GetMaxMana(npc);
+
+print($"Vits 3 is " + vits);
 
 foreach prop in allprops
 	cprops.append({prop, GetObjProperty(npc, prop)});

@@ -60,8 +60,14 @@ program dispel ( parms, spell_id )
 
 	var magery := ModifyWithMagicEfficiency( caster , GetEffectiveSkill(caster, SKILLID_MAGERY) );
 	if( !fromhit )
+		Print($"Checking Reflect");
 		detach();
 		cast_on := Reflected( caster , cast_on , circle );
+	endif
+	if( !fromhit )
+		Print($"Checking Absorption");
+		detach();
+		cast_on := IsProtected( caster , cast_on , circle );
 	endif
 		PlayObjectCenteredEffect(cast_on, 
                                          SPELL_EFFECT_ID,
