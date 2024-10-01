@@ -86,7 +86,7 @@ function CheckShortTermCounts(character);
 		shortcount := shortcount - 1;
 		SetObjProperty(character,"shortmurders",shortcount);
 
-		if(shortcount=4) //we just went from statloss to no statloss
+		if(shortcount == 4) //we just went from statloss to no statloss
 			var pingpong := GetObjProperty(character,"pingpong");
 			if(!pingpong)
 				pingpong := 0;
