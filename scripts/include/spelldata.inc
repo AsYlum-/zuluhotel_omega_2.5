@@ -662,9 +662,11 @@ endfunction
 
 function IsProtected( caster, cast_on, circle, nomsg := 0 )
 	
-	if(GetObjProperty( cast_on , CLASSEID_WARRIOR ))
-		return 0;
-	endif
+	//if(GetObjProperty( cast_on , CLASSEID_WARRIOR ))
+	//	Print($"Target is a warrior!");
+	//	return 0;
+	//endif
+
 
 	var protserial := GetObjProperty( cast_on, "MagicImmunity" );
 	var protlvl	 := GetObjProperty( cast_on, "PermMagicImmunity" );
@@ -672,7 +674,13 @@ function IsProtected( caster, cast_on, circle, nomsg := 0 )
 		protlvl := 0;
 	endif
 
-	circle := circle * ClasseBonus( cast_on, CLASSEID_WARRIOR );
+	if( protlvl == 0)
+		circle := circle * ClasseBonus( cast_on, CLASSEID_WARRIOR );
+	elseif( protlvl <= 6)
+		circle := circle;
+	else
+		circle := circle * ClasseBonus( cast_on, CLASSEID_WARRIOR );
+	endif
 
 	var cmi := 0 - protlvl;
 	var item;
@@ -722,7 +730,7 @@ function IsProtected( caster, cast_on, circle, nomsg := 0 )
 		PrintTextAbovePrivate( cast_on, cstr("The spell dissipates upon contact with " + cast_on.name + "'s magical barrier!") , caster );
 		return IMMUNED;
 	endif
-	
+
 	return 0;
 
 endfunction
@@ -938,7 +946,7 @@ function Resisted( caster , cast_on , circle , dmg )
 	endif
 
 	if( dmg < 0 )
-		dmg := 0;
+		dmg := 1;
 	endif
 
 	return dmg;
@@ -980,7 +988,7 @@ function ResistedDefinedSkillGain( caster , cast_on , dmg , diff , points := 0 )
 	endif
 
 	if( dmg < 0 )
-		dmg := 0;
+		dmg := 1;
 	endif
 
 	return dmg;

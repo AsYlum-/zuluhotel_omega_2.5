@@ -69,7 +69,7 @@ var sleepdelay := 0;
 
 //Anti-Wall & Lure Code
 var Near;
-Near := ListItemsNearLocation( me.x , me.y , me.z , 5 );
+Near := ListItemsNearLocation( me.x , me.y , me.z , 5, me.realm );
 var kwall := 0;
 foreach item in Near
 if (item.objtype == 0x5f or item.objtype == 0x57 or item.objtype == 0x3946 or item.objtype == 0x3955)
@@ -91,7 +91,7 @@ endforeach
 //
 //REANIMATE DEAD
 var NearDead;
-NearDead := ListItemsNearLocation( me.x , me.y , me.z , 15 );
+NearDead := ListItemsNearLocation( me.x , me.y , me.z , 15, me.realm );
 var kdead := 0;
 var servant;
 var npctemplate ;
@@ -106,7 +106,7 @@ if (kdead == 0 and Random (30) == 1 and GetObjProperty(item,"Type") != "Animal" 
 			endif
 			while(distance(me,servant) > 2 and kdead == 0)
 				RunToward(servant);
-				if (GetHP(me) < (GetMAXHP(me) / 1.5))
+				if (GetHP(me) < (GetMAXHP(me) / 5))
 					kdead := 1;
 					return;
 				endif
@@ -117,7 +117,7 @@ if (kdead == 0 and Random (30) == 1 and GetObjProperty(item,"Type") != "Animal" 
 			PerformAction( me, 0X011 );
 			sleep(1);
 			var thecritter;
-			thecritter := CreateNPCfromTemplate( npctemplate , servant.x , servant.y , servant.z );
+			thecritter := CreateNPCfromTemplate( npctemplate , servant.x , servant.y , servant.z, 0, servant.realm );
 			thecritter.hidden := 1;
 			thecritter.color  := 0x482;
 			thecritter.truecolor := 0x482;
@@ -129,7 +129,7 @@ if (kdead == 0 and Random (30) == 1 and GetObjProperty(item,"Type") != "Animal" 
 			var truename := ExtractName( servant.desc );
 			thecritter.name   := "a Reanimated " + truename;
 			if ( !thecritter.backpack )
-		var newbackpack := CreateItemAtLocation(thecritter.x , thecritter.y , thecritter.z , 0xe75 , 1 );
+		var newbackpack := CreateItemAtLocation(thecritter.x , thecritter.y , thecritter.z , 0xe75 , 1, thecritter.realm );
 				EquipItem( thecritter , newbackpack );
 			endif
 			foreach item in EnumerateItemsInContainer( servant)
@@ -147,7 +147,7 @@ if (kdead == 0 and Random (30) == 1 and GetObjProperty(item,"Type") != "Animal" 
 endforeach
 //
 //SPLIT LORD
-if (GetHP(me) < (GetMaxHP(me) / 1.5) and GetObjProperty(me,"merged") and Random(3) == 1)
+if (GetHP(me) < (GetMaxHP(me) / 5) and GetObjProperty(me,"merged") and Random(3) == 1)
    	while (distance(me, opponent) <= 8)
 		RunAwayFrom(opponent);
 	endwhile	
@@ -159,7 +159,7 @@ endif
 
 //HEALING
 omfg := 0;
-if (GetHP(me) < (GetMaxHP(me)/1.5))
+if (GetHP(me) < (GetMaxHP(me)/5))
    	while (distance(me, opponent) <= 6 and omfg < 15)
 		RunAwayFrom(opponent);
 		omfg := omfg + 1;
@@ -333,7 +333,7 @@ if (notgts2 > 2 and Random (5) == 1 )
 	var blah;
 	var ok := 1;	
 	crazymode := 1;
-	while ( (loop2 < notgts2) and (GetHP(me) > (GetMaxHP(me) / 1.5)) and ok )
+	while ( (loop2 < notgts2) and (GetHP(me) > (GetMaxHP(me) / 5)) and ok )
 		foreach critter in ListMobilesInLineOfSight( me, 2 )		
 			if (critter)
 				ok := 0;
@@ -381,7 +381,7 @@ if (notgts > 2 and Random (5) == 1 and !crazymode)
 		while (distance(me,opponent) > 1 and ffs < 30)
 			ffs := ffs + 1;
 			RunToward( opponent );
-			if (GetHP(me) < (GetMaxHP(me)/1.5))
+			if (GetHP(me) < (GetMaxHP(me)/5))
 				ffs := 30;
 				loop := notgts;
 			endif
@@ -394,7 +394,7 @@ if (notgts > 2 and Random (5) == 1 and !crazymode)
 		while ((distance(me,opponent) > 0 and distance(me,opponent) < 2) and ccl < 7)
 			ccl := ccl + 1;
 			RunToward( opponent );
-			if (GetHP(me) < (GetMaxHP(me)/1.5))
+			if (GetHP(me) < (GetMaxHP(me)/5))
 				ccl := 7;
 				loop := notgts;
 			endif
@@ -421,7 +421,7 @@ if (notgts3 > 2 and Random (5) == 1 and !crazymode)
 	var ccl3 := 0;
 	var blah3;
 	var ok3 := 1;
-	while ( (loop3 < notgts3) and (GetHP(me) > (GetMaxHP(me) / 1.5)) and ok3 )
+	while ( (loop3 < notgts3) and (GetHP(me) > (GetMaxHP(me) / 5)) and ok3 )
 		foreach critter in ListMobilesInLineOfSight( me, 2 )		
 			if (critter)
 				ok3 := 0;	
@@ -632,7 +632,7 @@ if (distance(me, critter) < distance(me, opponent) and (!critter.npctemplate or 
 		            return 1;
 			default:
 				var mofo := 0;
-				while (distance(me, opponent) > 1 and mofo < 40 and GetHP(me) > (GetMaxHP(me)/1.5))
+				while (distance(me, opponent) > 1 and mofo < 40 and GetHP(me) > (GetMaxHP(me)/5))
 			        	RunToward( opponent );
 					mofo := mofo + 1;
 			        endwhile   
@@ -724,6 +724,7 @@ function SplitLord(me)
 	var newx := me.x;
 	var newy := me.y;
 	var newz := me.z;
+	var newrealm := me.realm;
 	var tp;
 	foreach item in EnumerateItemsInContainer( me.backpack )
 		if (item.graphic == 0xf3f) 
@@ -743,8 +744,8 @@ function SplitLord(me)
 	twin2.hidden := 1;
 	sleep(1);
 	MoveObjectToLocation( me, 5376, 1081, 0, 0);
-	MoveObjectToLocation( twin1, newx, newy, newz, 0);
-	MoveObjectToLocation( twin2, newx, newy, newz, 0);
+	MoveObjectToLocation( twin1, newx, newy, newz, newrealm, 0);
+	MoveObjectToLocation( twin2, newx, newy, newz, newrealm, 0);
 	twin1.hidden := 0;
 	twin2.hidden := 0;
 	PlaySoundEffect( twin1 , 0x020a );	
@@ -756,7 +757,7 @@ endfunction
 
 function ShowFlame2( who )
 		var coolflame;
-		coolflame := CreateItemAtLocation( who.x, who.y, who.z, 0x3709, 1 );
+		coolflame := CreateItemAtLocation( who.x, who.y, who.z, 0x3709, 1, who.realm );
 		PlaySoundEffect(who, 0x209);
 		Sleep(1);
 		DestroyItem(coolflame);

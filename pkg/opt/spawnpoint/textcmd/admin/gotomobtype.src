@@ -38,10 +38,12 @@ program textcmd_gotomobtype( character , text )
 
     foreach mobile in ListMobilesInBox(0, 0, -127, realmData.width, realmData.height, 128, realm);
         if( mobile.IsA(POLCLASS_NPC) )
-            if (mobile.NPCTemplate == template )
+            if (mobile.NPCTemplate == template  or mobile.script == "tamed" )
                 found.append(mobile);
                 SleepMs(2);
             endif
+		elseif( mobile.IsA())
+			Print("stuff");
         endif
     endforeach
 
