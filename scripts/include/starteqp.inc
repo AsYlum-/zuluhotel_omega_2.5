@@ -2856,7 +2856,7 @@ function ApplyWeapHitscript( who , item )
 			ApplySlayerHitscript( item ); // slayer weapons
 
 		// 3% chance effect
-		elseif (power < 99000)
+		elseif (power < 99900)
 			ApplyEffectHitscript( item ); // blinding/stam,mana, life drain/pzn/banish/piercing
 			SetObjProperty(item, "isRare", 1);
 
@@ -2877,7 +2877,7 @@ function ApplyWeapHitscript( who , item )
 			ApplySlayerHitscript( item ); // slayer weapons
 
 		// 7% chance effect
-		elseif (power < 99000)
+		elseif (power < 99900)
 			ApplyEffectHitscript( item ); // blinding/stam,mana, life drain/pzn/banish/piercing
 			SetObjProperty(item, "isRare", 1);
 
@@ -2898,7 +2898,7 @@ function ApplyWeapHitscript( who , item )
 			ApplySlayerHitscript( item ); // slayer weapons
 
 		// 10% chance effect
-		elseif (power < 98000)
+		elseif (power < 99500)
 			ApplyEffectHitscript( item ); // blinding/stam,mana, life drain/pzn/banish/piercing
 			SetObjProperty(item, "isRare", 1);
 
@@ -2919,7 +2919,7 @@ function ApplyWeapHitscript( who , item )
 			ApplySlayerHitscript( item ); // slayer weapons
 
 		// 14% chance effect
-		elseif (power < 98000)
+		elseif (power < 99500)
 			ApplyEffectHitscript( item ); // blinding/stam,mana, life drain/pzn/banish/piercing
 			SetObjProperty(item, "isRare", 1);
 
@@ -2940,7 +2940,7 @@ function ApplyWeapHitscript( who , item )
 			ApplySlayerHitscript( item ); // slayer weapons
 
 		// 17% chance effect
-		elseif (power < 97000)
+		elseif (power < 99200)
 			ApplyEffectHitscript( item ); // blinding/stam,mana, life drain/pzn/banish/piercing
 			SetObjProperty(item, "isRare", 1);
 
@@ -2961,7 +2961,7 @@ function ApplyWeapHitscript( who , item )
 			ApplySlayerHitscript( item ); // slayer weapons
 		
 		// 22% chance effect
-		elseif (power < 96000)
+		elseif (power < 99200)
 			ApplyEffectHitscript( item ); // blinding/stam,mana, life drain/pzn/banish/piercing
 			SetObjProperty(item, "isRare", 1);
 
@@ -2982,7 +2982,7 @@ function ApplyWeapHitscript( who , item )
 			ApplySlayerHitscript( item ); // slayer weapons
 
 		// 25% chance effect
-		elseif (power < 95000)
+		elseif (power < 99000)
 			ApplyEffectHitscript( item ); // blinding/stam,mana, life drain/pzn/banish/piercing
 			SetObjProperty(item, "isRare", 1);
 
@@ -3003,7 +3003,7 @@ function ApplyWeapHitscript( who , item )
 			ApplySlayerHitscript( item ); // slayer weapons
 
 		// 26% chance effect
-		elseif (power < 94000)
+		elseif (power < 99000)
 			ApplyEffectHitscript( item ); // blinding/stam,mana, life drain/pzn/banish/piercing
 			SetObjProperty(item, "isRare", 1);
 
@@ -3025,7 +3025,7 @@ function ApplyWeapHitscript( who , item )
 			ApplySlayerHitscript( item ); // slayer weapons
 
 		// 29% chance effect
-		elseif (power < 93000)
+		elseif (power < 99000)
 			ApplyEffectHitscript( item ); // blinding/stam,mana, life drain/pzn/banish/piercing
 			SetObjProperty(item, "isRare", 1);
 

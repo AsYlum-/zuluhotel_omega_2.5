@@ -662,24 +662,22 @@ endfunction
 
 function IsProtected( caster, cast_on, circle, nomsg := 0 )
 	
-	//if(GetObjProperty( cast_on , CLASSEID_WARRIOR ))
-	//	Print($"Target is a warrior!");
-	//	return 0;
-	//endif
-
-
 	var protserial := GetObjProperty( cast_on, "MagicImmunity" );
 	var protlvl	 := GetObjProperty( cast_on, "PermMagicImmunity" );
 	if( !protlvl )
 		protlvl := 0;
 	endif
 
-	if( protlvl == 0)
-		circle := circle * ClasseBonus( cast_on, CLASSEID_WARRIOR );
-	elseif( protlvl <= 6)
-		circle := circle;
-	else
-		circle := circle * ClasseBonus( cast_on, CLASSEID_WARRIOR );
+
+	if(GetObjProperty( cast_on , CLASSEID_WARRIOR ))
+		Print($"Target is a warrior!");
+		if( protlvl == 0)
+			circle := circle * ClasseBonus( cast_on, CLASSEID_WARRIOR );
+		elseif( protlvl <= 6)
+			circle := circle;
+		else
+			circle := circle * ClasseBonus( cast_on, CLASSEID_WARRIOR );
+		endif
 	endif
 
 	var cmi := 0 - protlvl;
