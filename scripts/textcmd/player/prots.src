@@ -90,9 +90,10 @@ function CalculateImmunities(who)
 		tempmagicimmunity := GetImmunityCharges(who);
 		tempmagicreflection := GetReflectionCharges(who);
 	else
-		magicimmunity := 0;
+		//magicimmunity := 0;
+		magicimmunity := CInt(GetObjProperty(who, "PermMagicImmunity"));
 		magicreflection := 0;
-		tempmagicimmunity := 0;
+		tempmagicimmunity := GetImmunityCharges(who);
 		tempmagicreflection := 0;
 	endif
 
